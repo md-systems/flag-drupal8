@@ -70,7 +70,7 @@ class FlaggingConfirmForm extends ConfirmFormBase {
   public function getCancelUrl() {
     $destination = \Drupal::request()->get('destination');
     if (!empty($destination)) {
-      return Url::createFromPath($destination);
+      return Url::fromUri($destination);
     }
 
     return $this->entity->urlInfo();
