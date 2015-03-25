@@ -151,10 +151,7 @@ function flag_views_data_alter(array &$data) {
 
     $info = \Drupal::entityManager()->getDefinition($entity_type);
 
-    $base_table = $info->getBaseTable();
-    if ($flag_type_def['entity_type'] == 'node') {
-      $base_table = $info->getDataTable();
-    }
+    $base_table = $info->getDataTable ?: $info->getBaseTable();
 
     $data[$base_table]['flag_content_rel'] = [
       'title' => t('@entity_label flag', ['@entity_label' => $entity_type]),
