@@ -12,7 +12,7 @@ function flag_views_data() {
   $data['flagging']['table']['group'] = t('Flag');
   $data['flag_counts']['table']['group'] = t('Flaggings');
 
-  $data['flagging_data']['table']['join'] = [
+  $data['flagging']['table']['join'] = [
     'node_field_data' => [
       'type' => 'LEFT',
       'left_field' => 'nid',
@@ -153,7 +153,7 @@ function flag_views_data_alter(array &$data) {
 
     $base_table = $info->getDataTable() ?: $info->getBaseTable();
     $data[$base_table]['flag_content_rel'] = [
-      'title' => t('@entity_label flag', ['@entity_label' => $entity_type]),
+      'title' => t('@entity_label (flag)', ['@entity_label' => $info->getLabel()]),
       'help' => t('Limit results to only those entity flagged by a certain flag; Or display information about the flag set on a entity.'),
       'relationship' => [
         'group' => t('Flag'),
