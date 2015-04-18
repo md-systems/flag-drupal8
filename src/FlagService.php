@@ -302,7 +302,7 @@ class FlagService {
         $entity,
       ]);
 
-    $this->eventDispatcher->dispatch(FlagEvents::ENTITY_FLAGGED, new FlaggingEvent($flag, $entity, 'flag'));
+    $this->eventDispatcher->dispatch(FlagEvents::ENTITY_FLAGGED, new FlaggingEvent($flag, $entity));
 
     return $flagging;
   }
@@ -321,7 +321,7 @@ class FlagService {
    *   An array of flagging IDs to delete.
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL) {
-    $this->eventDispatcher->dispatch(FlagEvents::ENTITY_UNFLAGGED, new FlaggingEvent($flag, $entity, 'unflag'));
+    $this->eventDispatcher->dispatch(FlagEvents::ENTITY_UNFLAGGED, new FlaggingEvent($flag, $entity));
 
     $out = [];
     $flaggings = $this->getFlaggings($entity, $flag, $account);
