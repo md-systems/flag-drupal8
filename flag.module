@@ -209,8 +209,8 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
  * Implements hook_entity_build_defaults_alter().
  */
 function flag_entity_build_defaults_alter(array &$build, EntityInterface $entity, $view_mode = 'full', $langcode = NULL) {
-  // Add the flag ID combined with the action to the cache key if render
-  // caching is enabled.
+  // Add the flag ID combined with the action to the cache key and set the cache
+  // context if render caching is enabled.
   if (isset($build['#cache']) && isset($build['#cache']['keys'])) {
 
     // Get all possible flags for this entity type.
@@ -235,6 +235,7 @@ function flag_entity_build_defaults_alter(array &$build, EntityInterface $entity
       }
 
       $build['#cache']['keys'][] = $flag->id . '-' . $action;
+      $build['#cache']['contexts'][] = 'user.permissions';
     }
   }
   return $build;
