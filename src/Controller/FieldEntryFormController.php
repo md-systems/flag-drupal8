@@ -57,7 +57,9 @@ class FieldEntryFormController extends ControllerBase {
    *   The flagging edit form.
    */
   public function edit(FlagInterface $flag, $entity_id) {
-    $flagging = \Drupal::service('flag')->getFlagging($flag, $entity_id);
+    $flag_service = \Drupal::service('flag');
+    $entity = $flag_service->getFlaggableById($flag, $entity_id);
+    $flagging = \Drupal::service('flag')->getFlagging($flag, $entity);
     return $this->getForm($flagging, 'edit');
   }
 
@@ -75,7 +77,9 @@ class FieldEntryFormController extends ControllerBase {
    * @see \Drupal\flag\Plugin\ActionLink\AJAXactionLink
    */
   public function unflag(FlagInterface $flag, $entity_id) {
-    $flagging = \Drupal::service('flag')->getFlagging($flag, $entity_id);
+    $flag_service = \Drupal::service('flag');
+    $entity = $flag_service->getFlaggableById($flag, $entity_id);
+    $flagging = \Drupal::service('flag')->getFlagging($flag, $entity);
     return $this->getForm($flagging, 'delete');
   }
 

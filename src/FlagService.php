@@ -152,15 +152,21 @@ class FlagService {
    *
    * @param FlagInterface $flag
    *   The flag.
-   * @param mixed $entity_id
-   *   The flaggable ID.
+   * @param EntityInterface $entity
+   *   The flaggable entity.
+   * @param AccountInterface $account
+   *   (optional) The account of the flagging user. If omitted, the flagging for
+   *   the current user will be returned.
    *
    * @return FlaggingInterface|null
    *   The flagging or NULL if the flagging is not found.
    */
-  public function getFlagging(FlagInterface $flag, $entity_id) {
-    $entity = $this->getFlaggableById($flag, $entity_id);
-    $flaggings = $this->getFlaggings($entity, $flag, $this->currentUser);
+  public function getFlagging(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL) {
+    if (empty($account)) {
+      $account = $this->currentUser;
+    }
+
+    $flaggings = $this->getFlaggings($flag, $entity, $account);
 
     return !empty($flaggings) ? reset($flaggings) : NULL;
   }
@@ -168,11 +174,11 @@ class FlagService {
   /**
    * Get all flaggings for the given entity, flag, and optionally, user.
    *
-   * @param EntityInterface $entity
-   *   (optional) The flaggable entity. If NULL, flaggins for any entity will be
-   *   returned.
    * @param FlagInterface $flag
    *   (optional) The flag entity. If NULL, flaggings for any flag will be
+   *   returned.
+   * @param EntityInterface $entity
+   *   (optional) The flaggable entity. If NULL, flaggings for any entity will be
    *   returned.
    * @param AccountInterface $account
    *   (optional) The account of the flagging user. If NULL, flaggings for any
@@ -181,7 +187,7 @@ class FlagService {
    * @return array
    *   An array of flaggings.
    */
-  public function getFlaggings(EntityInterface $entity = NULL, FlagInterface $flag = NULL, AccountInterface $account = NULL) {
+  public function getFlaggings(FlagInterface $flag = NULL, EntityInterface $entity = NULL, AccountInterface $account = NULL) {
     $query = $this->entityQueryManager->get('flagging');
 
     if (!empty($account) && !$flag->isGlobal()) {
@@ -324,7 +330,7 @@ class FlagService {
     $this->eventDispatcher->dispatch(FlagEvents::ENTITY_UNFLAGGED, new FlaggingEvent($flag, $entity));
 
     $out = [];
-    $flaggings = $this->getFlaggings($entity, $flag, $account);
+    $flaggings = $this->getFlaggings($flag, $entity, $account);
     foreach ($flaggings as $flagging) {
       $out[] = $flagging->id();
 
