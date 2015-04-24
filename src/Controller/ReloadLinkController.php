@@ -11,7 +11,7 @@ use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\flag\FlagInterface;
-use Drupal\flag\FlagService;
+use Drupal\flag\FlagServiceInterface;
 
 /**
  * Provides a controller to flag and unflag when routed from a normal link.
@@ -21,17 +21,17 @@ class ReloadLinkController extends ControllerBase implements ContainerInjectionI
   /**
    * The flag service.
    *
-   * @var \Drupal\flag\FlagService
+   * @var \Drupal\flag\FlagServiceInterface
    */
   protected $flagService;
 
   /**
    * Constructor.
    *
-   * @param FlagService $flag
+   * @param FlagServiceInterface $flag
    *   The flag service.
    */
-  public function __construct(FlagService $flag) {
+  public function __construct(FlagServiceInterface $flag) {
     $this->flagService = $flag;
   }
 
