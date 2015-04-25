@@ -151,12 +151,4 @@ interface FlagServiceInterface {
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL);
 
-  /**
-   * Deletes the given flagging.
-   *
-   * @param FlaggingInterface $flagging
-   *   The flagging to delete.
-   */
-  public function unflagByFlagging(FlaggingInterface $flagging);
-
 }

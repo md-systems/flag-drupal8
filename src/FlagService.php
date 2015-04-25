@@ -246,19 +246,12 @@ class FlagService implements FlagServiceInterface {
     foreach ($flaggings as $flagging) {
       $out[] = $flagging->id();
 
-      $this->unflagByFlagging($flagging);
+      $flagging->delete();
 
       $this->decrementFlagCounts($flag, $entity);
     }
 
     return $out;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function unflagByFlagging(FlaggingInterface $flagging) {
-    $flagging->delete();
   }
 
   /**
