@@ -8,11 +8,9 @@ namespace Drupal\flag;
 
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
-use \Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\flag\FlagInterface;
 use Drupal\flag\ActionLinkTypePluginInterface;
-use Drupal\flag\FlagService;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
