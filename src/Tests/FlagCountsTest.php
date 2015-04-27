@@ -116,18 +116,20 @@ class FlagCountsTest extends WebTestBase {
     // Flag the node.
     $this->flagService->flag($this->flag, $this->node, $this->adminUser);
 
+    $flagCountService = \Drupal::service('flag.count');
+
     // Check each of the count API functions.
-    $flag_get_entity_flag_counts = flag_get_entity_flag_counts($this->flag, 'node');
-    $this->assertEqual($flag_get_entity_flag_counts, 1, "flag_get_entity_flag_counts() returns the expected count.");
+    $flag_get_entity_flag_counts = $flagCountService->getEntityCounts($this->flag, 'node');
+    $this->assertEqual($flag_get_entity_flag_counts, 1, "getEntityFlagCounts() returns the expected count.");
 
-    $flag_get_user_flag_counts = flag_get_user_flag_counts($this->flag, $this->adminUser);
-    $this->assertEqual($flag_get_user_flag_counts, 1, "flag_get_user_flag_counts() returns the expected count.");
+    $flag_get_user_flag_counts = $flagCountService->getUserCounts($this->flag, $this->adminUser);
+    $this->assertEqual($flag_get_user_flag_counts, 1, "getUserFlagCounts() returns the expected count.");
 
-    $flag_get_counts = flag_get_counts('node', $this->node->id());
-    $this->assertEqual($flag_get_counts[$this->id], 1, "flag_get_counts() returns the expected count.");
+    $flag_get_counts = $flagCountService->getCounts('node', $this->node->id());
+    $this->assertEqual($flag_get_counts[$this->id], 1, "getCounts() returns the expected count.");
 
-    $flag_get_flag_counts = flag_get_flag_counts($this->id);
-    $this->assertEqual($flag_get_flag_counts, 1, "flag_get_flag_counts() returns the expected count.");
+    $flag_get_flag_counts = $flagCountService->getTotals($this->id);
+    $this->assertEqual($flag_get_flag_counts, 1, "getFlagTotalCounts() returns the expected count.");
   }
 
 }

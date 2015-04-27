@@ -222,8 +222,6 @@ class FlagService implements FlagServiceInterface {
 
     $flagging->save();
 
-    $this->incrementFlagCounts($flag, $entity);
-
     $this->entityManager
       ->getViewBuilder($entity->getEntityTypeId())
       ->resetCache([
@@ -245,69 +243,10 @@ class FlagService implements FlagServiceInterface {
     $flaggings = $this->getFlaggings($flag, $entity, $account);
     foreach ($flaggings as $flagging) {
       $out[] = $flagging->id();
-
       $flagging->delete();
-
-      $this->decrementFlagCounts($flag, $entity);
     }
 
     return $out;
-  }
-
-  /**
-   * Increments count of flagged entities.
-   *
-   * @param FlagInterface $flag
-   *   The flag to increment.
-   * @param EntityInterface $entity
-   *   The flaggable entity.
-   */
-  protected function incrementFlagCounts(FlagInterface $flag, EntityInterface $entity) {
-    db_merge('flag_counts')
-      ->key([
-        'fid' => $flag->id(),
-        'entity_id' => $entity->id(),
-        'entity_type' => $entity->getEntityTypeId(),
-      ])
-      ->fields([
-        'last_updated' => REQUEST_TIME,
-        'count' => 1,
-      ])
-      ->expression('count', 'count + :inc', [':inc' => 1])
-      ->execute();
-  }
-
-  /**
-   * Reverts incrementation of count of flagged entities.
-   *
-   * @param FlagInterface $flag
-   *   The flag to decrement.
-   * @param EntityInterface $entity
-   *   The flaggable entity.
-   */
-  protected function decrementFlagCounts(FlagInterface $flag, EntityInterface $entity) {
-    $count_result = db_select('flag_counts')
-      ->fields(NULL, ['fid', 'entity_id', 'entity_type', 'count'])
-      ->condition('fid', $flag->id())
-      ->condition('entity_id', $entity->id())
-      ->condition('entity_type', $entity->getEntityTypeId())
-      ->execute()
-      ->fetchAll();
-    if (count($count_result) == 1) {
-      db_delete('flag_counts')
-        ->condition('fid', $flag->id())
-        ->condition('entity_id', $entity->id())
-        ->condition('entity_type', $entity->getEntityTypeId())
-        ->execute();
-    }
-    else {
-      db_update('flag_counts')
-        ->expression('count', 'count - 1')
-        ->condition('fid', $flag->id())
-        ->condition('entity_id', $entity->id())
-        ->condition('entity_id', $entity->id())
-        ->execute();
-    }
   }
 
 }
