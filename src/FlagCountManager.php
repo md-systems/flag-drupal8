@@ -184,7 +184,7 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
         ->expression('count', 'count - 1')
         ->condition('fid', $flag->id())
         ->condition('entity_id', $entity->id())
-        ->condition('entity_id', $entity->id())
+        ->condition('entity_type', $entity->getEntityTypeId())
         ->execute();
     }
   }
