@@ -160,12 +160,7 @@ class FlagService implements FlagServiceInterface {
 
     $result = $query->execute();
 
-    $flaggings = [];
-    foreach ($result as $flagging_id) {
-      $flaggings[$flagging_id] = $this->entityManager->getStorage('flagging')->load($flagging_id);
-    }
-
-    return $flaggings;
+    return entity_load_multiple('flagging', $result);
   }
 
   /**
