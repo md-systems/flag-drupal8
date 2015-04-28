@@ -133,6 +133,13 @@ interface FlagServiceInterface {
    *
    * @return FlaggingInterface|null
    *   The flagging.
+   *
+   * @throws \LogicException
+   *   An exception is thrown if the given flag, entity, and account are not
+   *   compatible in some way:
+   *   - The flag applies to a different entity type from the given entity.
+   *   - The flag does not apply to the entity's bundle.
+   *   - The entity is already flagged with this flag by the user.
    */
   public function flag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL);
 
@@ -148,6 +155,13 @@ interface FlagServiceInterface {
    *
    * @return array
    *   An array of flagging IDs to delete.
+   *
+   * @throws \LogicException
+   *   An exception is thrown if the given flag, entity, and account are not
+   *   compatible in some way:
+   *   - The flag applies to a different entity type from the given entity.
+   *   - The flag does not apply to the entity's bundle.
+   *   - The entity is not currently flagged with this flag by the user.
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL);
 

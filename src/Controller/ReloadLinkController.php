@@ -67,12 +67,18 @@ class ReloadLinkController extends ControllerBase implements ContainerInjectionI
     /* @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->flagService->getFlaggableById($flag, $entity_id);
 
-    /* @var \Drupal\flag\FlaggingInterface $flagging */
-    $flagging = $this->flagService->flag($flag, $entity);
+    try {
+      /* @var \Drupal\flag\FlaggingInterface $flagging */
+      $flagging = $this->flagService->flag($flag, $entity);
+    }
+    catch (\LogicException $e) {
+      // Fail silently so we return to the entity, which will show an updated
+      // link for the existing state of the flag.
+    }
 
     // Redirect back to the entity. A passed in destination query parameter
     // will automatically override this.
-    $url_info = $flagging->getFlaggable()->urlInfo();
+    $url_info = $entity->urlInfo();
     return $this->redirect($url_info->getRouteName(), $url_info->getRouteParameters());
   }
 
@@ -92,7 +98,14 @@ class ReloadLinkController extends ControllerBase implements ContainerInjectionI
   public function unflag(FlagInterface $flag, $entity_id) {
     /* @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $this->flagService->getFlaggableById($flag, $entity_id);
-    $this->flagService->unflag($flag, $entity);
+
+    try {
+      $this->flagService->unflag($flag, $entity);
+    }
+    catch (\LogicException $e) {
+      // Fail silently so we return to the entity, which will show an updated
+      // link for the existing state of the flag.
+    }
 
     // Redirect back to the entity. A passed in destination query parameter
     // will automatically override this.

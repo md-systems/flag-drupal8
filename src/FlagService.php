@@ -212,6 +212,23 @@ class FlagService implements FlagServiceInterface {
       $account = $this->currentUser;
     }
 
+    // Check the entity type corresponds to the flag type.
+    if ($flag->getFlaggableEntityTypeId() != $entity->getEntityTypeId()) {
+      throw new \LogicException('The flag does not apply to entities of this type.');
+    }
+
+    // Check the bundle is allowed by the flag.
+    // @todo: this will get hit by ->types becoming private.
+    if (!empty($flag->types) && !in_array($entity->bundle(), $flag->types)) {
+      throw new \LogicException('The flag does not apply to the bundle of the entity.');
+    }
+
+    // Check whether there is an existing flagging for the combination of flag,
+    // entity, and user.
+    if ($this->getFlagging($flag, $entity, $account)) {
+      throw new \LogicException('The user has already flagged the entity with the flag.');
+    }
+
     $flagging = $this->entityManager->getStorage('flagging')->create([
       'type' => 'flag',
       'uid' => $account->id(),
@@ -237,6 +254,23 @@ class FlagService implements FlagServiceInterface {
    * {@inheritdoc}
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL) {
+    // Check the entity type corresponds to the flag type.
+    if ($flag->getFlaggableEntityTypeId() != $entity->getEntityTypeId()) {
+      throw new \LogicException('The flag does not apply to entities of this type.');
+    }
+
+    // Check the bundle is allowed by the flag.
+    // @todo: this will get hit by ->types becoming private.
+    if (!empty($flag->types) && !in_array($entity->bundle(), $flag->types)) {
+      throw new \LogicException('The flag does not apply to the bundle of the entity.');
+    }
+
+    // Check whether there is an existing flagging for the combination of flag,
+    // entity, and user.
+    if (!$this->getFlagging($flag, $entity, $account)) {
+      throw new \LogicException('The entity is not flagged by the user.');
+    }
+
     $this->eventDispatcher->dispatch(FlagEvents::ENTITY_UNFLAGGED, new FlaggingEvent($flag, $entity));
 
     $out = [];
