@@ -8,10 +8,12 @@
 namespace Drupal\flag;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Event\FlagEvents;
 use Drupal\flag\Event\FlaggingEvent;
 use Drupal\flag\FlagCountManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Drupal\flag\FlagInterface;
 
 /**
  * Class FlagCountManager.
@@ -108,7 +110,7 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getUserCounts($flag, $user) {
+  public function getUserCounts(FlagInterface $flag, AccountInterface $user) {
     $counts = &drupal_static(__FUNCTION__);
 
     $flag_id = $flag->id();

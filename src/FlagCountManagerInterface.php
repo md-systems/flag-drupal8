@@ -7,6 +7,9 @@
 
 namespace Drupal\flag;
 
+use Drupal\flag\FlagInterface;
+use Drupal\Core\Session\AccountInterface;
+
 /**
  * Interface FlagCountManagerInterface.
  *
@@ -53,14 +56,14 @@ interface FlagCountManagerInterface {
   /**
    * Get the user's flag count.
    *
-   * @param $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   The flag.
-   * @param $user
+   * @param \Drupal\Core\Session\AccountInterface $user
    *   The user object.
    *
    * @return
    *   The flag count with the flag name and the uid as the array key.
    */
-  public function getUserCounts($flag, $user);
+  public function getUserCounts(FlagInterface $flag, AccountInterface $user);
 
 }
