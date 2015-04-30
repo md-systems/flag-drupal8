@@ -145,10 +145,15 @@ class FlagService implements FlagServiceInterface {
   public function getFlaggings(FlagInterface $flag = NULL, EntityInterface $entity = NULL, AccountInterface $account = NULL) {
     $query = $this->entityQueryManager->get('flagging');
 
-    if (!empty($account) && !$flag->isGlobal()) {
+    // The user is supplied with a flag that is not global.
+    if (!empty($account) && !empty($flag) && !$flag->isGlobal()) {
       $query = $query->condition('uid', $account->id());
     }
 
+    // The user is supplied but the flag is not.
+    if (!empty($account) && empty($flag)) {
+       $query = $query->condition('uid', $account->id());
+    }
     if (!empty($flag)) {
       $query = $query->condition('fid', $flag->id());
     }
