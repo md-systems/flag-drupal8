@@ -108,9 +108,8 @@ class FlagService implements FlagServiceInterface {
       $query->condition("types.*", $bundle);
     }
 
-    $result = $query->execute();
-
-    $flags = $this->entityManager->getStorage('flag')->loadMultiple($result);
+    $ids = $query->execute();
+    $flags = $this->getFlagsByIds($ids);
 
     if ($account == NULL) {
       return $flags;
@@ -163,9 +162,9 @@ class FlagService implements FlagServiceInterface {
                      ->condition('entity_id', $entity->id());
     }
 
-    $result = $query->execute();
+    $ids = $query->execute();
 
-    return entity_load_multiple('flagging', $result);
+    return $this->getFlaggingsByIds($ids);
   }
 
   /**
@@ -194,14 +193,9 @@ class FlagService implements FlagServiceInterface {
       $query = $query->condition('fid', $flag->id());
     }
 
-    $result = $query->execute();
+    $ids = $query->execute();
 
-    $flaggings = [];
-    foreach ($result as $flagging_id) {
-      $flaggings[$flagging_id] = $this->entityManager->getStorage('flagging')->load($flagging_id);
-    }
-
-    return $flaggings;
+    return $this->getFlaggingsByIds($ids);
   }
 
   /**
@@ -281,6 +275,32 @@ class FlagService implements FlagServiceInterface {
     }
 
     return $out;
+  }
+
+  /**
+   * Loads flag entities given their IDs.
+   *
+   * @param int[] $ids
+   *   The flag IDs.
+   *
+   * @return \Drupal\flag\FlagInterface[]
+   *   An array of flags.
+   */
+  protected function getFlagsByIds(array $ids) {
+    return $this->entityManager->getStorage('flag')->loadMultiple($ids);
+  }
+
+  /**
+   * Loads flagging entities given their IDs.
+   *
+   * @param int[] $ids
+   *   The flagging IDs.
+   *
+   * @return \Drupal\flag\FlaggingInterface[]
+   *   An array of flaggings.
+   */
+  protected function getFlaggingsByIds(array $ids) {
+    return $this->entityManager->getStorage('flagging')->loadMultiple($ids);
   }
 
 }
