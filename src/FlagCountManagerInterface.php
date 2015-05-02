@@ -33,15 +33,13 @@ interface FlagCountManagerInterface {
   /**
    * Get the count of flags for a certain entity.
    *
-   * @param $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   The flag.
-   * @param $entity_type
-   *   The entity type (usually 'node').
    *
    * @return
    *   The flag count with the flag name and entity type as the array key.
    */
-  public function getEntityCounts($flag, $entity_type);
+  public function getEntityCounts(FlagInterface $flag);
 
   /**
    * Get the total count of items flagged within a flag.

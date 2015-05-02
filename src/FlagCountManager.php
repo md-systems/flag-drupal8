@@ -61,10 +61,11 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getEntityCounts($flag, $entity_type) {
+  public function getEntityCounts(FlagInterface $flag) {
     $counts = &drupal_static(__FUNCTION__);
 
     $flag_id = $flag->id();
+    $entity_type = $flag->getFlaggableEntityTypeId();
 
     // We check to see if the flag count is already in the cache,
     // if it's not, run the query.
