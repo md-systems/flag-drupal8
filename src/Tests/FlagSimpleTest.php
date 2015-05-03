@@ -83,6 +83,7 @@ class FlagSimpleTest extends WebTestBase {
     $this->drupalLogin($this->adminUser);
 
     $this->doTestFlagAdd();
+    $this->doTestCreateNodeAndFlagIt();
     $this->doGlobalFlag();
     $this->doTestHideFlagLinkFromTeaser();
     $this->doTestUserDeletion();
@@ -110,9 +111,6 @@ class FlagSimpleTest extends WebTestBase {
     $this->drupalPostForm(NULL, $edit, t('Create Flag'));
 
     $this->assertText(t('Flag @this_label has been added.', ['@this_label' => $this->label]));
-
-    // Continue test process.
-    $this->doTestCreateNodeAndFlagIt();
   }
 
   /**
