@@ -125,7 +125,7 @@ class FlagCountsTest extends WebTestBase {
     $flag_get_user_flag_counts = $flagCountService->getUserCounts($this->flag, $this->adminUser);
     $this->assertEqual($flag_get_user_flag_counts, 1, "getUserFlagCounts() returns the expected count.");
 
-    $flag_get_counts = $flagCountService->getCounts('node', $this->node->id());
+    $flag_get_counts = $flagCountService->getCounts($this->node);
     $this->assertEqual($flag_get_counts[$this->id], 1, "getCounts() returns the expected count.");
 
     $flag_get_flag_counts = $flagCountService->getTotals($this->flag);

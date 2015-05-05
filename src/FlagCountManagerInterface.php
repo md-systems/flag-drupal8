@@ -7,8 +7,9 @@
 
 namespace Drupal\flag;
 
-use Drupal\flag\FlagInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\flag\FlagInterface;
 
 /**
  * Interface FlagCountManagerInterface.
@@ -20,15 +21,13 @@ interface FlagCountManagerInterface {
   /**
    * Get flag counts for all flags on a node.
    *
-   * @param $entity_type
-   *   The entity type (usually 'node').
-   * @param $entity_id
-   *   The entity ID (usually the node ID).
+   * @param $entity
+   *   The entity.
    *
    * @return
    *   The flag count with the flag names as array keys.
    */
-  public function getCounts($entity_type, $entity_id);
+  public function getCounts(EntityInterface $entity);
 
   /**
    * Get the count of flags for a certain entity.

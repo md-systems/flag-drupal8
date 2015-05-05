@@ -8,6 +8,7 @@
 namespace Drupal\flag;
 
 use Drupal\Core\Database\Connection;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Event\FlagEvents;
 use Drupal\flag\Event\FlaggingEvent;
@@ -39,9 +40,11 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getCounts($entity_type, $entity_id) {
+  public function getCounts(EntityInterface $entity) {
     $counts = &drupal_static(__FUNCTION__);
 
+    $entity_type = $entity->getEntityTypeId();
+    $entity_id = $entity->id();
     if (!isset($counts[$entity_type][$entity_id])) {
       $counts[$entity_type][$entity_id] = [];
       $query = $this->connection->select('flag_counts', 'fc');
