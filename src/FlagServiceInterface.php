@@ -16,20 +16,6 @@ use Drupal\flag\FlagInterface;
 interface FlagServiceInterface {
 
   /**
-   * Get a flag type definition.
-   *
-   * @param string $entity_type
-   *   (optional) The entity type to get the definition for, or NULL to return
-   *   all flag subtypes.
-   *
-   * @return array
-   *   The flag type definition array.
-   *
-   * @see hook_flag_type_info()
-   */
-  public function fetchDefinition($entity_type = NULL);
-
-  /**
    * List all flags available.
    *
    * If node type or account are entered, a list of all possible flags will be

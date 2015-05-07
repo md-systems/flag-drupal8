@@ -85,18 +85,6 @@ class FlagService implements FlagServiceInterface {
   /**
    * {@inheritdoc}
    */
-  public function fetchDefinition($entity_type = NULL) {
-    // @todo Add caching, PLS!
-    if (!empty($entity_type)) {
-      return $this->flagTypeManager->getDefinition($entity_type);
-    }
-
-    return $this->flagTypeManager->getDefinitions();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getFlags($entity_type = NULL, $bundle = NULL, AccountInterface $account = NULL) {
     $query = $this->entityQueryManager->get('flag');
 
