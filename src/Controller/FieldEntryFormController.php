@@ -54,7 +54,7 @@ class FieldEntryFormController extends ControllerBase {
    *   The entity ID.
    *
    * @return array
-   *   The flagging edit form.
+   *   The processed edit form for the given flagging.
    */
   public function edit(FlagInterface $flag, $entity_id) {
     $flag_service = \Drupal::service('flag');
@@ -71,8 +71,8 @@ class FieldEntryFormController extends ControllerBase {
    * @param int $entity_id
    *   The entity ID to unflag.
    *
-   * @return AjaxResponse
-   *   The response object.
+   * @return array
+   *   The processed delete form for the given flagging.
    *
    * @see \Drupal\flag\Plugin\ActionLink\AJAXactionLink
    */
@@ -121,10 +121,11 @@ class FieldEntryFormController extends ControllerBase {
    * @param FlaggingInterface $flagging
    *   The flagging from which to get the form.
    * @param string|null $operation
-   *   The operation identifying the form variant to return.
+   *   (optional) The operation identifying the form variant to return.
+   *   If no operation is specified then 'default' is used.
    *
    * @return array
-   *   The form array.
+   *   The processed form for the given flagging and operation.
    */
   protected function getForm(FlaggingInterface $flagging, $operation = 'default') {
     return $this->entityFormBuilder()->getForm($flagging, $operation);
