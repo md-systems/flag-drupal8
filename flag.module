@@ -271,40 +271,20 @@ function flag_user_delete(UserInterface $account) {
  * Shared helper for user account cancellation or deletion.
  */
 function flag_user_account_removal(UserInterface $account) {
-  // Remove flags by this user.
-  $query = db_select('flagging', 'fc');
-  $query->leftJoin('flag_counts', 'c', 'fc.entity_id = c.entity_id AND fc.entity_type = c.entity_type');
-  $result = $query
-    ->fields('fc', ['fid', 'entity_id'])
-    ->fields('c', ['count'])
-    ->condition('fc.uid', $account->id())
-    ->execute();
+  /** var \Drupal\flag\FlagServiceInterface $flag_service */
+  $flag_service = \Drupal::service('flag');
 
-  foreach ($result as $flag_data) {
-    // Only decrement the flag count table if it's greater than 1.
-    if ($flag_data->count > 0) {
-      $flag_data->count--;
-      db_update('flag_counts')
-        ->fields([
-          'count' => $flag_data->count,
-        ])
-        ->condition('fid', $flag_data->fid)
-        ->condition('entity_id', $flag_data->entity_id)
-        ->execute();
-    }
-    elseif ($flag_data->count == 0) {
-      db_delete('flag_counts')
-        ->condition('fid', $flag_data->fid)
-        ->condition('entity_id', $flag_data->entity_id)
-        ->execute();
-    }
+  // Remove flags by this user.
+  $flaggings = $flag_service->getFlaggings(NULL, NULL, $account);
+  foreach ($flaggings as $flagging_id => $flagging) {
+    $flag_service->unflag($flagging->getFlag(), $flagging->getFlaggable(), $account);
   }
-  db_delete('flagging')
-    ->condition('uid', $account->id())
-    ->execute();
 
   // Remove flags that have been done to this user.
-  //_flag_entity_delete('user', $account->id());
+  $flaggings = $flag_service->getFlaggings(NULL, $account);
+  foreach ($flaggings as $flagging_id => $flagging) {
+    $flag_service->unflag($flagging->getFlag(), $flagging->getFlaggable());
+  }
 }
 
 /**
