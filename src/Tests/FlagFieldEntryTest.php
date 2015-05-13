@@ -106,6 +106,7 @@ class FlagFieldEntryTest extends WebTestBase {
     $this->doAddFields();
     $this->doCreateFlagNode();
     $this->doEditFlagField();
+    $this->doBadEditFlagField();
   }
 
   /**
@@ -218,6 +219,24 @@ class FlagFieldEntryTest extends WebTestBase {
 
     // See if the field value was preserved.
     $this->assertFieldByName('field_' . $this->flagFieldId . '[0][value]', $this->flagFieldValue);
+  }
+
+  /**
+   * Assert editing an invalid flagging throws an exception.
+   */
+  public function doBadEditFlagField() {
+    // Test a good flag ID param, but a bad flaggable ID param.
+    $this->drupalGet('flag/details/edit/' . $this->id . '/-9999');
+    $this->assertResponse('404', 'Editing an invalid flagging path: good flag, bad entity.');
+
+    // Test a bad flag ID param, but a good flaggable ID param.
+    $this->drupalGet('flag/details/edit/jibberish/' . $this->nodeId);
+    $this->assertResponse('404', 'Editing an invalid flagging path: bad flag, good entity');
+
+    // Test editing a unflagged entity.
+    $unlinked_node = $this->drupalCreateNode(['type' => $this->nodeType]);
+    $this->drupalGet('flag/details/edit/' . $this->id . '/' . $unlinked_node->id());
+    $this->assertResponse('404', 'Editing an invalid flagging path: good flag, good entity, but not flagged');
   }
 
 }
