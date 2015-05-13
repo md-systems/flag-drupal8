@@ -8,6 +8,7 @@
 namespace Drupal\flag\Tests;
 
 use Drupal\simpletest\WebTestBase;
+use Drupal\user\RoleInterface;
 use Drupal\user\Entity\Role;
 
 
@@ -122,7 +123,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Grant the flag permissions to the authenticated role, so that both
     // users have the same roles and share the render cache.
-    $role = Role::load(DRUPAL_AUTHENTICATED_RID);
+    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $role->grantPermission('flag ' . $this->id);
     $role->grantPermission('unflag ' . $this->id);
     $role->save();
@@ -167,7 +168,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Grant the flag permissions to the authenticated role, so that both
     // users have the same roles and share the render cache.
-    $role = Role::load(DRUPAL_AUTHENTICATED_RID);
+    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $role->grantPermission('flag ' . $this->id);
     $role->grantPermission('unflag ' . $this->id);
     $role->save();
