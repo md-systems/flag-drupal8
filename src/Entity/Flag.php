@@ -268,7 +268,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
 
     // Query the flagging entities for the given flag and flaggable.
     $query = \Drupal::entityQuery('flagging')
-      ->condition('fid', $this->id())
+      ->condition('flag_id', $this->id())
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id());
 

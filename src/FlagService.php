@@ -142,7 +142,7 @@ class FlagService implements FlagServiceInterface {
        $query = $query->condition('uid', $account->id());
     }
     if (!empty($flag)) {
-      $query = $query->condition('fid', $flag->id());
+      $query = $query->condition('flag_id', $flag->id());
     }
 
     if (!empty($entity)) {
@@ -178,7 +178,7 @@ class FlagService implements FlagServiceInterface {
       ->condition('entity_id', $entity->id());
 
     if (!empty($flag)) {
-      $query = $query->condition('fid', $flag->id());
+      $query = $query->condition('flag_id', $flag->id());
     }
 
     $ids = $query->execute();
@@ -212,9 +212,8 @@ class FlagService implements FlagServiceInterface {
     }
 
     $flagging = $this->entityManager->getStorage('flagging')->create([
-      'type' => 'flag',
       'uid' => $account->id(),
-      'fid' => $flag->id(),
+      'flag_id' => $flag->id(),
       'entity_id' => $entity->id(),
       'entity_type' => $entity->getEntityTypeId(),
     ]);

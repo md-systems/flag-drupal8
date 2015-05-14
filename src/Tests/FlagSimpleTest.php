@@ -266,7 +266,7 @@ class FlagSimpleTest extends WebTestBase {
 
     $count_flags_before = \Drupal::entityQuery('flagging')
       ->condition('uid', $user_1->id())
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -278,7 +278,7 @@ class FlagSimpleTest extends WebTestBase {
 
     $count_flags_after = \Drupal::entityQuery('flagging')
       ->condition('uid', $user_1->id())
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -306,7 +306,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 1 flag count.
     $count_flags_before = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -325,7 +325,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 2 flag counts.
     $count_flags_after = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -340,7 +340,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 1 flag count.
     $count_flags_before = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -353,7 +353,7 @@ class FlagSimpleTest extends WebTestBase {
     // Check for 0 flag counts, user deletion should lead to count decrement
     // or row deletion.
     $count_flags_before = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()

@@ -49,12 +49,12 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
       $counts[$entity_type][$entity_id] = [];
       $query = $this->connection->select('flag_counts', 'fc');
       $result = $query
-        ->fields('fc', ['fid', 'count'])
+        ->fields('fc', ['flag_id', 'count'])
         ->condition('fc.entity_type', $entity_type)
         ->condition('fc.entity_id', $entity_id)
         ->execute();
       foreach ($result as $row) {
-        $counts[$entity_type][$entity_id][$row->fid] = $row->count;
+        $counts[$entity_type][$entity_id][$row->flag_id] = $row->count;
       }
     }
 
@@ -75,8 +75,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
     if (!isset($counts[$flag_id][$entity_type])) {
       $counts[$flag_id][$entity_type] = [];
       $result = $this->connection->select('flagging', 'f')
-        ->fields('f', ['fid'])
-        ->condition('fid', $flag_id)
+        ->fields('f', ['flag_id'])
+        ->condition('flag_id', $flag_id)
         ->condition('entity_type', $entity_type)
         ->countQuery()
         ->execute()
@@ -96,8 +96,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
 
     if (!isset($counts[$flag_name])) {
       $counts[$flag_name] = $this->connection->select('flag_counts', 'fc')
-        ->fields('fc', array('fid'))
-        ->condition('fid', $flag_name)
+        ->fields('fc', array('flag_id'))
+        ->condition('flag_id', $flag_name)
         ->countQuery()
         ->execute()
         ->fetchField();
@@ -120,8 +120,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
     if (!isset($counts[$flag_id][$uid])) {
       $counts[$flag_id][$uid] = [];
       $result = $this->connection->select('flagging', 'f')
-        ->fields('f', ['fid'])
-        ->condition('fid', $flag_id)
+        ->fields('f', ['flag_id'])
+        ->condition('flag_id', $flag_id)
         ->condition('uid', $uid)
         ->countQuery()
         ->execute()
@@ -141,7 +141,7 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   public function incrementFlagCounts(FlaggingEvent $event) {
     $this->connection->merge('flag_counts')
       ->key([
-        'fid' => $event->getFlag()->id(),
+        'flag_id' => $event->getFlag()->id(),
         'entity_id' => $event->getEntity()->id(),
         'entity_type' => $event->getEntity()->getEntityTypeId(),
       ])
@@ -167,15 +167,15 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
     $entity = $event->getEntity();
 
     $count_result = $this->connection->select('flag_counts')
-      ->fields(NULL, ['fid', 'entity_id', 'entity_type', 'count'])
-      ->condition('fid', $flag->id())
+      ->fields(NULL, ['flag_id', 'entity_id', 'entity_type', 'count'])
+      ->condition('flag_id', $flag->id())
       ->condition('entity_id', $entity->id())
       ->condition('entity_type', $entity->getEntityTypeId())
       ->execute()
       ->fetchAll();
     if (count($count_result) == 1) {
       $this->connection->delete('flag_counts')
-        ->condition('fid', $flag->id())
+        ->condition('flag_id', $flag->id())
         ->condition('entity_id', $entity->id())
         ->condition('entity_type', $entity->getEntityTypeId())
         ->execute();
@@ -183,7 +183,7 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
     else {
       $this->connection->update('flag_counts')
         ->expression('count', 'count - 1')
-        ->condition('fid', $flag->id())
+        ->condition('flag_id', $flag->id())
         ->condition('entity_id', $entity->id())
         ->condition('entity_type', $entity->getEntityTypeId())
         ->execute();

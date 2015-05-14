@@ -30,7 +30,7 @@ interface FlagServiceInterface {
    *   flags for the given entity and bundle will be returned.
    *
    * @return array
-   *   An array of the structure [fid] = flag_object.
+   *   An array of the structure [flag_id] = flag_object.
    */
   public function getFlags($entity_type = NULL, $bundle = NULL, AccountInterface $account = NULL);
 

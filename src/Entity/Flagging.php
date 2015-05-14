@@ -29,7 +29,7 @@ use Drupal\flag\FlaggingInterface;
  *  data_table = "flagging_data",
  *  entity_keys = {
  *    "id" = "id",
- *    "bundle" = "type",
+ *    "bundle" = "flag_id",
  *    "uuid" = "uuid"
  *  },
  *  bundle_entity_type = "flag",
@@ -49,7 +49,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
    *   The flag ID.
    */
   public function getFlagId() {
-    return $this->get('fid')->value;
+    return $this->get('flag_id')->value;
   }
 
   /**
@@ -106,7 +106,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
       ->setDescription(t('The flagging UUID.'))
       ->setReadOnly(TRUE);
 
-    $fields['fid'] = BaseFieldDefinition::create('string')
+    $fields['flag_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Flag ID'))
       ->setDescription(t('The Flag ID.'))
       ->setReadOnly(TRUE);
@@ -118,12 +118,6 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
     $fields['entity_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity ID'))
       ->setDescription(t('The Entity ID.'));
-
-    $fields['type'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Type'))
-      ->setDescription(t('The flag type.'))
-      ->setSetting('target_type', 'flag')
-      ->setReadOnly(TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('User ID'))

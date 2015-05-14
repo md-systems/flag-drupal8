@@ -51,9 +51,9 @@ class FlagViewsRelationship extends RelationshipPluginBase {
       '#required' => TRUE,
     ];
 
-    foreach ($flags as $fid => $flag) {
+    foreach ($flags as $flag_id => $flag) {
       if (!empty($flag)) {
-        $form['flag']['#options'][$fid] = $flag->label();
+        $form['flag']['#options'][$flag_id] = $flag->label();
       }
     }
 
@@ -85,7 +85,7 @@ class FlagViewsRelationship extends RelationshipPluginBase {
     }
 
     $this->definition['extra'][] = [
-      'field' => 'fid',
+      'field' => 'flag_id',
       'value' => $flag->id,
       'numeric' => TRUE,
     ];

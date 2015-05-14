@@ -144,7 +144,7 @@ function flag_views_data() {
 function flag_views_data_alter(array &$data) {
   $flags = \Drupal::service('flag')->getFlags();
 
-  foreach ($flags as $fid => $flag) {
+  foreach ($flags as $flag_id => $flag) {
     $flag_type_plugin = $flag->getFlagTypePlugin();
     $flag_type_def = $flag_type_plugin->getPluginDefinition();
     $entity_type = $flag_type_def['entity_type'];

@@ -143,7 +143,7 @@ class FlagConfirmFormTest extends WebTestBase {
 
     // Get the flag count before the flagging, querying the database directly.
     $flag_count_pre = db_query('SELECT count FROM {flag_counts}
-      WHERE fid = :flag_id AND entity_type = :entity_type AND entity_id = :entity_id', [
+      WHERE flag_id = :flag_id AND entity_type = :entity_type AND entity_id = :entity_id', [
         ':flag_id' => $this->id,
         ':entity_type' => 'node',
         ':entity_id' => $node_id,
@@ -166,7 +166,7 @@ class FlagConfirmFormTest extends WebTestBase {
 
     // Check the flag count was incremented.
     $flag_count_flagged = db_query('SELECT count FROM {flag_counts}
-      WHERE fid = :flag_id AND entity_type = :entity_type AND entity_id = :entity_id', [
+      WHERE flag_id = :flag_id AND entity_type = :entity_type AND entity_id = :entity_id', [
         ':flag_id' => $this->id,
         ':entity_type' => 'node',
         ':entity_id' => $node_id,
@@ -189,7 +189,7 @@ class FlagConfirmFormTest extends WebTestBase {
 
     // Check the flag count was decremented.
     $flag_count_unflagged = db_query('SELECT count FROM {flag_counts}
-      WHERE fid = :flag_id AND entity_type = :entity_type AND entity_id = :entity_id', [
+      WHERE flag_id = :flag_id AND entity_type = :entity_type AND entity_id = :entity_id', [
         ':flag_id' => $this->id,
         ':entity_type' => 'node',
         ':entity_id' => $node_id,
