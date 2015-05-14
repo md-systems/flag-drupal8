@@ -90,13 +90,10 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getTotals(FlagInterface $flag, $reset = FALSE) {
+  public function getTotals(FlagInterface $flag) {
     $counts = &drupal_static(__FUNCTION__);
     $flag_name = $flag->id();
 
-    if ($reset) {
-      $counts = array();
-    }
     if (!isset($counts[$flag_name])) {
       $counts[$flag_name] = $this->connection->select('flag_counts', 'fc')
         ->fields('fc', array('fid'))

@@ -67,14 +67,11 @@ interface FlagCountManagerInterface {
    *
    * @param \Drupal\flag\FlagInterface
    *   The flag for which to retrieve a flag count.
-   * @param $reset
-   *   (optional) Reset the internal cache and execute the SQL query another
-   *   time.
    *
    * @return int
    *   The number of entities that are flagged with the flag.
    */
-  public function getTotals(FlagInterface $flag, $reset = FALSE);
+  public function getTotals(FlagInterface $flag);
 
   /**
    * Gets the count of the flaggings made by a user with a flag.
