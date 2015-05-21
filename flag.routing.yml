@@ -117,3 +117,11 @@ entity.flag.disable:
     _title: 'Disable Flag?'
   requirements:
     _permission: 'administer flags'
+
+entity.flag.reset:
+  path: '/flag/reset/{flag}'
+  defaults:
+    _form: '\Drupal\flag\Form\FlagResetForm'
+    _title: 'Reset Flag?'
+  requirements:
+    _permission: 'administer flags'

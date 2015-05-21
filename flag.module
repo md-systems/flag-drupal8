@@ -461,6 +461,12 @@ function flag_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
         'weight' => 50,
       ];
     }
+
+    $operations['reset'] = [
+      'title' => t('Reset'),
+      'url' => $entity->urlInfo('reset'),
+      'weight' => 100,
+    ];
   }
 
   return $operations;
