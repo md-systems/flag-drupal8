@@ -18,8 +18,6 @@ interface FlagTypePluginInterface extends PluginFormInterface, ConfigurablePlugi
   /**
    * Implements access_multiple() implemented by each child class.
    *
-   * @abstract
-   *
    * @param array $entity_ids
    *   An array of entity IDs.
    * @param AccountInterface $account
