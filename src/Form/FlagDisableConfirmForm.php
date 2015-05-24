@@ -30,7 +30,7 @@ class FlagDisableConfirmForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'flag_disable_confirm_form';
   }
 

@@ -47,7 +47,7 @@ class FlaggingConfirmForm extends ConfirmFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'flag_flagging_confirm_form';
   }
 
