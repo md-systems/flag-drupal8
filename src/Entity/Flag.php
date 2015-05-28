@@ -404,7 +404,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    * {@inheritdoc}
    */
   public function setFlagShortText($text) {
-    $this->flag_short;
+    $this->flag_short = $text;
   }
 
   /**
