@@ -108,6 +108,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
     $fields['flag_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Flag ID'))
       ->setDescription(t('The Flag ID.'))
+      ->setRequired(TRUE)
       ->setReadOnly(TRUE);
 
     $fields['entity_type'] = BaseFieldDefinition::create('string')
@@ -116,6 +117,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
 
     $fields['entity_id'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity ID'))
+      ->setRequired(TRUE)
       ->setDescription(t('The Entity ID.'));
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
