@@ -131,23 +131,6 @@ function hook_flag_access_multiple(FlagInterface $flag,
 }
 
 /**
- * Act when a flag is reset.
- *
- * @param \Drupal\flag\FlagInterface $flag
- *   The flag object.
- * @param int $entity_id
- *   The entity ID on which all flaggings are to be removed. May be NULL, in
- *   which case all of this flag's entities are to be unflagged.
- * @param array $rows
- *   Database rows from the {flagging} table.
- *
- * @see flag_reset_flag()
- */
-function hook_flag_reset(FlagInterface $flag, $entity_id, array $rows) {
-
-}
-
-/**
  * Alter the javascript structure that describes the flag operation.
  *
  * @param \Drupal\flag\FlagInterface $flag

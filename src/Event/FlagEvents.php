@@ -38,4 +38,12 @@ final class FlagEvents {
    */
   const FLAG_DELETED = 'flag.flag_deleted';
 
+  /**
+   * Event ID for when a flag is reset and all its flaggings are deleted.
+   *
+   * @Event
+   *
+   * @var string
+   */
+  const FLAG_RESET = 'flag.flag_reset';
 }

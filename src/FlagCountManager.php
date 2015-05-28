@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Event\FlagEvents;
 use Drupal\flag\Event\FlaggingEvent;
+use Drupal\flag\Event\FlagResetEvent;
 use Drupal\flag\FlagCountManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Drupal\flag\FlagInterface;
@@ -191,12 +192,28 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   }
 
   /**
+   * Deletes all of a flag's count entries.
+   *
+   * @param \Drupal\flag\event\FlagResetEvent $event
+   *  The flag reset event.
+   */
+  public function resetFlagCounts(FlagResetEvent $event) {
+    /* @var \Drupal\flag\FlaggingInterface flag */
+    $flag = $event->getFlag();
+
+    $this->connection->delete('flag_counts')
+      ->condition('flag_id', $flag->id())
+      ->execute();
+  }
+
+  /**
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
     $events = array();
     $events[FlagEvents::ENTITY_FLAGGED][] = array('incrementFlagCounts', -100);
     $events[FlagEvents::ENTITY_UNFLAGGED][] = array('decrementFlagCounts', -100);
+    $events[FlagEvents::FLAG_RESET][] = array('resetFlagCounts', -100);
     return $events;
   }
 
