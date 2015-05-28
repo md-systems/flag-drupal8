@@ -22,7 +22,7 @@ use Drupal\flag\FlaggingInterface;
  *    "form" = {
  *      "add" = "Drupal\flag\Form\FlaggingForm",
  *      "edit" = "Drupal\flag\Form\FlaggingForm",
- *      "delete" = "Drupal\flag\Form\FlaggingConfirmForm"
+ *      "delete" = "Drupal\flag\Form\UnflagConfirmForm"
  *    }
  *  },
  *  base_table = "flagging",

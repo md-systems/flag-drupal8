@@ -73,7 +73,7 @@ flag.link_unflag.json:
 flag.confirm_flag:
   path: '/flag/confirm/flag/{flag}/{entity_id}'
   defaults:
-    _form: '\Drupal\flag\Form\FlaggingConfirmForm'
+    _form: '\Drupal\flag\Form\FlagConfirmForm'
     _title: 'Flag Content'
   requirements:
     _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
@@ -81,7 +81,7 @@ flag.confirm_flag:
 flag.confirm_unflag:
   path: '/flag/confirm/unflag/{flag}/{entity_id}'
   defaults:
-    _form: '\Drupal\flag\Form\FlaggingConfirmForm'
+    _form: '\Drupal\flag\Form\UnflagConfirmForm'
     _title: 'Flag Content'
   requirements:
     _custom_access: '\Drupal\flag\FlagAccessController::checkUnflag'
