@@ -1,21 +1,21 @@
 <?php
 /**
  * @file
- * Contains the \Drupal\flag\Controller\FlagListController class.
+ * Contains \Drupal\flag\Controller\FlagListBuilder.
  */
 
 namespace Drupal\flag\Controller;
 
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;
-use Drupal\Component\Utility\String;
 use Drupal\Core\Url;
 
 /**
  * Provides a entity list page for Flags.
  */
-class FlagListController extends ConfigEntityListBuilder {
+class FlagListBuilder extends ConfigEntityListBuilder {
 
   /**
    * Overrides Drupal\Core\Entity\EntityListController::buildHeader().
@@ -53,7 +53,7 @@ class FlagListController extends ConfigEntityListBuilder {
     $out = implode(', ', $all_roles);
 
     if (empty($out)) {
-      return String::placeHolder($this->t('None'));
+      return SafeMarkup::placeHolder($this->t('None'));
     }
 
     return rtrim($out, ', ');

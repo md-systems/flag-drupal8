@@ -10,13 +10,14 @@ define('FLAG_API_VERSION', 3);
 define('FLAG_ADMIN_PATH', 'admin/structure/flags');
 define('FLAG_ADMIN_PATH_START', 3);
 
-use Drupal\Component\Utility\String;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\flag\Entity\Flag;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\flag\Event\FlagEvents;
+use Drupal\flag\Event\FlagResetEvent;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\UserInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -209,8 +210,8 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
  * Implements hook_entity_build_defaults_alter().
  */
 function flag_entity_build_defaults_alter(array &$build, EntityInterface $entity, $view_mode = 'full', $langcode = NULL) {
-  // Add the flag ID combined with the action to the cache key if render
-  // caching is enabled.
+  // Add the flag ID combined with the action to the cache key and set the cache
+  // context if render caching is enabled.
   if (isset($build['#cache']) && isset($build['#cache']['keys'])) {
 
     // Get all possible flags for this entity type.
@@ -235,6 +236,7 @@ function flag_entity_build_defaults_alter(array &$build, EntityInterface $entity
       }
 
       $build['#cache']['keys'][] = $flag->id . '-' . $action;
+      $build['#cache']['contexts'][] = 'user.permissions';
     }
   }
   return $build;
@@ -271,40 +273,20 @@ function flag_user_delete(UserInterface $account) {
  * Shared helper for user account cancellation or deletion.
  */
 function flag_user_account_removal(UserInterface $account) {
-  // Remove flags by this user.
-  $query = db_select('flagging', 'fc');
-  $query->leftJoin('flag_counts', 'c', 'fc.entity_id = c.entity_id AND fc.entity_type = c.entity_type');
-  $result = $query
-    ->fields('fc', ['fid', 'entity_id'])
-    ->fields('c', ['count'])
-    ->condition('fc.uid', $account->id())
-    ->execute();
+  /** var \Drupal\flag\FlagServiceInterface $flag_service */
+  $flag_service = \Drupal::service('flag');
 
-  foreach ($result as $flag_data) {
-    // Only decrement the flag count table if it's greater than 1.
-    if ($flag_data->count > 0) {
-      $flag_data->count--;
-      db_update('flag_counts')
-        ->fields([
-          'count' => $flag_data->count,
-        ])
-        ->condition('fid', $flag_data->fid)
-        ->condition('entity_id', $flag_data->entity_id)
-        ->execute();
-    }
-    elseif ($flag_data->count == 0) {
-      db_delete('flag_counts')
-        ->condition('fid', $flag_data->fid)
-        ->condition('entity_id', $flag_data->entity_id)
-        ->execute();
-    }
+  // Remove flags by this user.
+  $flaggings = $flag_service->getFlaggings(NULL, NULL, $account);
+  foreach ($flaggings as $flagging_id => $flagging) {
+    $flag_service->unflag($flagging->getFlag(), $flagging->getFlaggable(), $account);
   }
-  db_delete('flagging')
-    ->condition('uid', $account->id())
-    ->execute();
 
   // Remove flags that have been done to this user.
-  //_flag_entity_delete('user', $account->id());
+  $flaggings = $flag_service->getFlaggings(NULL, $account);
+  foreach ($flaggings as $flagging_id => $flagging) {
+    $flag_service->unflag($flagging->getFlag(), $flagging->getFlaggable());
+  }
 }
 
 /**
@@ -422,139 +404,6 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
 // Non-Views public API
 
 /**
- * Get the count of flags for a certain entity.
- *
- * @param $flag
- *   The flag.
- * @param $entity_type
- *   The entity type (usually 'node').
- *
- * @return
- *   The flag count with the flag name and entity type as the array key.
- *
- * @deprecated In Drupal 8.
- * @todo Move flag_get_entity_flag_counts() into FlagCountService.
- */
-function flag_get_entity_flag_counts($flag, $entity_type) {
-  $counts = &drupal_static(__FUNCTION__);
-
-  // We check to see if the flag count is already in the cache,
-  // if it's not, run the query.
-  if (!isset($counts[$flag->name][$entity_type])) {
-    $counts[$flag->name][$entity_type] = [];
-    $result = db_select('flagging', 'f')
-      ->fields('f', ['fid'])
-      ->condition('fid', $flag->fid)
-      ->condition('entity_type', $entity_type)
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-    $counts[$flag->name][$entity_type] =  $result;
-  }
-
-  return $counts[$flag->name][$entity_type];
-}
-
-/**
- * Get the user's flag count.
- *
- * @param $flag
- *   The flag.
- * @param $user
- *   The user object.
- *
- * @return
- *   The flag count with the flag name and the uid as the array key.
- *
- * @deprecated In Drupal 8.
- * @todo Move flag_get_user_flag_counts() to FlagCountsService.
- */
-function flag_get_user_flag_counts($flag, $user) {
-  $counts = &drupal_static(__FUNCTION__);
-
-  // We check to see if the flag count is already in the cache,
-  // if it's not, run the query.
-  if (!isset($counts[$flag->name][$user->uid])) {
-    $counts[$flag->name][$user->uid] = [];
-    $result = db_select('flagging', 'f')
-      ->fields('f', ['fid'])
-      ->condition('fid', $flag->fid)
-      ->condition('uid', $user->uid)
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-    $counts[$flag->name][$user->uid] = $result;
-  }
-
-  return $counts[$flag->name][$user->uid];
-}
-
-/**
- * Get flag counts for all flags on a node.
- *
- * @param $entity_type
- *   The entity type (usually 'node').
- * @param $entity_id
- *   The entity ID (usually the node ID).
- *
- * @return
- *   The flag count with the entity type and id as array keys.
- *
- * @deprecated In Drupal 8
- * @todo Move flag_get_counts() to FlagCountService.
- */
-function flag_get_counts($entity_type, $entity_id) {
-  $counts = &drupal_static(__FUNCTION__);
-
-  if (!isset($counts[$entity_type][$entity_id])) {
-    $counts[$entity_type][$entity_id] = [];
-    $query = db_select('flag', 'f');
-    $query->leftJoin('flag_counts', 'fc', 'f.fid = fc.fid');
-    $result = $query
-      ->fields('f', ['name'])
-      ->fields('fc', ['count'])
-      ->condition('fc.entity_type', $entity_type)
-      ->condition('fc.entity_id', $entity_id)
-      ->execute();
-    foreach ($result as $row) {
-      $counts[$entity_type][$entity_id][$row->name] = $row->count;
-    }
-  }
-
-  return $counts[$entity_type][$entity_id];
-}
-
-/**
- * Get the total count of items flagged within a flag.
- *
- * @param $flag_name
- *   The flag name for which to retrieve a flag count.
- * @param $reset
- *   (optional) Reset the internal cache and execute the SQL query another time.
- *
- * @deprecated In Drupal 8.
- * @todo Move flag_get_flag_counts() into FlagCountService.
- */
-function flag_get_flag_counts($flag_name, $reset = FALSE) {
-  $counts = &drupal_static(__FUNCTION__);
-
-  if ($reset) {
-    $counts = array();
-  }
-  if (!isset($counts[$flag_name])) {
-    $flag = flag_get_flag($flag_name);
-    $counts[$flag_name] = db_select('flag_counts', 'fc')
-      ->fields('fc', array('flagging_id'))
-      ->condition('fid', $flag->fid)
-      ->countQuery()
-      ->execute()
-      ->fetchField();
-  }
-
-  return $counts[$flag_name];
-}
-
-/**
  * Remove all flagged entities from a flag.
  *
  * @param $flag
@@ -569,27 +418,23 @@ function flag_get_flag_counts($flag_name, $reset = FALSE) {
 function flag_reset_flag($flag, $entity_id = NULL) {
   $query = db_select('flagging', 'fc')
     ->fields('fc')
-    ->condition('fid', $flag->fid);
+    ->condition('flag_id', $flag->id());
 
   if ($entity_id) {
     $query->condition('entity_id', $entity_id);
   }
 
-  $result = $query->execute()->fetchAllAssoc('flagging_id', PDO::FETCH_ASSOC);
-  $rows = array();
-  foreach ($result as $row) {
-    $rows[] = $row;
-  }
-  \Drupal::moduleHandler()->invokeAll('flag_reset', array($flag, $entity_id, $rows));
+  $result = $query->countQuery()
+              ->execute()
+              ->fetchField();
 
-  $query = db_delete('flagging')->condition('fid' , $flag->fid);
-  // Update the flag_counts table.
-  $count_query = db_delete('flag_counts')->condition('fid', $flag->fid);
+  \Drupal::service('event_dispatcher')->dispatch(FlagEvents::FLAG_RESET, new FlagResetEvent($flag, $result));
+
+  $query = db_delete('flagging')->condition('flag_id', $flag->id());
   if ($entity_id) {
     $query->condition('entity_id', $entity_id);
-    $count_query->condition('entity_id', $entity_id);
   }
-  $count_query->execute();
+
   return $query->execute();
 }
 
@@ -614,6 +459,12 @@ function flag_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
         'weight' => 50,
       ];
     }
+
+    $operations['reset'] = [
+      'title' => t('Reset'),
+      'url' => $entity->urlInfo('reset'),
+      'weight' => 100,
+    ];
   }
 
   return $operations;

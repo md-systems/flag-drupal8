@@ -14,17 +14,17 @@ function flag_schema() {
   $schema['flag_counts'] = [
     'description' => 'The number of times an item has been flagged.',
     'fields' => [
-      'fid' => [
+      'flag_id' => [
         'type' => 'varchar',
         'length' => '32',
       ],
       'entity_type' => [
-        'description' => 'The flag type, usually one of "node", "comment", "user".',
+        'description' => 'The flag type, for example "node", "comment", or "user".',
         'type' => 'varchar',
         'length' => '128',
       ],
       'entity_id' => [
-        'description' => 'The unique ID of the content, usually either the {cid}, {uid}, or {nid}.',
+        'description' => 'The unique ID of the flagged entity, for example the uid, cid, or nid.',
         'type' => 'int',
         'unsigned' => TRUE,
         'disp-width' => '10',
@@ -42,12 +42,12 @@ function flag_schema() {
         'disp-size' => 11,
       ],
     ],
-    'primary key' => ['fid', 'entity_id'],
+    'primary key' => ['flag_id', 'entity_id'],
     'indexes' => [
-      'fid_entity_type' => ['fid', 'entity_type'],
+      'flag_id_entity_type' => ['flag_id', 'entity_type'],
       'entity_type_entity_id' => ['entity_type', 'entity_id'],
-      'fid_count' => ['fid', 'count'],
-      'fid_last_updated' => ['fid', 'last_updated'],
+      'flag_id_count' => ['flag_id', 'count'],
+      'flag_id_last_updated' => ['flag_id', 'last_updated'],
     ],
   ];
 

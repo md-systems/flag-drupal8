@@ -8,6 +8,7 @@
 namespace Drupal\flag\Tests;
 
 use Drupal\simpletest\WebTestBase;
+use Drupal\user\RoleInterface;
 use Drupal\user\Entity\Role;
 
 
@@ -83,6 +84,7 @@ class FlagSimpleTest extends WebTestBase {
     $this->drupalLogin($this->adminUser);
 
     $this->doTestFlagAdd();
+    $this->doTestCreateNodeAndFlagIt();
     $this->doGlobalFlag();
     $this->doTestHideFlagLinkFromTeaser();
     $this->doTestUserDeletion();
@@ -110,9 +112,6 @@ class FlagSimpleTest extends WebTestBase {
     $this->drupalPostForm(NULL, $edit, t('Create Flag'));
 
     $this->assertText(t('Flag @this_label has been added.', ['@this_label' => $this->label]));
-
-    // Continue test process.
-    $this->doTestCreateNodeAndFlagIt();
   }
 
   /**
@@ -124,7 +123,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Grant the flag permissions to the authenticated role, so that both
     // users have the same roles and share the render cache.
-    $role = Role::load(DRUPAL_AUTHENTICATED_RID);
+    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $role->grantPermission('flag ' . $this->id);
     $role->grantPermission('unflag ' . $this->id);
     $role->save();
@@ -169,7 +168,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Grant the flag permissions to the authenticated role, so that both
     // users have the same roles and share the render cache.
-    $role = Role::load(DRUPAL_AUTHENTICATED_RID);
+    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $role->grantPermission('flag ' . $this->id);
     $role->grantPermission('unflag ' . $this->id);
     $role->save();
@@ -267,7 +266,7 @@ class FlagSimpleTest extends WebTestBase {
 
     $count_flags_before = \Drupal::entityQuery('flagging')
       ->condition('uid', $user_1->id())
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -279,7 +278,7 @@ class FlagSimpleTest extends WebTestBase {
 
     $count_flags_after = \Drupal::entityQuery('flagging')
       ->condition('uid', $user_1->id())
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -307,7 +306,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 1 flag count.
     $count_flags_before = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -326,7 +325,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 2 flag counts.
     $count_flags_after = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -341,7 +340,7 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 1 flag count.
     $count_flags_before = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()
@@ -354,7 +353,7 @@ class FlagSimpleTest extends WebTestBase {
     // Check for 0 flag counts, user deletion should lead to count decrement
     // or row deletion.
     $count_flags_before = \Drupal::entityQuery('flag_counts')
-      ->condition('fid', $this->id)
+      ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
       ->count()

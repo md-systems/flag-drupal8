@@ -39,68 +39,68 @@ entity.flag.delete_form:
     _entity_access: 'flag.update'
 
 flag_link_flag.html:
-  path: '/flag/flag/{flag_id}/{entity_id}'
+  path: '/flag/flag/{flag}/{entity_id}'
   defaults:
     _controller: '\Drupal\flag\Controller\ReloadLinkController::flag'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
     _format: 'html'
 
 flag.link_flag.json:
-  path: '/flag/flag/{flag_id}/{entity_id}'
+  path: '/flag/flag/{flag}/{entity_id}'
   defaults:
     _controller: '\Drupal\flag\Controller\AJAXLinkController::flag'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
     _format: 'json'
 
 flag_link_unflag.html:
-  path: '/flag/unflag/{flag_id}/{entity_id}'
+  path: '/flag/unflag/{flag}/{entity_id}'
   defaults:
     _controller: '\Drupal\flag\Controller\ReloadLinkController::unflag'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkUnflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkUnflag'
     _format: 'html'
 
 flag.link_unflag.json:
-  path: '/flag/unflag/{flag_id}/{entity_id}'
+  path: '/flag/unflag/{flag}/{entity_id}'
   defaults:
     _controller: '\Drupal\flag\Controller\AJAXLinkController::unflag'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkUnflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkUnflag'
     _format: 'json'
 
 flag.confirm_flag:
-  path: '/flag/confirm/flag/{flag_id}/{entity_id}'
+  path: '/flag/confirm/flag/{flag}/{entity_id}'
   defaults:
-    _form: '\Drupal\flag\Form\FlaggingConfirmForm'
+    _form: '\Drupal\flag\Form\FlagConfirmForm'
     _title: 'Flag Content'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
 
 flag.confirm_unflag:
-  path: '/flag/confirm/unflag/{flag_id}/{entity_id}'
+  path: '/flag/confirm/unflag/{flag}/{entity_id}'
   defaults:
-    _form: '\Drupal\flag\Form\FlaggingConfirmForm'
+    _form: '\Drupal\flag\Form\UnflagConfirmForm'
     _title: 'Flag Content'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkUnflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkUnflag'
 
 flag.field_entry:
-  path: '/flag/details/flag/{flag_id}/{entity_id}'
+  path: '/flag/details/flag/{flag}/{entity_id}'
   defaults:
     _controller: '\Drupal\flag\Controller\FieldEntryFormController::flag'
     _title_callback: '\Drupal\flag\Controller\FieldEntryFormController::flagTitle'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
 
 flag.field_entry.edit:
-  path: '/flag/details/edit/{flag_id}/{entity_id}'
+  path: '/flag/details/edit/{flag}/{entity_id}'
   defaults:
     _controller: '\Drupal\flag\Controller\FieldEntryFormController::edit'
     _title_callback: '\Drupal\flag\Controller\FieldEntryFormController::editTitle'
   requirements:
-    _custom_access: '\Drupal\flag\FlaggingAccessController::checkflag'
+    _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
 
 entity.flag.enable:
   path: '/flag/enable/{flag}'
@@ -115,5 +115,13 @@ entity.flag.disable:
   defaults:
     _form: '\Drupal\flag\Form\FlagDisableConfirmForm'
     _title: 'Disable Flag?'
+  requirements:
+    _permission: 'administer flags'
+
+entity.flag.reset:
+  path: '/flag/reset/{flag}'
+  defaults:
+    _form: '\Drupal\flag\Form\FlagResetForm'
+    _title: 'Reset Flag?'
   requirements:
     _permission: 'administer flags'

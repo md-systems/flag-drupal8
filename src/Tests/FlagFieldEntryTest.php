@@ -8,6 +8,7 @@ namespace Drupal\flag\Tests;
 
 use Drupal\field_ui\Tests\FieldUiTestTrait;
 use Drupal\simpletest\WebTestBase;
+use Drupal\user\RoleInterface;
 use Drupal\user\Entity\Role;
 
 /**
@@ -105,6 +106,7 @@ class FlagFieldEntryTest extends WebTestBase {
     $this->doAddFields();
     $this->doCreateFlagNode();
     $this->doEditFlagField();
+    $this->doBadEditFlagField();
   }
 
   /**
@@ -165,7 +167,7 @@ class FlagFieldEntryTest extends WebTestBase {
 
     // Grant the flag permissions to the authenticated role, so that both
     // users have the same roles and share the render cache.
-    $role = Role::load(DRUPAL_AUTHENTICATED_RID);
+    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
     $role->grantPermission('flag ' . $this->id);
     $role->grantPermission('unflag ' . $this->id);
     $role->save();
@@ -186,7 +188,7 @@ class FlagFieldEntryTest extends WebTestBase {
     $edit = [
       'field_' . $this->flagFieldId . '[0][value]' => $this->flagFieldValue,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Update Flagging'));
+    $this->drupalPostForm(NULL, $edit, t('Create Flagging'));
 
     // Check that the node is flagged.
     $this->assertLink(t('Unflag this item'));
@@ -217,6 +219,24 @@ class FlagFieldEntryTest extends WebTestBase {
 
     // See if the field value was preserved.
     $this->assertFieldByName('field_' . $this->flagFieldId . '[0][value]', $this->flagFieldValue);
+  }
+
+  /**
+   * Assert editing an invalid flagging throws an exception.
+   */
+  public function doBadEditFlagField() {
+    // Test a good flag ID param, but a bad flaggable ID param.
+    $this->drupalGet('flag/details/edit/' . $this->id . '/-9999');
+    $this->assertResponse('404', 'Editing an invalid flagging path: good flag, bad entity.');
+
+    // Test a bad flag ID param, but a good flaggable ID param.
+    $this->drupalGet('flag/details/edit/jibberish/' . $this->nodeId);
+    $this->assertResponse('404', 'Editing an invalid flagging path: bad flag, good entity');
+
+    // Test editing a unflagged entity.
+    $unlinked_node = $this->drupalCreateNode(['type' => $this->nodeType]);
+    $this->drupalGet('flag/details/edit/' . $this->id . '/' . $unlinked_node->id());
+    $this->assertResponse('404', 'Editing an invalid flagging path: good flag, good entity, but not flagged');
   }
 
 }

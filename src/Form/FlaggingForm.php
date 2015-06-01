@@ -29,7 +29,13 @@ class FlaggingForm extends ContentEntityForm {
    */
   public function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
-    $actions['submit']['#value'] = $this->t('Update Flagging');
+
+    if ($this->entity->isNew()) {
+      $actions['submit']['#value'] = $this->t('Create Flagging');
+    }
+    else {
+      $actions['submit']['#value'] = $this->t('Update Flagging');
+    }
 
     // Customize the delete link.
     if (isset($actions['delete'])) {
@@ -43,7 +49,7 @@ class FlaggingForm extends ContentEntityForm {
       // link. Since that route doesn't use the flagging ID, Drupal can't build
       // the link for us.
       $route_params = [
-        'flag_id' => $this->entity->getFlagId(),
+        'flag' => $this->entity->getFlagId(),
         'entity_id' => $this->entity->getFlaggableId(),
         'destination' => \Drupal::request()->get('destination'),
       ];

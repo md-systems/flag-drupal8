@@ -24,7 +24,7 @@ use Drupal\flag\FlagInterface;
  *   label = @Translation("Flag"),
  *   admin_permission = "administer flags",
  *   handlers = {
- *     "list_builder" = "Drupal\flag\Controller\FlagListController",
+ *     "list_builder" = "Drupal\flag\Controller\FlagListBuilder",
  *     "form" = {
  *       "add" = "Drupal\flag\Form\FlagAddForm",
  *       "edit" = "Drupal\flag\Form\FlagEditForm",
@@ -36,11 +36,30 @@ use Drupal\flag\FlagInterface;
  *     "id" = "id",
  *     "label" = "label",
  *   },
+ *   config_export = {
+ *     "id",
+ *     "uuid",
+ *     "label",
+ *     "types",
+ *     "entity_type",
+ *     "enabled",
+ *     "global",
+ *     "flag_short",
+ *     "flag_long",
+ *     "flag_message",
+ *     "unflag_short",
+ *     "unflag_long",
+ *     "unflag_message",
+ *     "unflag_denied_text",
+ *     "flag_type",
+ *     "link_type",
+ *   },
  *   links = {
  *     "edit-form" = "/admin/structure/flags/manage/{flag}",
  *     "delete-form" = "/admin/structure/flags/manage/{flag}/delete",
  *     "enable" = "/flag/enable/{flag}",
- *     "disable" = "/flag/disable/{flag}"
+ *     "disable" = "/flag/disable/{flag}",
+ *     "reset" = "/flag/reset/{flag}"
  *   }
  * )
  */
@@ -250,7 +269,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
 
     // Query the flagging entities for the given flag and flaggable.
     $query = \Drupal::entityQuery('flagging')
-      ->condition('fid', $this->id())
+      ->condition('flag_id', $this->id())
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id());
 
@@ -274,7 +293,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   /**
    * {@inheritdoc}
    */
-  public function getFlaggableEntityType() {
+  public function getFlaggableEntityTypeId() {
     return $this->entity_type;
   }
 
@@ -360,10 +379,6 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
       $account = $account ?: \Drupal::currentUser();
       return $account->hasPermission($action . ' ' . $this->id);
     }
-    else {
-      // @todo: Is this the correct response?
-      return FALSE;
-    }
   }
 
   /**
@@ -389,7 +404,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    * {@inheritdoc}
    */
   public function setFlagShortText($text) {
-    $this->flag_short;
+    $this->flag_short = $text;
   }
 
   /**
@@ -513,7 +528,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
     // Reset the render cache for the entity.
     // @todo Inject the entity manager into the object?
     \Drupal::entityManager()
-      ->getViewBuilder($this->getFlaggableEntityType())
+      ->getViewBuilder($this->getFlaggableEntityTypeId())
       ->resetCache();
     // Clear entity extra field caches.
     \Drupal::entityManager()->clearCachedFieldDefinitions();

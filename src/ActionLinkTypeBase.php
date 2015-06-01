@@ -8,11 +8,9 @@ namespace Drupal\flag;
 
 use Drupal\Core\Url;
 use Drupal\Core\Entity\EntityInterface;
-use \Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\flag\FlagInterface;
 use Drupal\flag\ActionLinkTypePluginInterface;
-use Drupal\flag\FlagService;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -55,7 +53,7 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
    */
   public function buildLink($action, FlagInterface $flag, EntityInterface $entity) {
     $parameters = [
-      'flag_id' => $flag->id(),
+      'flag' => $flag->id(),
       'entity_id' => $entity->id(),
     ];
 

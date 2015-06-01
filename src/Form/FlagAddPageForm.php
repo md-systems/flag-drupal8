@@ -24,7 +24,7 @@ class FlagAddPageForm extends FormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'flag_add_page';
   }
 

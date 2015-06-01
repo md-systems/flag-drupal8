@@ -26,18 +26,6 @@ function hook_flag_type_info_alter(array &$definitions) {
 }
 
 /**
- * Allow modules to alter a flag when it is initially loaded.
- *
- * @param \Drupal\flag\FlagInterface $flag
- *   The flag to alter.
- *
- * @see \Drupal\flag\FlagService::getFlags()
- */
-function hook_flag_alter(FlagInterface &$flag) {
-
-}
-
-/**
  * Alter a flag's default options.
  *
  * Modules that wish to extend flags and provide additional options must declare
@@ -139,23 +127,6 @@ function hook_flag_access(FlagInterface $flag,
 function hook_flag_access_multiple(FlagInterface $flag,
                                    array $entity_ids,
                                    AccountInterface $account) {
-
-}
-
-/**
- * Act when a flag is reset.
- *
- * @param \Drupal\flag\FlagInterface $flag
- *   The flag object.
- * @param int $entity_id
- *   The entity ID on which all flaggings are to be removed. May be NULL, in
- *   which case all of this flag's entities are to be unflagged.
- * @param array $rows
- *   Database rows from the {flagging} table.
- *
- * @see flag_reset_flag()
- */
-function hook_flag_reset(FlagInterface $flag, $entity_id, array $rows) {
 
 }
 

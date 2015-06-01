@@ -51,9 +51,9 @@ class FlagViewsRelationship extends RelationshipPluginBase {
       '#required' => TRUE,
     ];
 
-    foreach ($flags as $fid => $flag) {
+    foreach ($flags as $flag_id => $flag) {
       if (!empty($flag)) {
-        $form['flag']['#options'][$fid] = $flag->label();
+        $form['flag']['#options'][$flag_id] = $flag->label();
       }
     }
 
@@ -120,9 +120,7 @@ class FlagViewsRelationship extends RelationshipPluginBase {
    *   The flag being selected by in the view.
    */
   public function getFlag() {
-    $flaggable = $this->definition['flaggable'];
-    $flag = \Drupal::service('flag')->getFlags($flaggable);
-    $this->options['flag'] = $flag;
-    return current($flag);
+    $flag = \Drupal::service('flag')->getFlagById($this->options['flag']);
+    return $flag;
   }
 }
