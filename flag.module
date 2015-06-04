@@ -155,6 +155,9 @@ function flag_entity_extra_field_info() {
   return $extra;
 }
 
+/**
+ * Implements hook_node_links_alter().
+ */
 function flag_node_links_alter(array &$links, NodeInterface $entity, array &$context) {
   //@todo: Define this for handling the showOnLinks() flag mode.
 }
