@@ -104,7 +104,7 @@ class FlagFieldEntryTest extends WebTestBase {
     $this->drupalLogin($this->adminUser);
     $this->doCreateFlag();
     $this->doAddFields();
-    $this->doCreateFlagNode();
+    $this->doFlagNode();
     $this->doEditFlagField();
     $this->doBadEditFlagField();
   }
@@ -161,7 +161,7 @@ class FlagFieldEntryTest extends WebTestBase {
   /**
    * Create a node and flag it.
    */
-  public function doCreateFlagNode() {
+  public function doFlagNode() {
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $this->nodeId = $node->id();
 

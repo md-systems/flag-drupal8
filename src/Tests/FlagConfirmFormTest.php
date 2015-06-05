@@ -84,7 +84,7 @@ class FlagConfirmFormTest extends WebTestBase {
 
     $this->drupalLogin($this->adminUser);
     $this->doCreateFlag();
-    $this->doCreateNode();
+    $this->doFlagUnflagNode();
   }
 
   /**
@@ -124,9 +124,9 @@ class FlagConfirmFormTest extends WebTestBase {
   }
 
   /**
-   * Create a node and flag it.
+   * Create a node, flag it and unflag it.
    */
-  public function doCreateNode() {
+  public function doFlagUnflagNode() {
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $node_id = $node->id();
 

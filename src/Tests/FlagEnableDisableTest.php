@@ -87,7 +87,7 @@ class FlagEnableDisableTest extends WebTestBase {
     $this->drupalLogin($this->adminUser);
 
     $this->doCreateFlag();
-    $this->doCreateNode();
+    $this->doFlagNode();
     $this->doDisableFlag();
     $this->doEnableFlag();
   }
@@ -118,7 +118,7 @@ class FlagEnableDisableTest extends WebTestBase {
   /**
    * Create a node and flag it.
    */
-  public function doCreateNode() {
+  public function doFlagNode() {
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $this->node_id = $node->id();
 
