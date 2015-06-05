@@ -27,13 +27,13 @@ class EntityFlagType extends FlagTypeBase {
    *
    * @var string
    */
-  public $entity_type = '';
+  protected $entityType = '';
 
   /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, array $plugin_definition) {
-    $this->entity_type = $plugin_definition['entity_type'];
+    $this->entityType = $plugin_definition['entity_type'];
     parent::__construct($configuration, $plugin_id, $plugin_definition);
   }
 
@@ -68,7 +68,7 @@ class EntityFlagType extends FlagTypeBase {
     // Add checkboxes to show flag link on each entity view mode.
     $options = [];
     $defaults = [];
-    $view_modes = \Drupal::entityManager()->getViewModes($this->entity_type);
+    $view_modes = \Drupal::entityManager()->getViewModes($this->entityType);
     foreach ($view_modes as $name => $view_mode) {
       $options[$name] = t('Display on @name view mode', ['@name' => $view_mode['label']]);
       $defaults[$name] = $this->showInLinks($name);
