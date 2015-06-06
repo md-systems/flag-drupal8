@@ -85,7 +85,7 @@ class FlagViewsRelationship extends RelationshipPluginBase {
     }
 
     $this->definition['extra'][] = [
-      'field' => 'fid',
+      'field' => 'flag_id',
       'value' => $flag->id(),
       'numeric' => TRUE,
     ];

@@ -279,13 +279,17 @@ function flag_user_account_removal(UserInterface $account) {
   // Remove flags by this user.
   $flaggings = $flag_service->getFlaggings(NULL, NULL, $account);
   foreach ($flaggings as $flagging_id => $flagging) {
-    $flag_service->unflag($flagging->getFlag(), $flagging->getFlaggable(), $account);
+    if ($flaggable = $flagging->getFlaggable()) {
+      $flag_service->unflag($flagging->getFlag(), $flaggable, $account);
+    }
   }
 
   // Remove flags that have been done to this user.
   $flaggings = $flag_service->getFlaggings(NULL, $account);
   foreach ($flaggings as $flagging_id => $flagging) {
-    $flag_service->unflag($flagging->getFlag(), $flagging->getFlaggable());
+    if ($flaggable = $flagging->getFlaggable()) {
+      $flag_service->unflag($flagging->getFlag(), $flaggable);
+    }
   }
 }
 
