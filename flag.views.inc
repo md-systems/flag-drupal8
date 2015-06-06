@@ -145,28 +145,27 @@ function flag_views_data_alter(array &$data) {
   $flags = \Drupal::service('flag')->getFlags();
 
   foreach ($flags as $flag_id => $flag) {
-    $entity_type = $flag->getFlaggableEntityTypeId();
+    $entity_type_id = $flag->getFlaggableEntityTypeId();
 
-    $info = \Drupal::entityManager()->getDefinition($entity_type);
+    $entity_manager = \Drupal::entityManager();
 
-    $base_table = $info->getBaseTable();
-    if ($entity_type == 'node') {
-      $base_table = $info->getDataTable();
+    $entity_type = $entity_manager->getDefinition($entity_type_id);
+    if ($entity_type->hasHandlerClass('views_data')) {
+      $base_table = $entity_manager->getHandler($entity_type_id, 'views_data')->getViewsTableForEntityType($entity_type);
+      $data[$base_table]['flag_content_rel'] = [
+        'title' => t('@entity_label flag', ['@entity_label' => $entity_type_id]),
+        'help' => t('Limit results to only those entity flagged by a certain flag; Or display information about the flag set on a entity.'),
+        'relationship' => [
+          'group' => t('Flag'),
+          'label' => t('Flags'),
+          'base' => 'flagging',
+          'base field' => 'entity_id',
+          'relationship field' => $entity_type->getKey('id'),
+          'id' => 'flag_relationship',
+          'flaggable' => $entity_type_id,
+        ],
+      ];
     }
-
-    $data[$base_table]['flag_content_rel'] = [
-      'title' => t('@entity_label flag', ['@entity_label' => $entity_type]),
-      'help' => t('Limit results to only those entity flagged by a certain flag; Or display information about the flag set on a entity.'),
-      'relationship' => [
-        'group' => t('Flag'),
-        'label' => t('Flags'),
-        'base' => 'flagging',
-        'base field' => 'entity_id',
-        'relationship field' => $info->getKey('id'),
-        'id' => 'flag_relationship',
-        'flaggable' => $entity_type,
-      ],
-    ];
 
   }
 }
