@@ -85,7 +85,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    *
    * @var string
    */
-  public $entity_type = NULL;
+  protected $entity_type = NULL;
 
   /**
    * The flag label.
@@ -115,7 +115,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    *
    * @var array
    */
-  public $types = [];
+  protected $types = [];
 
   /**
    * The text for the "flag this" link for this flag.
@@ -295,6 +295,13 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    */
   public function getFlaggableEntityTypeId() {
     return $this->entity_type;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTypes() {
+    return $this->types;
   }
 
   /**

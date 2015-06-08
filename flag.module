@@ -128,9 +128,11 @@ function flag_entity_extra_field_info() {
       continue;
     }
 
-    foreach ($flag->types as $bundle_name) {
+    $flaggable_bundles = $flag->getTypes();
+
+    foreach ($flaggable_bundles as $bundle_name) {
       if ($flag_type_plugin->showOnForm()) {
-        $extra[$flag->entity_type][$bundle_name]['form']['flag'] = [
+        $extra[$flag->getFlaggableEntityTypeId()][$bundle_name]['form']['flag'] = [
           'label' => t('Flags'),
           'description' => t('Checkboxes for toggling flags'),
           'weight' => 10,
@@ -138,7 +140,7 @@ function flag_entity_extra_field_info() {
       }
 
       if ($flag_type_plugin->showAsField()) {
-        $extra[$flag->entity_type][$bundle_name]['display']['flag_' . $flag->id()] = [
+        $extra[$flag->getFlaggableEntityTypeId()][$bundle_name]['display']['flag_' . $flag->id()] = [
           // It would be nicer to use % as the placeholder, but the label is
           // run through check_plain() by field_ui_display_overview_form()
           // (arguably incorrectly; see http://drupal.org/node/1991292).
@@ -303,7 +305,7 @@ function flag_flag_access($flag, $entity_id, $action, $account) {
 
   // Restrict access by authorship. It's important that TRUE is never returned
   // here, otherwise we'd grant permission even if other modules denied access.
-  if ($flag->entity_type == 'node') {
+  if ($flag->getFlaggableEntityTypeId() == 'node') {
     // For non-existent nodes (such as on the node add form), assume that the
     // current user is creating the content.
     if (empty($entity_id) || !($node = $flag->fetch_entity($entity_id))) {
@@ -319,7 +321,7 @@ function flag_flag_access($flag, $entity_id, $action, $account) {
   }
 
   // Restrict access by comment authorship.
-  if ($flag->entity_type == 'comment') {
+  if ($flag->getFlaggableEntityTypeId() == 'comment') {
     // For non-existent comments (such as on the comment add form), assume that
     // the current user is creating the content.
     if (empty($entity_id) || !($comment = $flag->fetch_entity($entity_id))) {
@@ -353,7 +355,7 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
     return $access;
   }
 
-  if ($flag->entity_type == 'node') {
+  if ($flag->getFlaggableEntityTypeId() == 'node') {
     // Restrict access by authorship. This is similar to flag_flag_access()
     // above, but returns an array of 'nid' => $access values. Similarly, we
     // should never return TRUE in any of these access values, only FALSE if we
@@ -361,7 +363,7 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
     $result = db_select('node', 'n')
       ->fields('n', array('nid', 'uid'))
       ->condition('nid', array_keys($entity_ids), 'IN')
-      ->condition('type', $flag->types, 'IN')
+      ->condition('type', $flag->getTypes(), 'IN')
       ->execute();
     foreach ($result as $row) {
       if ($flag->access_author == 'own') {
@@ -373,7 +375,7 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
     }
   }
 
-  if ($flag->entity_type == 'comment') {
+  if ($flag->getFlaggableEntityTypeId() == 'comment') {
     // Restrict access by comment ownership.
     $query = db_select('comment', 'c');
     $query->leftJoin('node', 'n', 'c.nid = n.nid');

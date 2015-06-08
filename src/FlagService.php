@@ -200,8 +200,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     // Check the bundle is allowed by the flag.
-    // @todo: this will get hit by ->types becoming private.
-    if (!empty($flag->types) && !in_array($entity->bundle(), $flag->types)) {
+    if (!in_array($entity->bundle(), $flag->getTypes())) {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 
@@ -241,8 +240,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     // Check the bundle is allowed by the flag.
-    // @todo: this will get hit by ->types becoming private.
-    if (!empty($flag->types) && !in_array($entity->bundle(), $flag->types)) {
+    if (!in_array($entity->bundle(), $flag->getTypes())) {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 

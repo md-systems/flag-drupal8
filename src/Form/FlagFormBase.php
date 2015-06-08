@@ -138,7 +138,7 @@ abstract class FlagFormBase extends EntityForm {
       '#type' => 'checkboxes',
       '#title' => t('Flaggable types'),
       '#options' => $entity_bundles,
-      '#default_value' => $flag->types,
+      '#default_value' => $flag->getTypes(),
       '#description' => t('Check any sub-types that this flag may be used on.'),
       '#required' => TRUE,
       '#weight' => 10,
