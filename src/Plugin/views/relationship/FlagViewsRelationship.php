@@ -110,7 +110,7 @@ class FlagViewsRelationship extends RelationshipPluginBase {
       }
     }
 
-    // parent::query();
+    parent::query();
   }
 
   /**
