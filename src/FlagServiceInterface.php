@@ -18,8 +18,7 @@ interface FlagServiceInterface {
   /**
    * List all flags available.
    *
-   * If node type or account are entered, a list of all possible flags will be
-   * returned.
+   * If all the parameters are omitted, a list of all flags will be returned.
    *
    * @param string $entity_type
    *   (optional) The type of entity for which to load the flags.
@@ -30,7 +29,7 @@ interface FlagServiceInterface {
    *   flags for the given entity and bundle will be returned.
    *
    * @return array
-   *   An array of the structure [flag_id] = flag_object.
+   *   An array of flag entities, keyed by the entity IDs.
    */
   public function getFlags($entity_type = NULL, $bundle = NULL, AccountInterface $account = NULL);
 
