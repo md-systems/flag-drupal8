@@ -247,10 +247,10 @@ abstract class FlagFormBase extends EntityForm {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityFormController::validate().
+   * Overrides Drupal\Core\Entity\EntityFormController::validateForm().
    */
-  public function validate(array $form, FormStateInterface $form_state) {
-    parent::validate($form, $form_state);
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    parent::validateForm($form, $form_state);
 
     // @todo Move this to the validation method for the confirm form plugin
     $flag = $this->entity;
