@@ -150,4 +150,18 @@ interface FlagServiceInterface {
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL);
 
+  /**
+   *
+   * Remove all flagged entities from a flag.
+   *
+   * @param FlagInterface $flag
+   *  The flag to reset.
+   * @param EntityInterface $entity
+   *  (optional) The entity for which to delete flaggings.
+   *
+   * @return int
+   *  The number of flaggings that have been deleted.
+   */
+  public function reset(FlagInterface $flag, EntityInterface $entity = NULL);
+
 }

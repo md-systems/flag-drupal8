@@ -16,8 +16,6 @@ use Drupal\flag\Entity\Flag;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\flag\Event\FlagEvents;
-use Drupal\flag\Event\FlagResetEvent;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\UserInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -396,44 +394,6 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
 
   // Always return an array (even if empty) of accesses.
   return $access;
-}
-
-// ---------------------------------------------------------------------------
-// Non-Views public API
-
-/**
- * Remove all flagged entities from a flag.
- *
- * @param $flag
- *   The flag object.
- * @param $entity_id
- *   (optional) The entity ID on which all flaggings will be removed. If left
- *   empty, this will remove all of this flag's entities.
- *
- * @deprecated In Drupal 8.
- * @todo Move to Flag::reset().
- */
-function flag_reset_flag($flag, $entity_id = NULL) {
-  $query = db_select('flagging', 'fc')
-    ->fields('fc')
-    ->condition('flag_id', $flag->id());
-
-  if ($entity_id) {
-    $query->condition('entity_id', $entity_id);
-  }
-
-  $result = $query->countQuery()
-              ->execute()
-              ->fetchField();
-
-  \Drupal::service('event_dispatcher')->dispatch(FlagEvents::FLAG_RESET, new FlagResetEvent($flag, $result));
-
-  $query = db_delete('flagging')->condition('flag_id', $flag->id());
-  if ($entity_id) {
-    $query->condition('entity_id', $entity_id);
-  }
-
-  return $query->execute();
 }
 
 /**
