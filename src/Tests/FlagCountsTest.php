@@ -131,7 +131,7 @@ class FlagCountsTest extends WebTestBase {
     $flag_get_flag_counts = $flagCountService->getTotals($this->flag);
     $this->assertEqual($flag_get_flag_counts, 1, "getFlagTotalCounts() returns the expected count.");
 
-    flag_reset_flag($this->flag);
+    $this->flagService->reset($this->flag);
     drupal_static_reset();
     $flag_get_flag_counts = $flagCountService->getTotals($this->flag);
     $this->assertEqual($flag_get_flag_counts, 0, "getCounts() on reset flag returns the expected count.");

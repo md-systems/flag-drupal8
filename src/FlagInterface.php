@@ -56,6 +56,14 @@ interface FlagInterface extends ConfigEntityInterface, EntityWithPluginCollectio
   public function getFlaggableEntityTypeId();
 
   /**
+   * Get the flag types property.
+   *
+   * @return array
+   *  An array containing the bundles this flag may be applied to.
+   */
+  public function getTypes();
+
+  /**
    * Set the flag type plugin.
    *
    * @param string $plugin_id

@@ -23,7 +23,8 @@ use Drupal\flag\FlaggingInterface;
  *      "add" = "Drupal\flag\Form\FlaggingForm",
  *      "edit" = "Drupal\flag\Form\FlaggingForm",
  *      "delete" = "Drupal\flag\Form\UnflagConfirmForm"
- *    }
+ *    },
+ *    "views_data" = "Drupal\flag\FlaggingViewsData",
  *  },
  *  base_table = "flagging",
  *  entity_keys = {

@@ -83,17 +83,17 @@ class FlagSimpleTest extends WebTestBase {
 
     $this->drupalLogin($this->adminUser);
 
-    $this->doTestFlagAdd();
-    $this->doTestCreateNodeAndFlagIt();
-    $this->doGlobalFlag();
-    $this->doTestHideFlagLinkFromTeaser();
-    $this->doTestUserDeletion();
+    $this->doFlagAdd();
+    $this->doFlagLinksTest();
+    $this->doGlobalFlagLinksTest();
+    $this->doFlagLinkTeaserTest();
+    $this->doUserDeletionTest();
   }
 
   /**
    * Flag creation.
    */
-  public function doTestFlagAdd() {
+  public function doFlagAdd() {
     // Create content type.
     $this->drupalCreateContentType(['type' => $this->nodeType]);
 
@@ -115,9 +115,9 @@ class FlagSimpleTest extends WebTestBase {
   }
 
   /**
-   * Node creation and flagging.
+   * Test the flag link in different states, for different users.
    */
-  public function doTestCreateNodeAndFlagIt() {
+  public function doFlagLinksTest() {
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $node_id = $node->id();
 
@@ -160,9 +160,9 @@ class FlagSimpleTest extends WebTestBase {
   }
 
   /**
-   * Test global flag.
+   * Test a global flag link appears correctly in different states.
    */
-  public function doGlobalFlag() {
+  public function doGlobalFlagLinksTest() {
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $node_id = $node->id();
 
@@ -214,9 +214,9 @@ class FlagSimpleTest extends WebTestBase {
   }
 
   /**
-   * Node creation and flag link.
+   * Test the flag link doesn't appear when set to hidden for a view mode.
    */
-  public function doTestHideFlagLinkFromTeaser() {
+  public function doFlagLinkTeaserTest() {
     $this->drupalLogin($this->adminUser);
 
     $node = $this->drupalCreateNode([
@@ -251,7 +251,7 @@ class FlagSimpleTest extends WebTestBase {
   /**
    * Creates user, sets flags and deletes user.
    */
-  public function doTestUserDeletion() {
+  public function doUserDeletionTest() {
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $node_id = $node->id();
 

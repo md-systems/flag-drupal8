@@ -7,6 +7,7 @@
 namespace Drupal\flag\Plugin\Derivative;
 
 use Drupal\Component\Plugin\Derivative\DeriverBase;
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 
 /**
  * Derivative class for entity flag subtypes plugin.
@@ -24,7 +25,6 @@ class EntityFlagTypeDeriver extends DeriverBase {
    * @var array
    */
   protected $ignoredEntities = [
-    'flag_flag',
     'flagging',
     'node',
     'user',
@@ -38,6 +38,10 @@ class EntityFlagTypeDeriver extends DeriverBase {
     $derivatives = array();
     foreach (\Drupal::entityManager()->getDefinitions() as $entity_id => $entity_type) {
       if (in_array($entity_id, $this->ignoredEntities)) {
+        continue;
+      }
+      // Skip config entity types.
+      if (!$entity_type instanceof ContentEntityTypeInterface) {
         continue;
       }
       $derivatives[$entity_id] = [

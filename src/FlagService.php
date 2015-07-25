@@ -12,6 +12,7 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Event\FlagEvents;
+use Drupal\flag\Event\FlagResetEvent;
 use Drupal\flag\Event\FlaggingEvent;
 use Drupal\flag\FlagInterface;
 use Drupal\flag\FlagServiceInterface;
@@ -200,8 +201,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     // Check the bundle is allowed by the flag.
-    // @todo: this will get hit by ->types becoming private.
-    if (!empty($flag->types) && !in_array($entity->bundle(), $flag->types)) {
+    if (!in_array($entity->bundle(), $flag->getTypes())) {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 
@@ -241,8 +241,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     // Check the bundle is allowed by the flag.
-    // @todo: this will get hit by ->types becoming private.
-    if (!empty($flag->types) && !in_array($entity->bundle(), $flag->types)) {
+    if (!in_array($entity->bundle(), $flag->getTypes())) {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 
@@ -262,6 +261,32 @@ class FlagService implements FlagServiceInterface {
     }
 
     return $out;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function reset(FlagInterface $flag, EntityInterface $entity = NULL) {
+    $query = db_select('flagging', 'fc')
+      ->fields('fc')
+      ->condition('flag_id', $flag->id());
+
+    if (!empty($entity)) {
+      $query->condition('entity_id', $entity->id());
+    }
+
+    $result = $query->countQuery()
+      ->execute()
+      ->fetchField();
+
+    $this->eventDispatcher->dispatch(FlagEvents::FLAG_RESET, new FlagResetEvent($flag, $result));
+
+    $flaggings = $this->getFlaggings($flag, $entity);
+    foreach ($flaggings as $flagging) {
+      $flagging->delete();
+    }
+
+    return $result;
   }
 
   /**
