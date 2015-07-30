@@ -21,15 +21,6 @@ use Drupal\flag\Entity\Flag;
 class FlagCountsTest extends WebTestBase {
 
   /**
-   * Set to TRUE to strict check all configuration saved.
-   *
-   * @see \Drupal\Core\Config\Testing\ConfigSchemaChecker
-   *
-   * @var bool
-   */
-  protected $strictConfigSchema = FALSE;
-
-  /**
    * The label of the flag to create for the test.
    *
    * @var string
