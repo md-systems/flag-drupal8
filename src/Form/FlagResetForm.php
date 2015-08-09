@@ -76,7 +76,7 @@ class FlagResetForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    flag_reset_flag($this->flag);
+    \Drupal::service('flag')->reset($this->flag);
     drupal_set_message($this->t('Flag %label was reset.', [
       '%label' => $this->flag->label(),
     ]));
