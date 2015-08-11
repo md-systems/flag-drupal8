@@ -6,6 +6,7 @@
 
 namespace Drupal\flag\Tests;
 
+use Drupal\flag\Entity\Flag;
 use Drupal\simpletest\WebTestBase;
 use Drupal\user\RoleInterface;
 use Drupal\user\Entity\Role;
@@ -15,7 +16,7 @@ use Drupal\user\Entity\Role;
  *
  * @group flag
  */
-class FlagEnableDisableTest extends WebTestBase {
+class FlagEnableDisableTest extends FlagTestBase {
 
   /**
    * The label of the flag to create for the test.
@@ -58,11 +59,12 @@ class FlagEnableDisableTest extends WebTestBase {
   protected $adminUser;
 
   /**
-   * Modules to enable.
+   * The flag.
    *
-   * @var array
+   * @var \Drupal\flag\Flaginterface
    */
-  public static $modules = array('views', 'flag', 'node', 'field_ui');
+  protected $flag;
+
 
   /**
    * Test the enabling and disabling of a flag from the Admin UI.
@@ -90,12 +92,6 @@ class FlagEnableDisableTest extends WebTestBase {
     // Create content type.
     $this->drupalCreateContentType(['type' => $this->nodeType]);
 
-    // Test with minimal value requirement.
-    $edit = [
-      'flag_entity_type' => 'flagtype_node',
-    ];
-    $this->drupalPostForm('admin/structure/flags/add', $edit, t('Continue'));
-
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
@@ -103,7 +99,7 @@ class FlagEnableDisableTest extends WebTestBase {
       'flag_short' => $this->flagShortText,
       'unflag_short' => $this->unflagShortText,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Create Flag'));
+    $this->flag = $this->createFlagWithForm('node', $edit);
   }
 
   /**
@@ -115,10 +111,7 @@ class FlagEnableDisableTest extends WebTestBase {
 
     // Grant the flag permissions to the authenticated role, so that both
     // users have the same roles and share the render cache.
-    $role = Role::load(RoleInterface::AUTHENTICATED_ID);
-    $role->grantPermission('flag ' . $this->id);
-    $role->grantPermission('unflag ' . $this->id);
-    $role->save();
+    $this->grantFlagPermissions($this->flag);
 
     // Click the flag link.
     $this->drupalGet('node/' . $this->node_id);
