@@ -41,7 +41,7 @@ class FlagService implements FlagServiceInterface {
   /**
    * The entity query manager injected into the service.
    *
-   * @var QueryFactory
+   * @var \Drupal\Core\Entity\Query\QueryFactory
    */
   private $entityQueryManager;
 
@@ -267,26 +267,25 @@ class FlagService implements FlagServiceInterface {
    * {@inheritdoc}
    */
   public function reset(FlagInterface $flag, EntityInterface $entity = NULL) {
-    $query = db_select('flagging', 'fc')
-      ->fields('fc')
+    $query = $this->entityQueryManager->get('flagging')
       ->condition('flag_id', $flag->id());
 
     if (!empty($entity)) {
       $query->condition('entity_id', $entity->id());
     }
 
-    $result = $query->countQuery()
-      ->execute()
-      ->fetchField();
+    // Count the number of flaggings to delete.
+    $count = $query->count()
+      ->execute();
 
-    $this->eventDispatcher->dispatch(FlagEvents::FLAG_RESET, new FlagResetEvent($flag, $result));
+    $this->eventDispatcher->dispatch(FlagEvents::FLAG_RESET, new FlagResetEvent($flag, $count));
 
     $flaggings = $this->getFlaggings($flag, $entity);
     foreach ($flaggings as $flagging) {
       $flagging->delete();
     }
 
-    return $result;
+    return $count;
   }
 
   /**
