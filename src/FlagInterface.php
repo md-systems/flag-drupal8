@@ -59,9 +59,22 @@ interface FlagInterface extends ConfigEntityInterface, EntityWithPluginCollectio
    * Get the flag types property.
    *
    * @return array
-   *  An array containing the bundles this flag may be applied to.
+   *  An array containing the bundles this flag may be applied to. An empty
+   *  array indicates all bundles are valid.
+   *
+   * @see getApplicableBundles()
    */
   public function getTypes();
+
+  /**
+   * Get the bundles this flag may be applied to.
+   *
+   * For the verbatim value of the flag's types property, use getTypes().
+   *
+   * @return array
+   *  An array containing the bundles this flag may be applied to.
+   */
+  public function getApplicableBundles();
 
   /**
    * Set the flag type plugin.

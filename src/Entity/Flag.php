@@ -307,6 +307,22 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   /**
    * {@inheritdoc}
    */
+  public function getApplicableBundles() {
+    $bundles = $this->getTypes();
+
+    if (empty($bundles)) {
+      // If the setting is empty, return all bundle names for the flag's entity
+      // type.
+      $bundle_info = entity_get_bundles($this->entity_type);
+      $bundles = array_keys($bundle_info);
+    }
+
+    return $bundles;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getPluginCollections() {
     return [
       'flagTypeConfig' => $this->flagTypeCollection,
@@ -523,6 +539,12 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    */
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
+
+    $types = array_filter($this->get('types'));
+    sort($types);
+
+    $this->set('types', $types);
+
     /*
     // Save the Flag Type configuration.
     $flagTypePlugin = $this->getFlagTypePlugin();

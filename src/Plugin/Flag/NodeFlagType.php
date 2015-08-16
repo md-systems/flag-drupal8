@@ -88,7 +88,8 @@ class NodeFlagType extends EntityFlagType {
     $access = [];
 
     // If all subtypes are allowed, we have nothing to say here.
-    if (empty($this->types)) {
+    $types = $this->getTypes();
+    if (empty($types)) {
       return $access;
     }
 
@@ -96,7 +97,7 @@ class NodeFlagType extends EntityFlagType {
     // node_load() on every type, usually done by applies_to_entity_id().
     $result = db_select('node', 'n')->fields('n', ['nid'])
       ->condition('nid', array_keys($entity_ids), 'IN')
-      ->condition('type', $this->types, 'NOT IN')
+      ->condition('type', $types, 'NOT IN')
       ->execute();
     foreach ($result as $row) {
       $access[$row->nid] = FALSE;

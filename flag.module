@@ -119,7 +119,7 @@ function flag_entity_extra_field_info() {
       continue;
     }
 
-    $flaggable_bundles = $flag->getTypes();
+    $flaggable_bundles = $flag->getApplicableBundles();
 
     foreach ($flaggable_bundles as $bundle_name) {
       if ($flag_type_plugin->showOnForm()) {
@@ -351,11 +351,14 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
     // above, but returns an array of 'nid' => $access values. Similarly, we
     // should never return TRUE in any of these access values, only FALSE if we
     // want to deny access, or use the current access value provided by Flag.
-    $result = db_select('node', 'n')
+    $query = db_select('node', 'n')
       ->fields('n', array('nid', 'uid'))
-      ->condition('nid', array_keys($entity_ids), 'IN')
-      ->condition('type', $flag->getTypes(), 'IN')
-      ->execute();
+      ->condition('nid', array_keys($entity_ids), 'IN');
+    $bundles = $flag->getTypes();
+    if (!empty($bundles)) {
+      $query->condition('type', $bundles, 'IN');
+    }
+    $result = $query->execute();
     foreach ($result as $row) {
       if ($flag->access_author == 'own') {
         $access[$row->nid] = $row->uid != $account->uid ? FALSE : NULL;
