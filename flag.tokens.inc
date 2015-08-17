@@ -5,6 +5,8 @@
  * Flag module tokens support.
  */
 
+use Drupal\Core\Render\BubbleableMetadata;
+
 /**
  * Implements hook_token_info().
  */
@@ -98,7 +100,7 @@ function flag_token_info() {
 /**
  * Implements hook_tokens().
  */
-function flag_tokens($type, $tokens, array $data = array(), array $options = array()) {
+function flag_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
   /*
   $replacements = array();
   $sanitize = !empty($options['sanitize']);
