@@ -138,19 +138,19 @@ class FlagService implements FlagServiceInterface {
 
     // The user is supplied with a flag that is not global.
     if (!empty($account) && !empty($flag) && !$flag->isGlobal()) {
-      $query = $query->condition('uid', $account->id());
+      $query->condition('uid', $account->id());
     }
 
     // The user is supplied but the flag is not.
     if (!empty($account) && empty($flag)) {
-       $query = $query->condition('uid', $account->id());
+       $query->condition('uid', $account->id());
     }
     if (!empty($flag)) {
-      $query = $query->condition('flag_id', $flag->id());
+      $query->condition('flag_id', $flag->id());
     }
 
     if (!empty($entity)) {
-      $query = $query->condition('entity_type', $entity->getEntityTypeId())
+      $query->condition('entity_type', $entity->getEntityTypeId())
                      ->condition('entity_id', $entity->id());
     }
 
@@ -182,7 +182,7 @@ class FlagService implements FlagServiceInterface {
       ->condition('entity_id', $entity->id());
 
     if (!empty($flag)) {
-      $query = $query->condition('flag_id', $flag->id());
+      $query->condition('flag_id', $flag->id());
     }
 
     $ids = $query->execute();

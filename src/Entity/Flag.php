@@ -275,7 +275,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
 
     // Select by user if the flag is not global.
     if (!$this->isGlobal()) {
-      $query = $query->condition('uid', $account->id());
+      $query->condition('uid', $account->id());
     }
 
     // Execute the query.
