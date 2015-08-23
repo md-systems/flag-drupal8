@@ -6,7 +6,6 @@
 
 namespace Drupal\flag\Controller;
 
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;
@@ -36,10 +35,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
    *   The flag entity.
    *
    * @return string
-   *   An HTML sting of roles.
+   *   An HTML string of roles.
    */
   protected function getFlagRoles(FlagInterface $flag) {
-    $out = '';
     $all_roles = [];
 
     foreach ($flag->getPermissions() as $perm => $pinfo) {
@@ -53,7 +51,10 @@ class FlagListBuilder extends ConfigEntityListBuilder {
     $out = implode(', ', $all_roles);
 
     if (empty($out)) {
-      return SafeMarkup::placeHolder($this->t('None'));
+      return [
+        '#markup' => '<em>' . $this->t('None') . '</em>',
+        '#allowed_tags' => ['em'],
+      ];
     }
 
     return rtrim($out, ', ');
