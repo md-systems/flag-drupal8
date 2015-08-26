@@ -252,22 +252,17 @@ class FlagService implements FlagServiceInterface {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 
+    $flagging = $this->getFlagging($flag, $entity, $account);
+
     // Check whether there is an existing flagging for the combination of flag,
     // entity, and user.
-    if (!$this->getFlagging($flag, $entity, $account)) {
+    if (!$flagging) {
       throw new \LogicException('The entity is not flagged by the user.');
     }
 
     $this->eventDispatcher->dispatch(FlagEvents::ENTITY_UNFLAGGED, new FlaggingEvent($flag, $entity));
 
-    $out = [];
-    $flaggings = $this->getFlaggings($flag, $entity, $account);
-    foreach ($flaggings as $flagging) {
-      $out[] = $flagging->id();
-      $flagging->delete();
-    }
-
-    return $out;
+    $flagging->delete();
   }
 
   /**

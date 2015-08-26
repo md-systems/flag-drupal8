@@ -138,9 +138,6 @@ interface FlagServiceInterface {
    * @param AccountInterface $account
    *   (optional) The account of the user that created the flagging.
    *
-   * @return array
-   *   An array of flagging IDs to delete.
-   *
    * @throws \LogicException
    *   An exception is thrown if the given flag, entity, and account are not
    *   compatible in some way:
