@@ -46,16 +46,16 @@ abstract class FlagTestBase extends WebTestBase {
    * @param string|null $entity_type
    *   (optional) The entity type of the flag to create. If omitted,
    *   assumes 'node'.
-   * @param array $subtypes
-   *   (optional) An array of entity subtypes to which the flag applies.
-   *   If NULL, all subtypes are assumed.
+   * @param array $bundles
+   *   (optional) An array of entity bundles to which the flag applies.
+   *   If NULL, all bundles are assumed.
    * @param string|null $link_type
    *   (optional) The ID of the link type to use. If omitted, assumes 'reload'.
    *
    * @return \Drupal\flag\FlagInterface
    *   A new flag entity with the given criteria.
    */
-  protected function createFlag($entity_type = 'node', $subtypes = [], $link_type = 'reload') {
+  protected function createFlag($entity_type = 'node', $bundles = [], $link_type = 'reload') {
 
     // If we didn't get an entity type, assume 'node'.
     if (empty($entity_type)) {
@@ -63,8 +63,8 @@ abstract class FlagTestBase extends WebTestBase {
     }
 
     // If we didn't get a subtype, assume all subtypes for the entity.
-    if (empty($subtypes)) {
-      $subtypes = array_keys(entity_get_bundles($entity_type));
+    if (empty($bundles)) {
+      $bundles = array_keys(entity_get_bundles($entity_type));
     }
 
     // If we didn't get a link type, assume 'reload'.
@@ -77,7 +77,7 @@ abstract class FlagTestBase extends WebTestBase {
       'id' => strtolower($this->randomMachineName()),
       'label' => $this->randomString(),
       'entity_type' => $entity_type,
-      'types' => $subtypes,
+      'bundles' => $bundles,
       'flag_short' => $this->t('Flag this item'),
       'flag_type' => $this->getFlagType($entity_type),
       'link_type' => $link_type,
@@ -137,7 +137,7 @@ abstract class FlagTestBase extends WebTestBase {
     $bundles = array_keys(entity_get_bundles($entity_type));
     $has_specified_bundle = FALSE;
     foreach ($bundles as $bundle_id) {
-      if (!empty($final_edit['types[' . $bundle_id . ']'])) {
+      if (!empty($final_edit['bundles[' . $bundle_id . ']'])) {
         $has_specified_bundle = TRUE;
         break;
       }
@@ -146,7 +146,7 @@ abstract class FlagTestBase extends WebTestBase {
     // If not, assume all by default.
     if (!$has_specified_bundle) {
       foreach ($bundles as $bundle_id) {
-        $final_edit['types[' . $bundle_id . ']'] = $bundle_id;
+        $final_edit['bundles[' . $bundle_id . ']'] = $bundle_id;
       }
     }
 

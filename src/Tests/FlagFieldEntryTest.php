@@ -127,7 +127,7 @@ class FlagFieldEntryTest extends WebTestBase {
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
-      'types[' . $this->nodeType . ']' => $this->nodeType,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
       'flag_confirmation' => $this->flagConfirmMessage,
       'flagging_edit_title' => $this->flagDetailsMessage,
       'unflag_confirmation' => $this->unflagConfirmMessage,

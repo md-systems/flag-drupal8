@@ -73,7 +73,7 @@ class CommentFlagType extends EntityFlagType {
     $access = [];
 
     // If all subtypes are allowed, we have nothing to say here.
-    $types = $this->getTypes();
+    $types = $this->getBundles();
     if (empty($types)) {
       return $access;
     }

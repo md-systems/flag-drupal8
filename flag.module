@@ -351,7 +351,7 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
     $query = db_select('node', 'n')
       ->fields('n', array('nid', 'uid'))
       ->condition('nid', array_keys($entity_ids), 'IN');
-    $bundles = $flag->getTypes();
+    $bundles = $flag->getBundles();
     if (!empty($bundles)) {
       $query->condition('type', $bundles, 'IN');
     }

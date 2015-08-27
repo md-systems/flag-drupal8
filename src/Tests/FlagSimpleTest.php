@@ -98,7 +98,7 @@ class FlagSimpleTest extends WebTestBase {
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
-      'types[' . $this->nodeType . ']' => $this->nodeType,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
     ];
     $this->drupalPostForm(NULL, $edit, t('Create Flag'));
 

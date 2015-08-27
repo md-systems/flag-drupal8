@@ -104,7 +104,7 @@ class FlagConfirmFormTest extends WebTestBase {
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
-      'types[' . $this->nodeType . ']' => $this->nodeType,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
       'flag_confirmation' => $this->flagConfirmMessage,
       'unflag_confirmation' => $this->unflagConfirmMessage,
     ];

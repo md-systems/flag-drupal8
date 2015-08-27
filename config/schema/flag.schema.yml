@@ -11,9 +11,9 @@ flag.flag.*:
     label:
       type: label
       label: 'Name'
-    types:
+    bundles:
       type: sequence
-      label: 'The entity subtypes this flag applies to'
+      label: 'The entity bundles this flag applies to'
       sequence:
         - type: string
     entity_type:

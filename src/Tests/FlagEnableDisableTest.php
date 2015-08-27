@@ -95,7 +95,7 @@ class FlagEnableDisableTest extends FlagTestBase {
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
-      'types[' . $this->nodeType . ']' => $this->nodeType,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
       'flag_short' => $this->flagShortText,
       'unflag_short' => $this->unflagShortText,
     ];

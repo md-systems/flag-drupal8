@@ -42,7 +42,7 @@ class UserFlagType extends EntityFlagType {
 
     /* Options form extras for user flags */
 
-    $form['access']['types'] = [
+    $form['access']['bundles'] = [
       // A user flag doesn't support node types.
       // TODO: Maybe support roles instead of node types.
       '#type' => 'value',

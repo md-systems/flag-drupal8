@@ -56,7 +56,7 @@ interface FlagInterface extends ConfigEntityInterface, EntityWithPluginCollectio
   public function getFlaggableEntityTypeId();
 
   /**
-   * Get the flag types property.
+   * Get the flag bundles property.
    *
    * @return array
    *  An array containing the bundles this flag may be applied to. An empty
@@ -64,12 +64,12 @@ interface FlagInterface extends ConfigEntityInterface, EntityWithPluginCollectio
    *
    * @see getApplicableBundles()
    */
-  public function getTypes();
+  public function getBundles();
 
   /**
    * Get the bundles this flag may be applied to.
    *
-   * For the verbatim value of the flag's types property, use getTypes().
+   * For the verbatim value of the flag's types property, use getBundles().
    *
    * @return array
    *  An array containing the bundles this flag may be applied to.

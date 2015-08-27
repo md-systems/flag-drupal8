@@ -40,7 +40,7 @@ use Drupal\flag\FlagInterface;
  *     "id",
  *     "uuid",
  *     "label",
- *     "types",
+ *     "bundles",
  *     "entity_type",
  *     "enabled",
  *     "global",
@@ -109,13 +109,13 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   protected $enabled = TRUE;
 
   /**
-   * The sub-types, AKA bundles, this flag applies to.
+   * The bundles this flag applies to.
    *
-   * This may be an empty array to indicate all types apply.
+   * This may be an empty array to indicate all bundles apply.
    *
    * @var array
    */
-  protected $types = [];
+  protected $bundles = [];
 
   /**
    * The text for the "flag this" link for this flag.
@@ -300,15 +300,15 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   /**
    * {@inheritdoc}
    */
-  public function getTypes() {
-    return $this->types;
+  public function getBundles() {
+    return $this->bundles;
   }
 
   /**
    * {@inheritdoc}
    */
   public function getApplicableBundles() {
-    $bundles = $this->getTypes();
+    $bundles = $this->getBundles();
 
     if (empty($bundles)) {
       // If the setting is empty, return all bundle names for the flag's entity
@@ -540,10 +540,10 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
 
-    $types = array_filter($this->get('types'));
-    sort($types);
+    $bundles = array_filter($this->get('bundles'));
+    sort($bundles);
 
-    $this->set('types', $types);
+    $this->set('bundles', $bundles);
 
     /*
     // Save the Flag Type configuration.

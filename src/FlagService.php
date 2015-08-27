@@ -98,8 +98,8 @@ class FlagService implements FlagServiceInterface {
 
     if (isset($bundle)) {
       $flags = array_filter($flags, function (FlagInterface $flag) use ($bundle) {
-        $types = $flag->getTypes();
-        return empty($types) || in_array($bundle, $types);
+        $bundles = $flag->getBundles();
+        return empty($bundles) || in_array($bundle, $bundles);
       });
     }
 
@@ -194,7 +194,7 @@ class FlagService implements FlagServiceInterface {
    * {@inheritdoc}
    */
   public function flag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL) {
-    $subtypes = $flag->getTypes();
+    $bundles = $flag->getBundles();
 
     if (empty($account)) {
       $account = $this->currentUser;
@@ -206,7 +206,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     // Check the bundle is allowed by the flag.
-    if (!empty($subtypes) && !in_array($entity->bundle(), $subtypes)) {
+    if (!empty($bundles) && !in_array($entity->bundle(), $bundles)) {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 
@@ -240,7 +240,7 @@ class FlagService implements FlagServiceInterface {
    * {@inheritdoc}
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL) {
-    $subtypes = $flag->getTypes();
+    $bundles = $flag->getBundles();
 
     // Check the entity type corresponds to the flag type.
     if ($flag->getFlaggableEntityTypeId() != $entity->getEntityTypeId()) {
@@ -248,7 +248,7 @@ class FlagService implements FlagServiceInterface {
     }
 
     // Check the bundle is allowed by the flag.
-    if (!empty($subtypes) && !in_array($entity->bundle(), $subtypes)) {
+    if (!empty($bundles) && !in_array($entity->bundle(), $bundles)) {
       throw new \LogicException('The flag does not apply to the bundle of the entity.');
     }
 

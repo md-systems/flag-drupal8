@@ -134,12 +134,12 @@ abstract class FlagFormBase extends EntityForm {
     }
 
     // Flag classes will want to override this form element.
-    $form['access']['types'] = [
+    $form['access']['bundles'] = [
       '#type' => 'checkboxes',
       '#title' => t('Flaggable types'),
       '#options' => $entity_bundles,
-      '#default_value' => $flag->getTypes(),
-      '#description' => t('Check any sub-types that this flag may be used on. Leave empty to apply to all sub-types.'),
+      '#default_value' => $flag->getBundles(),
+      '#description' => t('Check any bundles that this flag may be used on. Leave empty to apply to all bundles.'),
       '#weight' => 10,
     ];
 

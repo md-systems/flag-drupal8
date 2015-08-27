@@ -1,7 +1,7 @@
 id: bookmark
 entity_type: node
 label: Bookmark
-types:
+bundles:
   article: article
   page: page
 flag_short: 'Bookmark this'
