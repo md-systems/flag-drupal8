@@ -87,7 +87,7 @@ class FlagConfirmFormTest extends WebTestBase {
 
     // Test with minimal value requirement.
     $edit = [
-      'flag_entity_type' => 'flagtype_node',
+      'flag_entity_type' => 'entity:node',
     ];
     $this->drupalPostForm('admin/structure/flags/add', $edit, t('Continue'));
 

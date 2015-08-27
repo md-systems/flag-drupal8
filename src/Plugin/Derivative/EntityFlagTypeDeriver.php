@@ -13,11 +13,6 @@ use Drupal\Core\Entity\ContentEntityTypeInterface;
  * Derivative class for entity flag subtypes plugin.
  */
 class EntityFlagTypeDeriver extends DeriverBase {
-  /*
-  public function __construct($base_plugin_id,
-  EntityStorageControllerInterface $storageController) {
-  }
-  */
 
   /**
    * Ignored types to prevent duplicate occurrences.
@@ -26,9 +21,6 @@ class EntityFlagTypeDeriver extends DeriverBase {
    */
   protected $ignoredEntities = [
     'flagging',
-    'node',
-    'user',
-    'comment',
   ];
 
   /**

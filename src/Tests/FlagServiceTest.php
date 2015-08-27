@@ -57,7 +57,7 @@ class FlagServiceTest extends WebTestBase {
       'types' => [
         'article',
       ],
-      'flag_type' => 'flagtype_node',
+      'flag_type' => 'entity:node',
       'link_type' => 'reload',
       'flagTypeConfig' => [],
       'linkTypeConfig' => [],
@@ -82,7 +82,7 @@ class FlagServiceTest extends WebTestBase {
       'types' => [
         'article',
       ],
-      'flag_type' => 'flagtype_node',
+      'flag_type' => 'entity:node',
       'link_type' => 'reload',
       'flagTypeConfig' => [],
       'linkTypeConfig' => [],

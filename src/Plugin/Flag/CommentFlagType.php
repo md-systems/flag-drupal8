@@ -13,7 +13,7 @@ use Drupal\Core\Session\AccountInterface;
  * Provides a flag type for comments.
  *
  * @FlagType(
- *   id = "flagtype_comment",
+ *   id = "entity:comment",
  *   title = @Translation("Comment"),
  *   entity_type = "comment",
  *   provider = "comment"

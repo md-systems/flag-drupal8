@@ -16,7 +16,7 @@ status: true
 langcode: en
 dependencies: {  }
 roles: null
-flag_type: flagtype_node
+flag_type: entity:node
 link_type: reload
 flagTypeConfig:
   show_in_links:

@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
  * Provides a flag type for all content entities.
  *
  * @FlagType(
- *   id = "flagtype_node",
+ *   id = "entity:node",
  *   title = @Translation("Content"),
  *   entity_type = "node",
  *   provider = "node"
