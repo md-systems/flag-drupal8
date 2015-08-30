@@ -98,8 +98,8 @@ class FlagService implements FlagServiceInterface {
 
     if (isset($bundle)) {
       $flags = array_filter($flags, function (FlagInterface $flag) use ($bundle) {
-        $bundles = $flag->getBundles();
-        return empty($bundles) || in_array($bundle, $bundles);
+        $bundles = $flag->getApplicableBundles();
+        return in_array($bundle, $bundles);
       });
     }
 
