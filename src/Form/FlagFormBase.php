@@ -127,7 +127,7 @@ abstract class FlagFormBase extends EntityForm {
     $flag_type_plugin = $flag->getFlagTypePlugin();
     $flag_type_def = $flag_type_plugin->getPluginDefinition();
 
-    $bundles = entity_get_bundles($flag_type_def['entity_type']);
+    $bundles = \Drupal::entityManager()->getBundleInfo($flag_type_def['entity_type']);
     $entity_bundles = [];
     foreach ($bundles as $bundle_id => $bundle_row) {
       $entity_bundles[$bundle_id] = $bundle_row['label'];

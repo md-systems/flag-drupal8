@@ -64,7 +64,7 @@ abstract class FlagTestBase extends WebTestBase {
 
     // If we didn't get a subtype, assume all subtypes for the entity.
     if (empty($bundles)) {
-      $bundles = array_keys(entity_get_bundles($entity_type));
+      $bundles = array_keys(\Drupal::entityManager()->getBundleInfo($entity_type));
     }
 
     // If we didn't get a link type, assume 'reload'.
@@ -134,7 +134,7 @@ abstract class FlagTestBase extends WebTestBase {
     $final_edit = array_merge($default_edit, $edit);
 
     // Check if any of the bundles have been set.
-    $bundles = array_keys(entity_get_bundles($entity_type));
+    $bundles = array_keys(\Drupal::entityManager()->getBundleInfo($entity_type));
     $has_specified_bundle = FALSE;
     foreach ($bundles as $bundle_id) {
       if (!empty($final_edit['bundles[' . $bundle_id . ']'])) {

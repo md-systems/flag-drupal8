@@ -313,7 +313,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
     if (empty($bundles)) {
       // If the setting is empty, return all bundle names for the flag's entity
       // type.
-      $bundle_info = entity_get_bundles($this->entity_type);
+      $bundle_info = \Drupal::entityManager()->getBundleInfo($this->entity_type);
       $bundles = array_keys($bundle_info);
     }
 
