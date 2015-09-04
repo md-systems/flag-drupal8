@@ -86,7 +86,9 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
    *   The flaggable entity.
    */
   public function getFlaggable() {
-    return $this->entityManager()->getStorage($this->getFlaggableType())->load($this->getFlaggableId());
+    $flaggable_type = $this->getFlaggableType();
+    $flaggable_id = $this->getFlaggableId();
+    return $this->entityManager()->getStorage($flaggable_type)->load($flaggable_id);
   }
 
   /**
