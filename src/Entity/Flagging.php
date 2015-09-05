@@ -111,6 +111,8 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
       ->setRequired(TRUE)
       ->setReadOnly(TRUE);
 
+    // This field is on flaggings even though it duplicates the entity type
+    // field on the flag so that flagging queries can use it.
     $fields['entity_type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity Type'))
       ->setDescription(t('The Entity Type.'));
