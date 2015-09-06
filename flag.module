@@ -427,3 +427,21 @@ function flag_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
 
   return $operations;
 }
+
+/**
+ * Implements hook_hook_info().
+ *
+ * Flag alter hooks should be defined in a MODULE.flag.inc file.
+ */
+function flag_hook_info() {
+  $hooks = array();
+
+  $hooks['flag_type_info_alter'] = array(
+    'group' => 'flag',
+  );
+  $hooks['flag_link_type_info_alter'] = array(
+    'group' => 'flag',
+  );
+
+  return $hooks;
+}
