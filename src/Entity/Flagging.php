@@ -50,10 +50,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
   }
 
   /**
-   * Gets the parent flag entity.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\flag\FlagInterface
-   *   The flag related this this flagging.
+   * {@inheritdoc}
    */
   public function getFlag() {
     return $this->entityManager()->getStorage('flag')->load($this->getFlagId());
@@ -80,10 +77,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
   }
 
   /**
-   * Gets the flaggable entity.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   The flaggable entity.
+   * {@inheritdoc}
    */
   public function getFlaggable() {
     $flaggable_type = $this->getFlaggableType();

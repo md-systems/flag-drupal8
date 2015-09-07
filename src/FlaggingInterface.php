@@ -14,9 +14,10 @@ use Drupal\Core\Entity\ContentEntityInterface;
 interface FlaggingInterface extends ContentEntityInterface {
 
   /**
-   * Returns the Flag content entity related to this flagging.
+   * Returns the parent flag entity.
    *
-   * @return \Drupal\flag\FlagInterface
+   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\flag\FlagInterface
+   *   The flag related to this flagging.
    */
   public function getFlag();
 
