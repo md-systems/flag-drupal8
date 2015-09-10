@@ -17,7 +17,7 @@ use Drupal\Core\Url;
 class FlagListBuilder extends ConfigEntityListBuilder {
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::buildHeader().
+   * {@inheritdoc}
    */
   public function buildHeader() {
     $header['label'] = t('Flag');
@@ -61,7 +61,7 @@ class FlagListBuilder extends ConfigEntityListBuilder {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::buildRow().
+   * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
 
@@ -77,10 +77,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::render().
-   *
-   * We override the render() method to add helpful text below the entity list.
+   * {@inheritdoc}
    */
+  // We override the render() method to add helpful text below the entity list.
   public function render() {
     $build['table'] = parent::render();
 

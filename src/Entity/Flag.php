@@ -217,7 +217,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   public $weight = 0;
 
   /**
-   * Overrides \Drupal\Core\Config\Entity\ConfigEntityBase::__construct().
+   * {@inheritdoc}
    */
   public function __construct(array $values, $entity_type) {
     parent::__construct($values, $entity_type);
