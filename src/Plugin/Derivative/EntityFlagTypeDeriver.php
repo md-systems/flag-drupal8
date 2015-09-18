@@ -15,23 +15,11 @@ use Drupal\Core\Entity\ContentEntityTypeInterface;
 class EntityFlagTypeDeriver extends DeriverBase {
 
   /**
-   * Ignored types to prevent duplicate occurrences.
-   *
-   * @var array
-   */
-  protected $ignoredEntities = [
-    'flagging',
-  ];
-
-  /**
    * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_def) {
     $derivatives = array();
     foreach (\Drupal::entityManager()->getDefinitions() as $entity_id => $entity_type) {
-      if (in_array($entity_id, $this->ignoredEntities)) {
-        continue;
-      }
       // Skip config entity types.
       if (!$entity_type instanceof ContentEntityTypeInterface) {
         continue;
