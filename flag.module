@@ -183,7 +183,7 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
     }
 
     $build['flag_' . $flag->id()] = [
-      '#lazy_builder' => ['flag_lazy_link_builder', [
+      '#lazy_builder' => ['flag.link_builder:build', [
         $entity->getEntityTypeId(),
         $entity->id(),
         $flag->id(),
@@ -191,44 +191,6 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
       '#create_placeholder' => TRUE,
     ];
   }
-}
-
-/**
- * Lazy builder callback for displaying a flag action link.
- *
- * @param string $entity_type_id
- *   The entity type ID for which the link should be shown.
- * @param string|int $entity_id
- *   The entity ID for which the link should be shown
- * @param string $flag_id
- *   The flag ID for which the link should be shown.
- *
- * @return array
- *   A render array for the action link, empty if the user does not have access.
- */
-function flag_lazy_link_builder($entity_type_id, $entity_id, $flag_id) {
-  $entity = \Drupal::entityManager()->getStorage($entity_type_id)->load($entity_id);
-  /** @var \Drupal\flag\FlagServiceInterface $flag_service */
-  $flag_service = \Drupal::service('flag');
-  $flag = $flag_service->getFlagById($flag_id);
-
-  $action = 'flag';
-  if ($flag->isFlagged($entity)) {
-    $action = 'unflag';
-  }
-
-  // Only display if the user does have access.
-  if ($flag->hasActionAccess($action)) {
-    $link_type_plugin = $flag->getLinkTypePlugin();
-    $link = $link_type_plugin->renderLink($action, $flag, $entity);
-    // The actual render array must be in a nested key, due to a bug in
-    // lazy builder handling that does not properly render top-level #type
-    // elements.
-    return ['link' => $link];
-  }
-
-  // Lazy builders must always return a render array.
-  return [];
 }
 
 /**
