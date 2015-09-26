@@ -112,7 +112,7 @@ class FlagViewsLinkField extends FieldPluginBase {
       $action = 'unflag';
     }
 
-    $link = $link_type_plugin->renderLink($action, $flag, $entity);
+    $link = $link_type_plugin->buildLink($action, $flag, $entity);
 
     return $link;
   }

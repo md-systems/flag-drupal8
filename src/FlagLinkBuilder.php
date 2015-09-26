@@ -59,7 +59,7 @@ class FlagLinkBuilder implements FlagLinkBuilderInterface {
     // Only display if the user does have access.
     if ($flag->hasActionAccess($action)) {
       $link_type_plugin = $flag->getLinkTypePlugin();
-      $link = $link_type_plugin->renderLink($action, $flag, $entity);
+      $link = $link_type_plugin->buildLink($action, $flag, $entity);
       // The actual render array must be in a nested key, due to a bug in
       // lazy builder handling that does not properly render top-level #type
       // elements.

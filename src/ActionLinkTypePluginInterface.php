@@ -29,7 +29,7 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
    * @return \Drupal\Core\Url
    *   The URL object.
    */
-  public function buildLink($action, FlagInterface $flag, EntityInterface $entity);
+  public function getLinkURL($action, FlagInterface $flag, EntityInterface $entity);
 
   /**
    * Generates a flag link as a render array.
@@ -44,5 +44,5 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
    * @return array
    *   A render array of the flag link.
    */
-  public function renderLink($action, FlagInterface $flag, EntityInterface $entity);
+  public function buildLink($action, FlagInterface $flag, EntityInterface $entity);
 }

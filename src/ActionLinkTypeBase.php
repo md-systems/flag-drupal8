@@ -51,7 +51,7 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
   /**
    * {@inheritdoc}
    */
-  public function buildLink($action, FlagInterface $flag, EntityInterface $entity) {
+  public function getLinkURL($action, FlagInterface $flag, EntityInterface $entity) {
     $parameters = [
       'flag' => $flag->id(),
       'entity_id' => $entity->id(),
@@ -80,8 +80,8 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
   /**
    * {@inheritdoc}
    */
-  public function renderLink($action, FlagInterface $flag, EntityInterface $entity) {
-    $url = $this->buildLink($action, $flag, $entity);
+  public function buildLink($action, FlagInterface $flag, EntityInterface $entity) {
+    $url = $this->getLinkURL($action, $flag, $entity);
 
     $url->setRouteParameter('destination', $this->getDestination());
 
