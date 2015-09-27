@@ -1,4 +1,4 @@
-Flag for Drupal 8 [![Build Status](https://travis-ci.org/socketwench/flag-drupal8.svg?branch=master)](https://travis-ci.org/socketwench/flag-drupal8)
+Flag for Drupal 8
 =================
 
 Contents:
