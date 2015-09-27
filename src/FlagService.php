@@ -221,6 +221,7 @@ class FlagService implements FlagServiceInterface {
       'flag_id' => $flag->id(),
       'entity_id' => $entity->id(),
       'entity_type' => $entity->getEntityTypeId(),
+      'global' => $flag->isGlobal(),
     ]);
 
     $flagging->save();

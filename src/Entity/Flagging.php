@@ -116,6 +116,11 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
       ->setRequired(TRUE)
       ->setDescription(t('The Entity ID.'));
 
+    // Also duplicates data on flag entity for querying purposes.
+    $fields['global'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Global'))
+      ->setDescription(t('A boolean indicating whether the flagging is global.'));
+
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('User ID'))
       ->setDescription(t('The user ID of the flagging user.'))
