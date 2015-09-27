@@ -44,6 +44,7 @@ use Drupal\flag\FlagInterface;
  *     "entity_type",
  *     "enabled",
  *     "global",
+ *     "weight",
  *     "flag_short",
  *     "flag_long",
  *     "flag_message",
