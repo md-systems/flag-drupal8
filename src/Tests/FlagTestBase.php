@@ -21,6 +21,15 @@ abstract class FlagTestBase extends WebTestBase {
   use StringTranslationTrait;
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    $this->drupalPlaceBlock('page_title_block');
+  }
+
+  /**
    * Modules to enable.
    *
    * @var array

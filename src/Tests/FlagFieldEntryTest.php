@@ -80,6 +80,7 @@ class FlagFieldEntryTest extends WebTestBase {
     // The breadcrumb block is needed for FieldUiTestTrait's tests.
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('local_tasks_block');
+    $this->drupalPlaceBlock('page_title_block');
   }
 
   /**
