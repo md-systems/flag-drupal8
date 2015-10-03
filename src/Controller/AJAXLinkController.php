@@ -96,7 +96,7 @@ class AJAXLinkController extends ControllerBase {
     $link_type = $flag->getLinkTypePlugin();
 
     // Generate the link render array and get the link CSS ID.
-    $link = $link_type->buildLink($action, $flag, $entity);
+    $link = $link_type->getLink($action, $flag, $entity);
     $link_id = '#' . $link['#attributes']['id'];
 
     // Create a new JQuery Replace command to update the link display.
