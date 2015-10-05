@@ -19,11 +19,11 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
   /**
    * Returns a flag link as a render array.
    *
+   * The link's action is determined from the current state of the flag.
+   *
    * If the current user does not have access to the flag then an empty render
    * array will be returned.
    *
-   * @param string $action
-   *   The action to perform, 'flag' and 'unflag'.
    * @param FlagInterface $flag
    *   The flag entity.
    * @param EntityInterface $entity
@@ -32,7 +32,7 @@ interface ActionLinkTypePluginInterface extends PluginFormInterface, Configurabl
    * @return array
    *   A render array of the flag link.
    */
-  public function getLink($action, FlagInterface $flag, EntityInterface $entity);
+  public function getLink(FlagInterface $flag, EntityInterface $entity);
 
   /**
    * Returns a Url object for the given flag action.

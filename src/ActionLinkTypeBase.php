@@ -104,8 +104,11 @@ abstract class ActionLinkTypeBase extends PluginBase implements ActionLinkTypePl
   /**
    * {@inheritdoc}
    */
-  public function getLink($action, FlagInterface $flag, EntityInterface $entity) {
+  public function getLink(FlagInterface $flag, EntityInterface $entity) {
+    $action = $flag->isFlagged($entity) ? 'unflag' : 'flag';
+
     if ($flag->hasActionAccess($action)) {
+
       $link = $this->buildLink($action, $flag, $entity);
 
       // The actual render array must be in a nested key, due to a bug in

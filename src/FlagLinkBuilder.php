@@ -51,13 +51,8 @@ class FlagLinkBuilder implements FlagLinkBuilderInterface {
     $entity = $this->entityManager->getStorage($entity_type_id)->load($entity_id);
     $flag = $this->flagService->getFlagById($flag_id);
 
-    $action = 'flag';
-    if ($flag->isFlagged($entity)) {
-      $action = 'unflag';
-    }
-
     $link_type_plugin = $flag->getLinkTypePlugin();
-    return $link_type_plugin->getLink($action, $flag, $entity);
+    return $link_type_plugin->getLink($flag, $entity);
   }
 
 }
