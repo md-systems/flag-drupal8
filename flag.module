@@ -157,7 +157,7 @@ function flag_node_links_alter(array &$links, NodeInterface $entity, array &$con
  *
  * Handles the 'show_in_links' and 'show_as_field' flag options.
  */
-function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode, $langcode) {
+function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   // Don't show on previews.
   if ($entity->isNew()) {
     return;
