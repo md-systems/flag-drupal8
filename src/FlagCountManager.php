@@ -174,7 +174,7 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
       ->condition('entity_type', $entity->getEntityTypeId())
       ->execute()
       ->fetchAll();
-    if (count($count_result) == 1) {
+    if ($count_result[0]->count == '1') {
       $this->connection->delete('flag_counts')
         ->condition('flag_id', $flag->id())
         ->condition('entity_id', $entity->id())
