@@ -72,39 +72,6 @@ function hook_flag_validate($action, FlagInterface $flag, $entity_id,
 }
 
 /**
- * Allow modules to allow or deny access to flagging for a single entity.
- *
- * Called when displaying a single entity view or edit page.  For flag access
- * checks from within Views, implement hook_flag_access_multiple().
- *
- * @param \Drupal\flag\FlagInterface $flag
- *   The flag object.
- * @param int $entity_id
- *   The id of the entity in question.
- * @param string $action
- *   The action to test. Either 'flag' or 'unflag'.
- * @param \Drupal\Core\Session\AccountInterface $account
- *   The user on whose behalf to test the flagging action.
- *
- * @return boolean|null
- *   One of the following values:
- *     - TRUE: User has access to the flag.
- *     - FALSE: User does not have access to the flag.
- *     - NULL: This module does not perform checks on this flag/action.
- *
- *   NOTE: Any module that returns FALSE will prevent the user from
- *   being able to use the flag.
- *
- * @see hook_flag_access_multiple()
- * @see flag_flag:access()
- */
-function hook_flag_access(FlagInterface $flag,
-                          $entity_id, $action,
-                          AccountInterface $account) {
-
-}
-
-/**
  * Allow modules to allow or deny access to flagging for multiple entities.
  *
  * Called when preparing a View or list of multiple flaggable entities.

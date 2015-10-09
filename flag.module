@@ -243,6 +243,9 @@ function flag_user_account_removal(UserInterface $account) {
 /**
  * Implements hook_flag_access().
  */
+/*
+// Commented out because it clashes with the core hook.
+// TODO: see https://www.drupal.org/node/2584647.
 function flag_flag_access($flag, $entity_id, $action, $account) {
   // Do nothing if there is no restriction by authorship.
   if (empty($flag->access_author)) {
@@ -289,6 +292,7 @@ function flag_flag_access($flag, $entity_id, $action, $account) {
     }
   }
 }
+*/
 
 /**
  * Implements hook_flag_access_multiple().
