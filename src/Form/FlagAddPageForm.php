@@ -38,7 +38,7 @@ class FlagAddPageForm extends FormBase {
       '#title' => t('Flag Type'),
       '#required' => TRUE,
       '#description' => t('The type of object this flag will affect. This cannot be changed once the flag is created.'),
-      '#default_value' => 'flagtype_node',
+      '#default_value' => 'entity:node',
       '#options' => \Drupal::service('plugin.manager.flag.flagtype')->getAllFlagTypes(),
     ];
 

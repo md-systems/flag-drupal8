@@ -6,9 +6,8 @@
 
 namespace Drupal\flag\Tests;
 
-use Drupal\simpletest\WebTestBase;
+use Drupal\flag\Tests\FlagTestBase;
 use Drupal\node\Entity\Node;
-use Drupal\flag\Entity\Flag;
 
 /**
  * Tests the Flag counts API.
@@ -18,31 +17,29 @@ use Drupal\flag\Entity\Flag;
  *
  * @group flag
  */
-class FlagCountsTest extends WebTestBase {
+class FlagCountsTest extends FlagTestBase {
 
   /**
-   * The label of the flag to create for the test.
+   * The flag.
    *
-   * @var string
+   * @var \Drupal\flag\FlagInterface
+   *
    */
-  protected $label = 'Test label 123';
+  protected $flag;
 
   /**
-   * The ID of the flag to create for the test.
+   * The node.
    *
-   * @var string
+   * @var \Drupal\node\Entity\Node
    */
-  protected $id = 'test_label_123';
+  protected $node;
 
   /**
-   * The flag link type.
+   * The flag service.
    *
-   * @var string
+   * @var \Drupal\flag\FlagServiceInterface
    */
-  protected $flagLinkType;
-
-  protected $flagConfirmMessage = 'Flag test label 123?';
-  protected $unflagConfirmMessage = 'Unflag test label 123?';
+  protected $flagService;
 
   /**
    * User object.
@@ -50,13 +47,6 @@ class FlagCountsTest extends WebTestBase {
    * @var \Drupal\user\Entity\User|false
    */
   protected $adminUser;
-
-  /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = array('flag', 'node');
 
   /**
    * {@inheritdoc}
@@ -67,19 +57,7 @@ class FlagCountsTest extends WebTestBase {
     $this->flagService = \Drupal::service('flag');
 
     // Create a flag.
-    $this->flag = Flag::create([
-      'id' => $this->id,
-      'entity_type' => 'node',
-      'types' => [
-        'article',
-      ],
-      'flag_type' => 'flagtype_node',
-      'link_type' => 'reload',
-      'flagTypeConfig' => [],
-      'linkTypeConfig' => [],
-    ]);
-
-    $this->flag->save();
+    $this->flag = $this->createFlag('node', ['article'], 'reload');
 
     // Create a user who may flag.
     $this->adminUser = $this->drupalCreateUser([
@@ -117,7 +95,7 @@ class FlagCountsTest extends WebTestBase {
     $this->assertEqual($flag_get_user_flag_counts, 1, "getUserFlagCounts() returns the expected count.");
 
     $flag_get_counts = $flagCountService->getCounts($this->node);
-    $this->assertEqual($flag_get_counts[$this->id], 1, "getCounts() returns the expected count.");
+    $this->assertEqual($flag_get_counts[$this->flag->id()], 1, "getCounts() returns the expected count.");
 
     $flag_get_flag_counts = $flagCountService->getTotals($this->flag);
     $this->assertEqual($flag_get_flag_counts, 1, "getFlagTotalCounts() returns the expected count.");

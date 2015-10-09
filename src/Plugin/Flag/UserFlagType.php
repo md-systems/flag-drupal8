@@ -14,7 +14,7 @@ use Drupal\Core\Form\FormStateInterface;
  * Provides a flag type for user entities.
  *
  * @FlagType(
- *   id = "flagtype_user",
+ *   id = "entity:user",
  *   title = @Translation("User"),
  *   entity_type = "user",
  *   provider = "user"
@@ -42,7 +42,7 @@ class UserFlagType extends EntityFlagType {
 
     /* Options form extras for user flags */
 
-    $form['access']['types'] = [
+    $form['access']['bundles'] = [
       // A user flag doesn't support node types.
       // TODO: Maybe support roles instead of node types.
       '#type' => 'value',

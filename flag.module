@@ -7,9 +7,6 @@
 
 define('FLAG_API_VERSION', 3);
 
-define('FLAG_ADMIN_PATH', 'admin/structure/flags');
-define('FLAG_ADMIN_PATH_START', 3);
-
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\flag\Entity\Flag;
@@ -119,7 +116,7 @@ function flag_entity_extra_field_info() {
       continue;
     }
 
-    $flaggable_bundles = $flag->getTypes();
+    $flaggable_bundles = $flag->getApplicableBundles();
 
     foreach ($flaggable_bundles as $bundle_name) {
       if ($flag_type_plugin->showOnForm()) {
@@ -160,13 +157,13 @@ function flag_node_links_alter(array &$links, NodeInterface $entity, array &$con
  *
  * Handles the 'show_in_links' and 'show_as_field' flag options.
  */
-function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode, $langcode) {
+function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
   // Don't show on previews.
   if ($entity->isNew()) {
     return;
   }
 
-  // @todo: Add caching here PLZ.
+  $build['#cache']['contexts'][] = 'user.permissions';
 
   // Get all possible flags for this entity type.
   $flag_service = \Drupal::service('flag');
@@ -178,7 +175,6 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
       continue;
     }
 
-    $link_type_plugin = $flag->getLinkTypePlugin();
     $flag_type_plugin = $flag->getFlagTypePlugin();
 
     // Only add cache key if flag link is displayed.
@@ -186,56 +182,15 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
       continue;
     }
 
-    $action = 'flag';
-    if ($flag->isFlagged($entity)) {
-      $action = 'unflag';
-    }
-
-    // If the user does not have permission, go to the next foreach loop and
-    // don't display this flag.
-    if (!$flag->hasActionAccess($action)){
-      continue;
-    }
-
-    $link = $link_type_plugin->renderLink($action, $flag, $entity);
-    $build['flag_' . $flag->id()] = $link;
+    $build['flag_' . $flag->id()] = [
+      '#lazy_builder' => ['flag.link_builder:build', [
+        $entity->getEntityTypeId(),
+        $entity->id(),
+        $flag->id(),
+      ]],
+      '#create_placeholder' => TRUE,
+    ];
   }
-}
-
-/**
- * Implements hook_entity_build_defaults_alter().
- */
-function flag_entity_build_defaults_alter(array &$build, EntityInterface $entity, $view_mode = 'full', $langcode = NULL) {
-  // Add the flag ID combined with the action to the cache key and set the cache
-  // context if render caching is enabled.
-  if (isset($build['#cache']) && isset($build['#cache']['keys'])) {
-
-    // Get all possible flags for this entity type.
-    $flag_service = \Drupal::service('flag');
-    $flags = $flag_service->getFlags($entity->getEntityTypeID(),
-      $entity->bundle());
-
-    // Get the corresponding display settings.
-    $display = EntityViewDisplay::collectRenderDisplay($entity, $view_mode);
-
-    foreach ($flags as $flag) {
-      $flag_type_plugin = $flag->getFlagTypePlugin();
-
-      // Only add cache key if flag link is displayed.
-      if ($flag_type_plugin->showAsField() && !$display->getComponent('flag_' . $flag->id())) {
-        continue;
-      }
-
-      $action = 'flag';
-      if ($flag->isFlagged($entity)) {
-        $action = 'unflag';
-      }
-
-      $build['#cache']['keys'][] = $flag->id . '-' . $action;
-      $build['#cache']['contexts'][] = 'user.permissions';
-    }
-  }
-  return $build;
 }
 
 /**
@@ -292,6 +247,9 @@ function flag_user_account_removal(UserInterface $account) {
 /**
  * Implements hook_flag_access().
  */
+/*
+// Commented out because it clashes with the core hook.
+// TODO: see https://www.drupal.org/node/2584647.
 function flag_flag_access($flag, $entity_id, $action, $account) {
   // Do nothing if there is no restriction by authorship.
   if (empty($flag->access_author)) {
@@ -338,6 +296,7 @@ function flag_flag_access($flag, $entity_id, $action, $account) {
     }
   }
 }
+*/
 
 /**
  * Implements hook_flag_access_multiple().
@@ -355,11 +314,14 @@ function flag_flag_access_multiple($flag, $entity_ids, $account) {
     // above, but returns an array of 'nid' => $access values. Similarly, we
     // should never return TRUE in any of these access values, only FALSE if we
     // want to deny access, or use the current access value provided by Flag.
-    $result = db_select('node', 'n')
+    $query = db_select('node', 'n')
       ->fields('n', array('nid', 'uid'))
-      ->condition('nid', array_keys($entity_ids), 'IN')
-      ->condition('type', $flag->getTypes(), 'IN')
-      ->execute();
+      ->condition('nid', array_keys($entity_ids), 'IN');
+    $bundles = $flag->getBundles();
+    if (!empty($bundles)) {
+      $query->condition('type', $bundles, 'IN');
+    }
+    $result = $query->execute();
     foreach ($result as $row) {
       if ($flag->access_author == 'own') {
         $access[$row->nid] = $row->uid != $account->uid ? FALSE : NULL;
@@ -430,4 +392,22 @@ function flag_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
   }
 
   return $operations;
+}
+
+/**
+ * Implements hook_hook_info().
+ *
+ * Flag alter hooks should be defined in a MODULE.flag.inc file.
+ */
+function flag_hook_info() {
+  $hooks = array();
+
+  $hooks['flag_type_info_alter'] = array(
+    'group' => 'flag',
+  );
+  $hooks['flag_link_type_info_alter'] = array(
+    'group' => 'flag',
+  );
+
+  return $hooks;
 }

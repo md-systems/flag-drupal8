@@ -38,8 +38,8 @@ class AJAXactionLink extends ActionLinkTypeBase {
   /**
    * {@inheritdoc}
    */
-  public function renderLink($action, FlagInterface $flag, EntityInterface $entity) {
-    $render = parent::renderLink($action, $flag, $entity);
+  public function buildLink($action, FlagInterface $flag, EntityInterface $entity) {
+    $render = parent::buildLink($action, $flag, $entity);
     $render['#attached']['library'][] = 'core/drupal.ajax';
     $render['#attributes']['class'][] = 'use-ajax';
     return $render;

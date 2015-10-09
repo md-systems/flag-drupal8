@@ -54,10 +54,10 @@ class FlagServiceTest extends WebTestBase {
     $flag = Flag::create([
       'id' => 'test',
       'entity_type' => 'node',
-      'types' => [
+      'bundles' => [
         'article',
       ],
-      'flag_type' => 'flagtype_node',
+      'flag_type' => 'entity:node',
       'link_type' => 'reload',
       'flagTypeConfig' => [],
       'linkTypeConfig' => [],
@@ -79,10 +79,10 @@ class FlagServiceTest extends WebTestBase {
     $flag = Flag::create([
       'id' => 'test',
       'entity_type' => 'node',
-      'types' => [
+      'bundles' => [
         'article',
       ],
-      'flag_type' => 'flagtype_node',
+      'flag_type' => 'entity:node',
       'link_type' => 'reload',
       'flagTypeConfig' => [],
       'linkTypeConfig' => [],

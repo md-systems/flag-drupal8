@@ -54,11 +54,10 @@ function flag_views_data() {
  */
 function flag_views_data_alter(array &$data) {
   $flags = \Drupal::service('flag')->getFlags();
+  $entity_manager = \Drupal::entityManager();
 
   foreach ($flags as $flag_id => $flag) {
     $entity_type_id = $flag->getFlaggableEntityTypeId();
-
-    $entity_manager = \Drupal::entityManager();
 
     $entity_type = $entity_manager->getDefinition($entity_type_id);
     if ($entity_type->hasHandlerClass('views_data')) {

@@ -106,13 +106,8 @@ class FlagViewsLinkField extends FieldPluginBase {
 
     $flag = $this->getFlag();
     $link_type_plugin = $flag->getLinkTypePlugin();
-    $action = 'flag';
 
-    if ($flag->isFlagged($entity)) {
-      $action = 'unflag';
-    }
-
-    $link = $link_type_plugin->renderLink($action, $flag, $entity);
+    $link = $link_type_plugin->getLink($flag, $entity);
 
     return $link;
   }

@@ -79,6 +79,8 @@ class FlagFieldEntryTest extends WebTestBase {
     parent::setUp();
     // The breadcrumb block is needed for FieldUiTestTrait's tests.
     $this->drupalPlaceBlock('system_breadcrumb_block');
+    $this->drupalPlaceBlock('local_tasks_block');
+    $this->drupalPlaceBlock('page_title_block');
   }
 
   /**
@@ -109,7 +111,7 @@ class FlagFieldEntryTest extends WebTestBase {
 
     // Test with minimal value requirement.
     $edit = [
-      'flag_entity_type' => 'flagtype_node',
+      'flag_entity_type' => 'entity:node',
     ];
     $this->drupalPostForm('admin/structure/flags/add', $edit, t('Continue'));
 
@@ -127,7 +129,7 @@ class FlagFieldEntryTest extends WebTestBase {
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
-      'types[' . $this->nodeType . ']' => $this->nodeType,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
       'flag_confirmation' => $this->flagConfirmMessage,
       'flagging_edit_title' => $this->flagDetailsMessage,
       'unflag_confirmation' => $this->unflagConfirmMessage,

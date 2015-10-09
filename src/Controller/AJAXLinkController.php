@@ -43,7 +43,7 @@ class AJAXLinkController extends ControllerBase {
       // Fail silently and return the updated link.
     }
 
-    return $this->generateResponse('unflag', $flag, $entity);
+    return $this->generateResponse($flag, $entity);
   }
 
   /**
@@ -72,14 +72,12 @@ class AJAXLinkController extends ControllerBase {
       // Fail silently and return the updated link.
     }
 
-    return $this->generateResponse('flag', $flag, $entity);
+    return $this->generateResponse($flag, $entity);
   }
 
   /**
    * Generates a response object after handing the un/flag request.
    *
-   * @param string $action
-   *   The action being performed, should be 'flag' or 'unflag'.
    * @param FlagInterface $flag
    *   The flag entity.
    * @param EntityInterface $entity
@@ -88,7 +86,7 @@ class AJAXLinkController extends ControllerBase {
    * @return AjaxResponse
    *   The response object.
    */
-  protected function generateResponse($action, FlagInterface $flag, EntityInterface $entity) {
+  protected function generateResponse(FlagInterface $flag, EntityInterface $entity) {
     // Create a new AJAX response.
     $response = new AjaxResponse();
 
@@ -96,7 +94,7 @@ class AJAXLinkController extends ControllerBase {
     $link_type = $flag->getLinkTypePlugin();
 
     // Generate the link render array and get the link CSS ID.
-    $link = $link_type->renderLink($action, $flag, $entity);
+    $link = $link_type->getLink($flag, $entity);
     $link_id = '#' . $link['#attributes']['id'];
 
     // Create a new JQuery Replace command to update the link display.

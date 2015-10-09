@@ -40,10 +40,11 @@ use Drupal\flag\FlagInterface;
  *     "id",
  *     "uuid",
  *     "label",
- *     "types",
+ *     "bundles",
  *     "entity_type",
  *     "enabled",
  *     "global",
+ *     "weight",
  *     "flag_short",
  *     "flag_long",
  *     "flag_message",
@@ -109,13 +110,13 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   protected $enabled = TRUE;
 
   /**
-   * The sub-types, AKA bundles, this flag applies to.
+   * The bundles this flag applies to.
    *
-   * This may be an empty array to indicate all types apply.
+   * This may be an empty array to indicate all bundles apply.
    *
    * @var array
    */
-  protected $types = [];
+  protected $bundles = [];
 
   /**
    * The text for the "flag this" link for this flag.
@@ -217,7 +218,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   public $weight = 0;
 
   /**
-   * Overrides \Drupal\Core\Config\Entity\ConfigEntityBase::__construct().
+   * {@inheritdoc}
    */
   public function __construct(array $values, $entity_type) {
     parent::__construct($values, $entity_type);
@@ -275,7 +276,7 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
 
     // Select by user if the flag is not global.
     if (!$this->isGlobal()) {
-      $query = $query->condition('uid', $account->id());
+      $query->condition('uid', $account->id());
     }
 
     // Execute the query.
@@ -300,8 +301,24 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   /**
    * {@inheritdoc}
    */
-  public function getTypes() {
-    return $this->types;
+  public function getBundles() {
+    return $this->bundles;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getApplicableBundles() {
+    $bundles = $this->getBundles();
+
+    if (empty($bundles)) {
+      // If the setting is empty, return all bundle names for the flag's entity
+      // type.
+      $bundle_info = \Drupal::entityManager()->getBundleInfo($this->entity_type);
+      $bundles = array_keys($bundle_info);
+    }
+
+    return $bundles;
   }
 
   /**
@@ -523,6 +540,12 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
    */
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
+
+    $bundles = array_filter($this->get('bundles'));
+    sort($bundles);
+
+    $this->set('bundles', $bundles);
+
     /*
     // Save the Flag Type configuration.
     $flagTypePlugin = $this->getFlagTypePlugin();

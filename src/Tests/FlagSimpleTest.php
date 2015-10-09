@@ -77,6 +77,7 @@ class FlagSimpleTest extends WebTestBase {
     $this->doFlagAdd();
     $this->doFlagLinksTest();
     $this->doGlobalFlagLinksTest();
+    $this->doTestFlagCounts();
     $this->doFlagLinkTeaserTest();
     $this->doUserDeletionTest();
   }
@@ -98,7 +99,7 @@ class FlagSimpleTest extends WebTestBase {
     $edit = [
       'label' => $this->label,
       'id' => $this->id,
-      'types[' . $this->nodeType . ']' => $this->nodeType,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
     ];
     $this->drupalPostForm(NULL, $edit, t('Create Flag'));
 
@@ -282,8 +283,18 @@ class FlagSimpleTest extends WebTestBase {
    * Flags a node using different user accounts and checks flag counts.
    */
   public function doTestFlagCounts() {
+    /** \Drupal\Core\Database\Connection $connection */
+    $connection = \Drupal::database();
+
     $node = $this->drupalCreateNode(['type' => $this->nodeType]);
     $node_id = $node->id();
+
+    // Grant the flag permissions to the authenticated role, so that both
+    // users have the same roles and share the render cache.
+    $role = Role::load(DRUPAL_AUTHENTICATED_RID);
+    $role->grantPermission('flag ' . $this->id);
+    $role->grantPermission('unflag ' . $this->id);
+    $role->save();
 
     // Create and login user 1.
     $user_1 = $this->drupalCreateUser();
@@ -296,12 +307,13 @@ class FlagSimpleTest extends WebTestBase {
     $this->assertLink('Unflag this item');
 
     // Check for 1 flag count.
-    $count_flags_before = \Drupal::entityQuery('flag_counts')
+    $count_flags_before = $connection->select('flag_counts')
       ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
-      ->count()
-      ->execute();
+      ->countQuery()
+      ->execute()
+      ->fetchField();
     $this->assertTrue(1, $count_flags_before);
 
     // Logout user 1, create and login user 2.
@@ -315,12 +327,13 @@ class FlagSimpleTest extends WebTestBase {
     $this->assertLink('Unflag this item');
 
     // Check for 2 flag counts.
-    $count_flags_after = \Drupal::entityQuery('flag_counts')
+    $count_flags_after = $connection->select('flag_counts')
       ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
-      ->count()
-      ->execute();
+      ->countQuery()
+      ->execute()
+      ->fetchField();
     $this->assertTrue(2, $count_flags_after);
 
     // Unflag the node again.
@@ -330,12 +343,13 @@ class FlagSimpleTest extends WebTestBase {
     $this->assertLink('Flag this item');
 
     // Check for 1 flag count.
-    $count_flags_before = \Drupal::entityQuery('flag_counts')
+    $count_flags_before = $connection->select('flag_counts')
       ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
-      ->count()
-      ->execute();
+      ->countQuery()
+      ->execute()
+      ->fetchField();
     $this->assertEqual(1, $count_flags_before);
 
     // Delete  user 1.
@@ -343,12 +357,13 @@ class FlagSimpleTest extends WebTestBase {
 
     // Check for 0 flag counts, user deletion should lead to count decrement
     // or row deletion.
-    $count_flags_before = \Drupal::entityQuery('flag_counts')
+    $count_flags_before = $connection->select('flag_counts')
       ->condition('flag_id', $this->id)
       ->condition('entity_type', $node->getEntityTypeId())
       ->condition('entity_id', $node_id)
-      ->count()
-      ->execute();
+      ->countQuery()
+      ->execute()
+      ->fetchField();
 
     $this->assertEqual(0, $count_flags_before);
   }

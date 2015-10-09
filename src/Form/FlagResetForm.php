@@ -7,14 +7,22 @@
 namespace Drupal\flag\Form;
 
 use Drupal\Core\Url;
-use Drupal\flag\FlagInterface;
 use Drupal\Core\Form\ConfirmFormBase;
 use Drupal\Core\Form\FormStateInterface;
-
+use Drupal\flag\FlagInterface;
+use Drupal\flag\FlagService;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Provides the flag reset form.
  */
 class FlagResetForm extends ConfirmFormBase {
+
+  /**
+   * The Flag Service.
+   *
+   * @var \Drupal\flag\FlagService $flagService
+   */
+  protected $flagService;
 
   /**
    * The flag to reset.
@@ -22,6 +30,22 @@ class FlagResetForm extends ConfirmFormBase {
    * @var \Drupal\flag\FlagInterface
    */
   protected $flag;
+
+  /**
+   * Class constructor.
+   */
+  public function __construct(FlagService $flag_service) {
+    $this->flagService = $flag_service;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('flag')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -76,7 +100,7 @@ class FlagResetForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    flag_reset_flag($this->flag);
+    $this->flagService->reset($this->flag);
     drupal_set_message($this->t('Flag %label was reset.', [
       '%label' => $this->flag->label(),
     ]));

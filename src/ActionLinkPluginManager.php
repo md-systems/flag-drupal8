@@ -37,7 +37,7 @@ class ActionLinkPluginManager extends DefaultPluginManager {
   public function getAllLinkTypes() {
     $link_types = [];
     foreach ($this->getDefinitions() as $plugin_id => $plugin_def) {
-      $link_types[$plugin_id] = t($plugin_def['label']);
+      $link_types[$plugin_id] = $plugin_def['label'];
     }
 
     return $link_types;

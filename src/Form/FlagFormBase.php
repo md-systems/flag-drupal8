@@ -127,20 +127,19 @@ abstract class FlagFormBase extends EntityForm {
     $flag_type_plugin = $flag->getFlagTypePlugin();
     $flag_type_def = $flag_type_plugin->getPluginDefinition();
 
-    $bundles = entity_get_bundles($flag_type_def['entity_type']);
+    $bundles = \Drupal::entityManager()->getBundleInfo($flag_type_def['entity_type']);
     $entity_bundles = [];
     foreach ($bundles as $bundle_id => $bundle_row) {
       $entity_bundles[$bundle_id] = $bundle_row['label'];
     }
 
     // Flag classes will want to override this form element.
-    $form['access']['types'] = [
+    $form['access']['bundles'] = [
       '#type' => 'checkboxes',
       '#title' => t('Flaggable types'),
       '#options' => $entity_bundles,
-      '#default_value' => $flag->getTypes(),
-      '#description' => t('Check any sub-types that this flag may be used on.'),
-      '#required' => TRUE,
+      '#default_value' => $flag->getBundles(),
+      '#description' => t('Check any bundles that this flag may be used on. Leave empty to apply to all bundles.'),
       '#weight' => 10,
     ];
 
@@ -247,7 +246,7 @@ abstract class FlagFormBase extends EntityForm {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityFormController::validateForm().
+   * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
@@ -259,7 +258,7 @@ abstract class FlagFormBase extends EntityForm {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityFormController::save().
+   * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
     $flag = $this->entity;
@@ -313,7 +312,7 @@ abstract class FlagFormBase extends EntityForm {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityFormController::delete().
+   * {@inheritdoc}
    */
   public function delete(array $form, FormStateInterface $form_state) {
     $form_state->setRedirect('flag_list');

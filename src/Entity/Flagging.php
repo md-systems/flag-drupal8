@@ -50,10 +50,7 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
   }
 
   /**
-   * Gets the parent flag entity.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\flag\FlagInterface
-   *   The flag related this this flagging.
+   * {@inheritdoc}
    */
   public function getFlag() {
     return $this->entityManager()->getStorage('flag')->load($this->getFlagId());
@@ -80,13 +77,12 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
   }
 
   /**
-   * Gets the flaggable entity.
-   *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   The flaggable entity.
+   * {@inheritdoc}
    */
   public function getFlaggable() {
-    return $this->entityManager()->getStorage($this->getFlaggableType())->load($this->getFlaggableId());
+    $flaggable_type = $this->getFlaggableType();
+    $flaggable_id = $this->getFlaggableId();
+    return $this->entityManager()->getStorage($flaggable_type)->load($flaggable_id);
   }
 
   /**
@@ -109,6 +105,8 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
       ->setRequired(TRUE)
       ->setReadOnly(TRUE);
 
+    // This field is on flaggings even though it duplicates the entity type
+    // field on the flag so that flagging queries can use it.
     $fields['entity_type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity Type'))
       ->setDescription(t('The Entity Type.'));
@@ -117,6 +115,11 @@ class Flagging extends ContentEntityBase implements FlaggingInterface {
       ->setLabel(t('Entity ID'))
       ->setRequired(TRUE)
       ->setDescription(t('The Entity ID.'));
+
+    // Also duplicates data on flag entity for querying purposes.
+    $fields['global'] = BaseFieldDefinition::create('boolean')
+      ->setLabel(t('Global'))
+      ->setDescription(t('A boolean indicating whether the flagging is global.'));
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('User ID'))

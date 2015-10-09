@@ -13,7 +13,7 @@ use Drupal\Core\Session\AccountInterface;
  * Provides a flag type for comments.
  *
  * @FlagType(
- *   id = "flagtype_comment",
+ *   id = "entity:comment",
  *   title = @Translation("Comment"),
  *   entity_type = "comment",
  *   provider = "comment"
@@ -73,7 +73,8 @@ class CommentFlagType extends EntityFlagType {
     $access = [];
 
     // If all subtypes are allowed, we have nothing to say here.
-    if (empty($this->types)) {
+    $types = $this->getBundles();
+    if (empty($types)) {
       return $access;
     }
 
@@ -84,7 +85,7 @@ class CommentFlagType extends EntityFlagType {
     $result = $query
       ->fields('c', ['cid'])
       ->condition('c.cid', $entity_ids, 'IN')
-      ->condition('n.type', $this->types, 'NOT IN')
+      ->condition('n.type', $types, 'NOT IN')
       ->execute();
     foreach ($result as $row) {
       $access[$row->nid] = FALSE;

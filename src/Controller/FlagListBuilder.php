@@ -6,7 +6,6 @@
 
 namespace Drupal\flag\Controller;
 
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;
@@ -18,7 +17,7 @@ use Drupal\Core\Url;
 class FlagListBuilder extends ConfigEntityListBuilder {
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::buildHeader().
+   * {@inheritdoc}
    */
   public function buildHeader() {
     $header['label'] = t('Flag');
@@ -36,10 +35,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
    *   The flag entity.
    *
    * @return string
-   *   An HTML sting of roles.
+   *   An HTML string of roles.
    */
   protected function getFlagRoles(FlagInterface $flag) {
-    $out = '';
     $all_roles = [];
 
     foreach ($flag->getPermissions() as $perm => $pinfo) {
@@ -53,14 +51,17 @@ class FlagListBuilder extends ConfigEntityListBuilder {
     $out = implode(', ', $all_roles);
 
     if (empty($out)) {
-      return SafeMarkup::placeHolder($this->t('None'));
+      return [
+        '#markup' => '<em>' . $this->t('None') . '</em>',
+        '#allowed_tags' => ['em'],
+      ];
     }
 
     return rtrim($out, ', ');
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::buildRow().
+   * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
 
@@ -76,10 +77,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
   }
 
   /**
-   * Overrides Drupal\Core\Entity\EntityListController::render().
-   *
-   * We override the render() method to add helpful text below the entity list.
+   * {@inheritdoc}
    */
+  // We override the render() method to add helpful text below the entity list.
   public function render() {
     $build['table'] = parent::render();
 
