@@ -224,7 +224,8 @@ abstract class FlagTestBase extends WebTestBase {
       }
     }
 
-    return 'flagtype_entity';
+    // Return the generic entity flag type plugin ID.
+    return 'entity';
   }
 
 }
