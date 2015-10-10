@@ -48,7 +48,7 @@ abstract class FlagTestBase extends WebTestBase {
   /**
    * Create a basic flag programmatically.
    *
-   * Creates a flag with the given entity type, subtype, and link type without
+   * Creates a flag with the given entity type, bundles, and link type without
    * using the admin UI. The flag's ID, label, flag and unflag text will be
    * random strings.
    *
@@ -71,7 +71,7 @@ abstract class FlagTestBase extends WebTestBase {
       $entity_type = 'node';
     }
 
-    // If we didn't get a subtype, assume all subtypes for the entity.
+    // If we didn't get a bundles, assume all bundles for the entity.
     if (empty($bundles)) {
       $bundles = array_keys(\Drupal::entityManager()->getBundleInfo($entity_type));
     }

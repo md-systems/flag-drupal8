@@ -10,7 +10,7 @@ use Drupal\Component\Plugin\Derivative\DeriverBase;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 
 /**
- * Derivative class for entity flag subtypes plugin.
+ * Derivative class for entity flag type plugin.
  */
 class EntityFlagTypeDeriver extends DeriverBase {
 
