@@ -71,7 +71,9 @@ class EntityFlagType extends FlagTypeBase {
     $view_modes = \Drupal::entityManager()->getViewModes($this->entityType);
     foreach ($view_modes as $name => $view_mode) {
       $options[$name] = t('Display on @name view mode', ['@name' => $view_mode['label']]);
-      $defaults[$name] = $this->showInLinks($name);
+      if ($this->showInLinks($name)) {
+        $defaults[$name] = $name;
+      }
     }
 
     $form['display']['show_in_links'] = [
@@ -172,15 +174,15 @@ class EntityFlagType extends FlagTypeBase {
    * @param string $name
    *   The name of the view mode.
    *
-   * @return mixed
-   *   The name of the view mode if the flag appears in links, 0 otherwise.
+   * @return boolean
+   *   TRUE if the flag should appear in the entity links for the view mode.
    */
   public function showInLinks($name) {
     if (!empty($this->configuration['show_in_links'][$name])) {
-      return $name;
+      return TRUE;
     }
 
-    return 0;
+    return FALSE;
   }
 
   /**
