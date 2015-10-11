@@ -8,14 +8,11 @@
 define('FLAG_API_VERSION', 3);
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\flag\Entity\Flag;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\UserInterface;
-use Drupal\Core\Form\FormStateInterface;
 
 /**
  * Implements hook_help().
