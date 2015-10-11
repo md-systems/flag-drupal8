@@ -571,8 +571,9 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   public static function preDelete(EntityStorageInterface $storage, array $entities) {
     parent::preDelete($storage, $entities);
 
+    $event_dispatcher = \Drupal::service('event_dispatcher');
     foreach ($entities as $entity) {
-      \Drupal::service('event_dispatcher')
+      $event_dispatcher
         ->dispatch(FlagEvents::FLAG_DELETED, new FlagDeleteEvent($entity));
     }
   }
