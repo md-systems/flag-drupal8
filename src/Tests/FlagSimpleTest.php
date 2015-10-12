@@ -7,7 +7,6 @@
 
 namespace Drupal\flag\Tests;
 
-use Drupal\simpletest\WebTestBase;
 use Drupal\user\RoleInterface;
 use Drupal\user\Entity\Role;
 
@@ -17,7 +16,7 @@ use Drupal\user\Entity\Role;
  *
  * @group flag
  */
-class FlagSimpleTest extends WebTestBase {
+class FlagSimpleTest extends FlagTestBase {
 
   /**
    * The label of the flag to create for the test.
@@ -74,36 +73,26 @@ class FlagSimpleTest extends WebTestBase {
 
     $this->drupalLogin($this->adminUser);
 
-    $this->doFlagAdd();
+    // Create content type.
+    $this->drupalCreateContentType(['type' => $this->nodeType]);
+
+    // Create flag.
+    // TODO: replace this with createFlag(), and change rest of test class to
+    // use generated flag ID and labels.
+    $edit = [
+      'label' => $this->label,
+      'id' => $this->id,
+      'bundles[' . $this->nodeType . ']' => $this->nodeType,
+      'flag_short' => 'Flag this item',
+      'flag_long' => 'Unflag this item',
+    ];
+    $this->createFlagWithForm('node', $edit);
+
     $this->doFlagLinksTest();
     $this->doGlobalFlagLinksTest();
     $this->doTestFlagCounts();
     $this->doFlagLinkTeaserTest();
     $this->doUserDeletionTest();
-  }
-
-  /**
-   * Flag creation.
-   */
-  public function doFlagAdd() {
-    // Create content type.
-    $this->drupalCreateContentType(['type' => $this->nodeType]);
-
-    // Test with minimal value requirement.
-    $this->drupalPostForm('admin/structure/flags/add', [], t('Continue'));
-    // Check for fieldset titles.
-    $this->assertText(t('Messages'));
-    $this->assertText(t('Flag access'));
-    $this->assertText(t('Display options'));
-
-    $edit = [
-      'label' => $this->label,
-      'id' => $this->id,
-      'bundles[' . $this->nodeType . ']' => $this->nodeType,
-    ];
-    $this->drupalPostForm(NULL, $edit, t('Create Flag'));
-
-    $this->assertText(t('Flag @this_label has been added.', ['@this_label' => $this->label]));
   }
 
   /**
