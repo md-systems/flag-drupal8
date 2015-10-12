@@ -40,7 +40,7 @@ interface FlagCountManagerInterface {
    *   are the keys and the counts for each flag the values. Note that flags
    *   that have no flaggings are not included in the array.
    */
-  public function getCounts(EntityInterface $entity);
+  public function getEntityFlagCounts(EntityInterface $entity);
 
   /**
    * Gets the count of flaggings for the given flag.
@@ -55,7 +55,7 @@ interface FlagCountManagerInterface {
    * @return int
    *   The number of flaggings for the flag.
    */
-  public function getEntityCounts(FlagInterface $flag);
+  public function getFlagFlaggingCount(FlagInterface $flag);
 
   /**
    * Gets the count of entities flagged by the given flag.
@@ -71,7 +71,7 @@ interface FlagCountManagerInterface {
    * @return int
    *   The number of entities that are flagged with the flag.
    */
-  public function getTotals(FlagInterface $flag);
+  public function getFlagEntityCount(FlagInterface $flag);
 
   /**
    * Gets the count of the flaggings made by a user with a flag.
@@ -87,6 +87,6 @@ interface FlagCountManagerInterface {
    * @return int
    *   The number of flaggings for the given flag and user.
    */
-  public function getUserCounts(FlagInterface $flag, AccountInterface $user);
+  public function getUserFlagFlaggingCount(FlagInterface $flag, AccountInterface $user);
 
 }

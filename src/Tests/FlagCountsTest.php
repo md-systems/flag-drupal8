@@ -88,22 +88,22 @@ class FlagCountsTest extends FlagTestBase {
     $flagCountService = \Drupal::service('flag.count');
 
     // Check each of the count API functions.
-    $flag_get_entity_flag_counts = $flagCountService->getEntityCounts($this->flag, 'node');
-    $this->assertEqual($flag_get_entity_flag_counts, 1, "getEntityFlagCounts() returns the expected count.");
+    $flag_get_entity_flag_counts = $flagCountService->getFlagFlaggingCount($this->flag, 'node');
+    $this->assertEqual($flag_get_entity_flag_counts, 1, "getFlagFlaggingCount() returns the expected count.");
 
-    $flag_get_user_flag_counts = $flagCountService->getUserCounts($this->flag, $this->adminUser);
-    $this->assertEqual($flag_get_user_flag_counts, 1, "getUserFlagCounts() returns the expected count.");
+    $flag_get_user_flag_counts = $flagCountService->getUserFlagFlaggingCount($this->flag, $this->adminUser);
+    $this->assertEqual($flag_get_user_flag_counts, 1, "getUserFlagFlaggingCount() returns the expected count.");
 
-    $flag_get_counts = $flagCountService->getCounts($this->node);
-    $this->assertEqual($flag_get_counts[$this->flag->id()], 1, "getCounts() returns the expected count.");
+    $flag_get_counts = $flagCountService->getEntityFlagCounts($this->node);
+    $this->assertEqual($flag_get_counts[$this->flag->id()], 1, "getEntityFlagCounts() returns the expected count.");
 
-    $flag_get_flag_counts = $flagCountService->getTotals($this->flag);
-    $this->assertEqual($flag_get_flag_counts, 1, "getFlagTotalCounts() returns the expected count.");
+    $flag_get_flag_counts = $flagCountService->getFlagEntityCount($this->flag);
+    $this->assertEqual($flag_get_flag_counts, 1, "getFlagEntityCount() returns the expected count.");
 
     $this->flagService->reset($this->flag);
     drupal_static_reset();
-    $flag_get_flag_counts = $flagCountService->getTotals($this->flag);
-    $this->assertEqual($flag_get_flag_counts, 0, "getCounts() on reset flag returns the expected count.");
+    $flag_get_flag_counts = $flagCountService->getFlagEntityCount($this->flag);
+    $this->assertEqual($flag_get_flag_counts, 0, "getFlagEntityCount() on reset flag returns the expected count.");
   }
 
 }
