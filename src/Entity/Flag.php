@@ -35,6 +35,7 @@ use Drupal\flag\FlagInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
+ *     "weight" = "weight",
  *   },
  *   config_export = {
  *     "id",

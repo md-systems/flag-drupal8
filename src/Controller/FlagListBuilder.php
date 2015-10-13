@@ -6,7 +6,7 @@
 
 namespace Drupal\flag\Controller;
 
-use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Config\Entity\DraggableListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\Core\Url;
@@ -14,7 +14,19 @@ use Drupal\Core\Url;
 /**
  * Provides a entity list page for Flags.
  */
-class FlagListBuilder extends ConfigEntityListBuilder {
+class FlagListBuilder extends DraggableListBuilder {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $entitiesKey = 'flags';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'flag_list';
+  }
 
   /**
    * {@inheritdoc}
@@ -57,7 +69,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
       ];
     }
 
-    return rtrim($out, ', ');
+    return [
+      '#markup' => rtrim($out, ', '),
+    ];
   }
 
   /**
@@ -69,9 +83,13 @@ class FlagListBuilder extends ConfigEntityListBuilder {
 
     $row['roles'] = $this->getFlagRoles($entity);
 
-    $row['global'] = $entity->isGlobal() ? t('Yes') : t('No');
+    $row['global'] = [
+      '#markup' => $entity->isGlobal() ? t('Yes') : t('No'),
+    ];
 
-    $row['status'] = $entity->isEnabled() ? t('enabled') : t('disabled');
+    $row['status'] = [
+      '#markup' => $entity->isEnabled() ? t('enabled') : t('disabled'),
+    ];
 
     return $row + parent::buildRow($entity);
   }

@@ -130,6 +130,8 @@ class AdminUI extends FlagTestBase {
 
     $this->doFlagReset();
 
+    $this->doFlagChangeWeights();
+
     // TODO: add test for flag deletion.
     //$this->doFlagDelete();
   }
@@ -226,6 +228,39 @@ class AdminUI extends FlagTestBase {
       ->execute();
 
     $this->assertEqual(count($ids_after), 0, "The flag has no flaggings after being reset.");
+  }
+
+  /**
+   * Create further flags and change the weights using the draggable list.
+   */
+  public function doFlagChangeWeights() {
+    $flag_weights_to_set = [];
+
+    // We have one flag already.
+    $flag_weights_to_set[$this->flagId] = 0;
+
+    foreach (range(1, 10) as $i) {
+      $flag = $this->createFlag();
+
+      $flag_weights_to_set[$flag->id()] = -$i;
+    }
+
+    $edit = array();
+    foreach ($flag_weights_to_set as $id => $weight) {
+      $edit['flags[' . $id . '][weight]'] = $weight;
+    }
+    // Saving the new weights via the interface.
+    $this->drupalPostForm('admin/structure/flags', $edit, $this->t('Save order'));
+
+    // Load the vocabularies from the database.
+    $flag_storage = $this->container->get('entity.manager')->getStorage('flag');
+    $flag_storage->resetCache();
+    $updated_flags = $flag_storage->loadMultiple();
+
+    // Check that the weights are saved in the database correctly.
+    foreach ($updated_flags as $id => $flag) {
+      $this->assertEqual($updated_flags[$id]->get('weight'), $flag_weights_to_set[$id], 'The flag weight was changed.');
+    }
   }
 
 }
