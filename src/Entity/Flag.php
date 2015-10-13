@@ -401,7 +401,8 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   public function hasActionAccess($action, AccountInterface $account = NULL) {
     if ($action === 'flag' || $action === 'unflag') {
       $account = $account ?: \Drupal::currentUser();
-      return $account->hasPermission($action . ' ' . $this->id);
+      $permission = $action . ' ' . $this->id;
+      return $account->hasPermission($permission);
     }
   }
 
