@@ -141,7 +141,7 @@ class AdminUI extends FlagTestBase {
    */
   public function doFlagAdd() {
     // Test with minimal value requirement.
-    $this->drupalPostForm('admin/structure/flags/add', [], t('Continue'));
+    $this->drupalPostForm('admin/structure/flags/add', [], $this->t('Continue'));
     // Check for fieldset titles.
     $this->assertText(t('Messages'));
     $this->assertText(t('Flag access'));
@@ -154,7 +154,7 @@ class AdminUI extends FlagTestBase {
       'flag_short' => $this->flagShortText,
       'unflag_short' => $this->unflagShortText,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Create Flag'));
+    $this->drupalPostForm(NULL, $edit, $this->t('Create Flag'));
 
     $this->assertText(t('Flag @this_label has been added.', ['@this_label' => $this->label]));
 
@@ -172,7 +172,7 @@ class AdminUI extends FlagTestBase {
     $this->drupalGet('admin/structure/flags');
     $this->assertText(t('enabled'));
 
-    $this->drupalPostForm('flag/disable/' . $this->flagId, [], t('Disable'));
+    $this->drupalPostForm('flag/disable/' . $this->flagId, [], $this->t('Disable'));
     $this->assertResponse(200);
 
     $this->drupalGet('admin/structure/flags');
@@ -189,7 +189,7 @@ class AdminUI extends FlagTestBase {
     $this->drupalGet('admin/structure/flags');
     $this->assertText(t('disabled'));
 
-    $this->drupalPostForm('flag/enable/' . $this->flagId, [], t('Enable'));
+    $this->drupalPostForm('flag/enable/' . $this->flagId, [], $this->t('Enable'));
     $this->assertResponse(200);
 
     $this->drupalGet('admin/structure/flags');
