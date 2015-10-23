@@ -95,7 +95,7 @@ class AJAXLinkController extends ControllerBase {
 
     // Generate the link render array and get the link CSS ID.
     $link = $link_type->getLink($flag, $entity);
-    $link_id = '#' . $link['#attributes']['id'];
+    $link_id = '#' . $link['link']['#attributes']['id'];
 
     // Create a new JQuery Replace command to update the link display.
     $replace = new ReplaceCommand($link_id, drupal_render($link));
