@@ -66,7 +66,7 @@ class AJAXLinkController extends ControllerBase {
     $flag_service = \Drupal::service('flag');
     $entity = $flag_service->getFlaggableById($flag, $entity_id);
     try {
-      $flag_service->unflag($flag_id, $entity_id);
+      $flag_service->unflag($flag, $entity);
     }
     catch (\LogicException $e) {
       // Fail silently and return the updated link.
