@@ -42,6 +42,7 @@ class AJAXactionLink extends ActionLinkTypeBase {
     $render = parent::buildLink($action, $flag, $entity);
     $render['#attached']['library'][] = 'core/drupal.ajax';
     $render['#attributes']['class'][] = 'use-ajax';
+    $render['#url']->setRouteParameter('_format', 'json');
     return $render;
   }
 
