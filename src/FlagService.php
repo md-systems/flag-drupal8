@@ -177,7 +177,7 @@ class FlagService implements FlagServiceInterface {
    * {@inheritdoc}
    */
   public function getFlaggingUsers(EntityInterface $entity, FlagInterface $flag = NULL) {
-    $query = $this->entityQueryManager->get('users')
+    $query = $this->entityQueryManager->get('flagging')
       ->condition('entity_type', $entity->getEntityTypeId())
       ->condition('entity_id', $entity->id());
 
@@ -186,8 +186,15 @@ class FlagService implements FlagServiceInterface {
     }
 
     $ids = $query->execute();
+    // Load the flaggings.
+    $flaggings = $this->getFlaggingsByIds($ids);
 
-    return $this->getFlaggingsByIds($ids);
+    $user_ids = array();
+    foreach ($flaggings as $flagging) {
+      $user_ids[] = $flagging->get('uid')->first()->getValue()['target_id'];
+    }
+
+    return $this->entityManager->getStorage('user')->loadMultiple($user_ids);
   }
 
   /**
