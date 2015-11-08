@@ -12,15 +12,13 @@ use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\flag\Event\FlagEvents;
-use Drupal\flag\Event\FlagResetEvent;
 use Drupal\flag\Event\FlaggingEvent;
-use Drupal\flag\FlagInterface;
-use Drupal\flag\FlagServiceInterface;
-use Drupal\flag\FlagTypePluginManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Flag service.
+ *  - Handles search requests for flags and flaggings.
+ *  - Performs flagging and unflaging operations.
  */
 class FlagService implements FlagServiceInterface {
 
@@ -271,31 +269,6 @@ class FlagService implements FlagServiceInterface {
     $this->eventDispatcher->dispatch(FlagEvents::ENTITY_UNFLAGGED, new FlaggingEvent($flag, $entity));
 
     $flagging->delete();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function reset(FlagInterface $flag, EntityInterface $entity = NULL) {
-    $query = $this->entityQueryManager->get('flagging')
-      ->condition('flag_id', $flag->id());
-
-    if (!empty($entity)) {
-      $query->condition('entity_id', $entity->id());
-    }
-
-    // Count the number of flaggings to delete.
-    $count = $query->count()
-      ->execute();
-
-    $this->eventDispatcher->dispatch(FlagEvents::FLAG_RESET, new FlagResetEvent($flag, $count));
-
-    $flaggings = $this->getFlaggings($flag, $entity);
-    foreach ($flaggings as $flagging) {
-      $flagging->delete();
-    }
-
-    return $count;
   }
 
   /**

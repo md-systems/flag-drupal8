@@ -8,7 +8,6 @@ namespace Drupal\flag;
 
 use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\flag\FlagInterface;
 
 /**
  * Flag service interface.
@@ -146,19 +145,5 @@ interface FlagServiceInterface {
    *   - The entity is not currently flagged with this flag by the user.
    */
   public function unflag(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL);
-
-  /**
-   *
-   * Remove all flagged entities from a flag.
-   *
-   * @param FlagInterface $flag
-   *  The flag to reset.
-   * @param EntityInterface $entity
-   *  (optional) The entity for which to delete flaggings.
-   *
-   * @return int
-   *  The number of flaggings that have been deleted.
-   */
-  public function reset(FlagInterface $flag, EntityInterface $entity = NULL);
 
 }
