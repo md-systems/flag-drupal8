@@ -21,11 +21,19 @@ abstract class FlagTestBase extends WebTestBase {
   use StringTranslationTrait;
 
   /**
+   * The flag service.
+   *
+   * @var \Drupal\flag\FlagServiceInterface
+   */
+  protected $flagService;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
     parent::setUp();
 
+    $this->flagService = \Drupal::service('flag');
     $this->drupalPlaceBlock('page_title_block');
   }
 

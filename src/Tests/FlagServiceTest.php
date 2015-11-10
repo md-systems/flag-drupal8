@@ -8,36 +8,20 @@
 namespace Drupal\flag\Tests;
 
 use Drupal\flag\Entity\Flag;
-use Drupal\simpletest\WebTestBase;
+use Drupal\flag\Tests\FlagTestBase;
 
 /**
  * Tests the FlagService.
  *
  * @group flag
  */
-class FlagServiceTest extends WebTestBase {
+class FlagServiceTest extends FlagTestBase {
 
   public static $modules = array(
     'flag',
     'node',
     'user',
   );
-
-  /**
-   * The flag service.
-   *
-   * @var \Drupal\flag\FlagService;
-   */
-  protected $flagService;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-
-    $this->flagService = \Drupal::service('flag');
-  }
 
   /**
    * Test the FlagService.

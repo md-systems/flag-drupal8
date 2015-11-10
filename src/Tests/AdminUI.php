@@ -15,12 +15,6 @@ use Drupal\flag\Tests\FlagTestBase;
  */
 class AdminUI extends FlagTestBase {
 
-  /**
-   * The flag service.
-   *
-   * @var \Drupal\flag\FlagServiceInterface
-   */
-  protected $flagService;
 
   /**
    * The entity query service.
@@ -97,8 +91,6 @@ class AdminUI extends FlagTestBase {
    */
   protected function setUp() {
     parent::setUp();
-
-    $this->flagService = $this->container->get('flag');
 
     $this->entityQueryManager = $this->container->get('entity.query');
 

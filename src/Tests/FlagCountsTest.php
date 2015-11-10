@@ -33,13 +33,6 @@ class FlagCountsTest extends FlagTestBase {
   protected $node;
 
   /**
-   * The flag service.
-   *
-   * @var \Drupal\flag\FlagServiceInterface
-   */
-  protected $flagService;
-
-  /**
    * The flag count service.
    *
    * @var \Drupal\flag\FlagCountManagerInterface
@@ -66,7 +59,6 @@ class FlagCountsTest extends FlagTestBase {
   protected function setUp() {
     parent::setUp();
 
-    $this->flagService = \Drupal::service('flag');
     $this->flagCountService = \Drupal::service('flag.count');
     $this->flaggingDelete = \Drupal::service('flagging');
 
