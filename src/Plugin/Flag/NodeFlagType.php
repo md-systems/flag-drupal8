@@ -87,7 +87,7 @@ class NodeFlagType extends EntityFlagType {
   public function typeAccessMultiple(array $entity_ids, AccountInterface $account) {
     $access = [];
 
-    // If all subtypes are allowed, we have nothing to say here.
+    // If all bundles are allowed, we have nothing to say here.
     $types = $this->getBundles();
     if (empty($types)) {
       return $access;

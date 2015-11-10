@@ -35,7 +35,7 @@ abstract class FlagFormBase extends EntityForm {
       '#type' => 'textfield',
       '#title' => t('Label'),
       '#default_value' => $flag->label,
-      '#description' => t('A short, descriptive title for this flag. It will be used in administrative interfaces to refer to this flag, and in page titles and menu items of some <a href="@insite-views-url">views</a> this module provides (theses are customizable, though). Some examples could be <em>Bookmarks</em>, <em>Favorites</em>, or <em>Offensive</em>.', array('@insite-views-url' => Url::fromRoute('entity.view.collection')->toString())),
+      '#description' => t('A short, descriptive title for this flag. It will be used in administrative interfaces to refer to this flag, and in page titles and menu items of some views this module provides (these are customizable, though). Some examples could be <em>Bookmarks</em>, <em>Favorites</em>, or <em>Offensive</em>.'),
       '#maxlength' => 255,
       '#required' => TRUE,
       '#weight' => -3,
@@ -285,7 +285,7 @@ abstract class FlagFormBase extends EntityForm {
     // This needs to be done after the flag cache has been cleared, so that
     // the new permissions are picked up by hook_permission().
     // This may need to move to the flag class when we implement extra
-    // permissions for different flag subtypes: http://drupal.org/node/879988
+    // permissions for different flag types: http://drupal.org/node/879988
 
     // If the flag ID has changed, clean up all the obsolete permissions.
     if ($flag->id != $form['#flag_name']) {

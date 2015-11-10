@@ -45,6 +45,7 @@ class FlagServiceTest extends WebTestBase {
   public function testFlagService() {
     $this->doTestFlagServiceGetFlag();
     $this->doTestFlagServiceFlagExceptions();
+    $this->doTestFlagServiceGetFlaggingUsers();
   }
 
   /**
@@ -155,4 +156,45 @@ class FlagServiceTest extends WebTestBase {
     }
   }
 
+  /**
+   * Tests that getFlaggingUsers method returns the expected result.
+   */
+  public function doTestFlagServiceGetFlaggingUsers() {
+
+    $flag = Flag::create([
+      'id' => 'testFlaggingUsers',
+      'entity_type' => 'node',
+      'bundles' => [
+        //Content type article exists already from test before.
+        'article',
+      ],
+      'flag_type' => 'entity:node',
+      'link_type' => 'reload',
+      'flagTypeConfig' => [],
+      'linkTypeConfig' => [],
+    ]);
+
+    $flag->save();
+
+    // The service methods don't check access, so our user can be anybody.
+    $accounts = array($this->drupalCreateUser(), $this->drupalCreateUser());
+
+    // Flag the node.
+    $flaggable_node = $this->drupalCreateNode(['type' => 'article']);
+    foreach ($accounts as $account) {
+      $this->flagService->flag($flag, $flaggable_node, $account);
+    }
+
+    $flagging_users = $this->flagService->getFlaggingUsers($flaggable_node, $flag);
+    $this->assertTrue(is_array($flagging_users), "The method getFlaggingUsers() returns an array.");
+
+    foreach ($accounts as $account) {
+      foreach ($flagging_users as $flagging_user) {
+        if ($flagging_user->id() == $account->id()) {
+          break;
+        }
+      }
+      $this->assertTrue($flagging_user->id() == $account->id(), "The returned array has the flagged account included.");
+    }
+  }
 }

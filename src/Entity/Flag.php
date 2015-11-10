@@ -12,7 +12,6 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
-use Drupal\flag\Event\FlagDeleteEvent;
 use Drupal\flag\Event\FlagEvents;
 use Drupal\flag\FlagInterface;
 
@@ -35,6 +34,7 @@ use Drupal\flag\FlagInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
+ *     "weight" = "weight",
  *   },
  *   config_export = {
  *     "id",
@@ -401,7 +401,8 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
   public function hasActionAccess($action, AccountInterface $account = NULL) {
     if ($action === 'flag' || $action === 'unflag') {
       $account = $account ?: \Drupal::currentUser();
-      return $account->hasPermission($action . ' ' . $this->id);
+      $permission = $action . ' ' . $this->id;
+      return $account->hasPermission($permission);
     }
   }
 
@@ -563,18 +564,6 @@ class Flag extends ConfigEntityBundleBase implements FlagInterface {
     // Clear entity extra field caches.
     \Drupal::entityManager()->clearCachedFieldDefinitions();
 
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function preDelete(EntityStorageInterface $storage, array $entities) {
-    parent::preDelete($storage, $entities);
-
-    foreach ($entities as $entity) {
-      \Drupal::service('event_dispatcher')
-        ->dispatch(FlagEvents::FLAG_DELETED, new FlagDeleteEvent($entity));
-    }
   }
 
   /**

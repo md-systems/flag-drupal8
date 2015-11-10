@@ -6,7 +6,7 @@
 
 namespace Drupal\flag\Controller;
 
-use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Config\Entity\DraggableListBuilder;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\flag\FlagInterface;
 use Drupal\Core\Url;
@@ -14,7 +14,19 @@ use Drupal\Core\Url;
 /**
  * Provides a entity list page for Flags.
  */
-class FlagListBuilder extends ConfigEntityListBuilder {
+class FlagListBuilder extends DraggableListBuilder {
+
+  /**
+   * {@inheritdoc}
+   */
+  protected $entitiesKey = 'flags';
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getFormId() {
+    return 'flag_list';
+  }
 
   /**
    * {@inheritdoc}
@@ -57,7 +69,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
       ];
     }
 
-    return rtrim($out, ', ');
+    return [
+      '#markup' => rtrim($out, ', '),
+    ];
   }
 
   /**
@@ -69,9 +83,13 @@ class FlagListBuilder extends ConfigEntityListBuilder {
 
     $row['roles'] = $this->getFlagRoles($entity);
 
-    $row['global'] = $entity->isGlobal() ? t('Yes') : t('No');
+    $row['global'] = [
+      '#markup' => $entity->isGlobal() ? t('Yes') : t('No'),
+    ];
 
-    $row['status'] = $entity->isEnabled() ? t('enabled') : t('disabled');
+    $row['status'] = [
+      '#markup' => $entity->isEnabled() ? t('enabled') : t('disabled'),
+    ];
 
     return $row + parent::buildRow($entity);
   }
@@ -91,9 +109,9 @@ class FlagListBuilder extends ConfigEntityListBuilder {
     }
     else {
       $output .= '<p>';
-      $output .= t('Lists of flagged content can be displayed using views. You can configure these in the <a href="@views-url">Views administration section</a>.', ['@views-url' => Url::fromRoute('entity.view.collection')->toString()]);
+      $output .= t('Lists of flagged content can be displayed using views. You can configure these in the Views administration section.');
       if (\Drupal::service('flag')->getFlagById('bookmarks')) {
-        $output .= ' ' . t('Flag module automatically provides a few <a href="@views-url">default views for the <em>bookmarks</em> flag</a>. You can use these as templates by cloning these views and then customizing as desired.', ['@views-url' => Url::fromRoute('entity.view.collection', ['query' => ['tag' => 'flag']])->toString()]);
+        $output .= ' ' . t('Flag module automatically provides a few default views for the <em>bookmarks</em> flag. You can use these as templates by cloning these views and then customizing as desired.');
       }
       $output .= ' ' . t('The <a href="@flag-handbook-url">Flag module handbook</a> contains extensive <a href="@customize-url">documentation on creating customized views</a> using flags.', ['@flag-handbook-url' => 'http://drupal.org/handbook/modules/flag', '@customize-url' => 'http://drupal.org/node/296954']);
       $output .= '</p>';

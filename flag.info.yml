@@ -4,5 +4,3 @@ core: 8.x
 type: module
 package: Flags
 configure: flag.list
-dependencies:
- - views_ui

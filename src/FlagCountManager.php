@@ -41,8 +41,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getCounts(EntityInterface $entity) {
-    $counts = &drupal_static(__FUNCTION__);
+  public function getEntityFlagCounts(EntityInterface $entity) {
+    $counts = &drupal_static(__METHOD__);
 
     $entity_type = $entity->getEntityTypeId();
     $entity_id = $entity->id();
@@ -65,8 +65,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getEntityCounts(FlagInterface $flag) {
-    $counts = &drupal_static(__FUNCTION__);
+  public function getFlagFlaggingCount(FlagInterface $flag) {
+    $counts = &drupal_static(__METHOD__);
 
     $flag_id = $flag->id();
     $entity_type = $flag->getFlaggableEntityTypeId();
@@ -91,8 +91,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getTotals(FlagInterface $flag) {
-    $counts = &drupal_static(__FUNCTION__);
+  public function getFlagEntityCount(FlagInterface $flag) {
+    $counts = &drupal_static(__METHOD__);
     $flag_name = $flag->id();
 
     if (!isset($counts[$flag_name])) {
@@ -110,8 +110,8 @@ class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInte
   /**
    * {@inheritdoc}
    */
-  public function getUserCounts(FlagInterface $flag, AccountInterface $user) {
-    $counts = &drupal_static(__FUNCTION__);
+  public function getUserFlagFlaggingCount(FlagInterface $flag, AccountInterface $user) {
+    $counts = &drupal_static(__METHOD__);
 
     $flag_id = $flag->id();
     $uid = $user->id();

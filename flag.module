@@ -8,14 +8,12 @@
 define('FLAG_API_VERSION', 3);
 
 use Drupal\Core\Access\AccessResult;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\flag\Entity\Flag;
 use Drupal\node\NodeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\user\UserInterface;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\flag\FlagInterface;
 
 /**
  * Implements hook_help().
@@ -178,7 +176,7 @@ function flag_entity_view(array &$build, EntityInterface $entity, EntityViewDisp
     $flag_type_plugin = $flag->getFlagTypePlugin();
 
     // Only add cache key if flag link is displayed.
-    if ($flag_type_plugin->showAsField() && !$display->getComponent('flag_' . $flag->id())) {
+    if (!$flag_type_plugin->showAsField() || !$display->getComponent('flag_' . $flag->id())) {
       continue;
     }
 
@@ -204,6 +202,15 @@ function flag_entity_delete(EntityInterface $entity) {
   }
 
   // @todo Actually delete the flaggings and clear associated flag counts.
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function flag_flag_delete(FlagInterface $entity) {
+  /** @var \Drupal\flag\FlaggingServiceInterface $flagging_service */
+  $flagging_service = \Drupal::service('flagging');
+  $flagging_service->reset($entity);
 }
 
 /**

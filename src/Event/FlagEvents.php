@@ -30,15 +30,6 @@ final class FlagEvents {
   const ENTITY_UNFLAGGED = 'flag.entity_unflagged';
 
   /**
-   * Event ID for when a flag (not a flagging) is deleted.
-   *
-   * @Event
-   *
-   * @var string
-   */
-  const FLAG_DELETED = 'flag.flag_deleted';
-
-  /**
    * Event ID for when a flag is reset and all its flaggings are deleted.
    *
    * @Event

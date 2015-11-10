@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\flag\Tests\FlagConfirmFormTest.
+ * Contains \Drupal\flag\Tests\LinkTypeConfirmFormTest.
  */
 
 namespace Drupal\flag\Tests;
@@ -15,7 +15,7 @@ use Drupal\user\Entity\Role;
  *
  * @group flag
  */
-class FlagConfirmFormTest extends WebTestBase {
+class LinkTypeConfirmFormTest extends WebTestBase {
 
   /**
    * The label of the flag to create for the test.

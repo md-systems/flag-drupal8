@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\flag\Tests\FlagFieldEntryTest.
+ * Contains \Drupal\flag\Tests\LinkTypeFieldEntryTest.
  */
 
 namespace Drupal\flag\Tests;
@@ -16,7 +16,7 @@ use Drupal\user\Entity\Role;
  *
  * @group flag
  */
-class FlagFieldEntryTest extends WebTestBase {
+class LinkTypeFieldEntryTest extends WebTestBase {
 
   use FieldUiTestTrait;
 

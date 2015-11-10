@@ -52,7 +52,8 @@ class FlagLinkBuilder implements FlagLinkBuilderInterface {
     $flag = $this->flagService->getFlagById($flag_id);
 
     $link_type_plugin = $flag->getLinkTypePlugin();
-    return $link_type_plugin->getLink($flag, $entity);
+    $link = $link_type_plugin->getLink($flag, $entity);
+    return $link;
   }
 
 }
