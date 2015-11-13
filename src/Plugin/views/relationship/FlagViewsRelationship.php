@@ -35,7 +35,7 @@ class FlagViewsRelationship extends RelationshipPluginBase {
     parent::buildOptionsForm($form, $form_state);
 
     $entity_type = $this->definition['flaggable'];
-    $form['label']['#description'] .= ' ' . t('The name of the selected flag makes a good label.');
+    $form['admin_label']['#description'] = t('The name of the selected flag makes a good label.');
 
     $flags = \Drupal::service('flag')->getFlags($entity_type);
 

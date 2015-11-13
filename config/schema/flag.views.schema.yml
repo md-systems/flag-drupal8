@@ -1,0 +1,13 @@
+views.relationship.flag_relationship:
+  type: views_relationship
+  label: 'Display options for flag relationship'
+  mapping:
+    flag:
+      type: string
+      label: 'The flag'
+    required:
+      type: boolean
+      label: 'Is required?'
+    user_scope:
+      type: string
+      label: 'The user scope'
