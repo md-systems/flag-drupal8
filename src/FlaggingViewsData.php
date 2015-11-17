@@ -23,10 +23,6 @@ class FlaggingViewsData extends EntityViewsData {
     // Remove the 'delete flagging' link that Views provides.
     unset($data['delete_flagging']);
 
-    // Remove the operations.
-    // @todo: Remove this when https://www.drupal.org/node/2491875 is fixed.
-    unset($data['operations']);
-
     // Flag link.
     $data['flagging']['link_flag'] = [
       'field' => [
