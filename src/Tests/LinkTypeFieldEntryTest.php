@@ -191,8 +191,15 @@ class LinkTypeFieldEntryTest extends WebTestBase {
    * Edit the field value of the existing flagging.
    */
   public function doEditFlagField() {
+    $this->drupalGet('node/' . $this->nodeId);
+
     // Get the details form.
-    $this->drupalGet('flag/details/edit/' . $this->id . '/' . $this->nodeId);
+    $this->clickLink(t('Unflag this item'));
+    $this->assertUrl('flag/details/edit/' . $this->id . '/' . $this->nodeId, [
+      'query' => [
+        'destination' => 'node/' . $this->nodeId,
+      ],
+    ]);
 
     // See if the details message is displayed.
     $this->assertText($this->flagDetailsMessage);

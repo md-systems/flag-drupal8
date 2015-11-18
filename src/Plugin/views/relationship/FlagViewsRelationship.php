@@ -6,6 +6,7 @@
 
 namespace Drupal\flag\Plugin\views\relationship;
 
+use Drupal\user\RoleInterface;
 use Drupal\views\Plugin\views\relationship\RelationshipPluginBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
@@ -96,8 +97,8 @@ class FlagViewsRelationship extends RelationshipPluginBase {
         'value' => '***CURRENT_USER***',
         'numeric' => TRUE,
       ];
-      $flag_roles = user_roles(FALSE, "flag $flag->label");
-      if (isset($flag_roles[DRUPAL_ANONYMOUS_RID])) {
+      $flag_roles = user_roles(FALSE, "flag $flag->id()");
+      if (isset($flag_roles[RoleInterface::ANONYMOUS_ID])) {
         // Disable page caching for anonymous users.
         \Drupal::service('page_cache_kill_switch')->trigger();
 
