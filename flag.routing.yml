@@ -45,6 +45,7 @@ flag_link_flag.html:
   requirements:
     _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
     _format: 'html'
+    _csrf_token: 'TRUE'
 
 flag.link_flag.json:
   path: '/flag/flag/{flag}/{entity_id}'
@@ -61,6 +62,7 @@ flag_link_unflag.html:
   requirements:
     _custom_access: '\Drupal\flag\FlagAccessController::checkUnflag'
     _format: 'html'
+    _csrf_token: 'TRUE'
 
 flag.link_unflag.json:
   path: '/flag/unflag/{flag}/{entity_id}'
