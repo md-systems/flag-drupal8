@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\flag\Tests\AdminUI.
+ * Contains \Drupal\flag\Tests\AdminUITest.
  */
 
 namespace Drupal\flag\Tests;
@@ -13,7 +13,7 @@ use Drupal\flag\Tests\FlagTestBase;
  *
  * @group flag
  */
-class AdminUI extends FlagTestBase {
+class AdminUITest extends FlagTestBase {
 
 
   /**
