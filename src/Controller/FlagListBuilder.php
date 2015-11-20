@@ -104,10 +104,7 @@ class FlagListBuilder extends DraggableListBuilder {
     $output = "";
 
     // @todo Move this too hook_help()?
-    if (!\Drupal::moduleHandler()->moduleExists('views')) {
-      $output .= '<p>' . t('The <a href="@views-url">Views</a> module is not installed, or not enabled. It is recommended that you install the Views module to be able to easily produce lists of flagged content.', ['@views-url' => Url::fromUri('http://drupal.org/project/views')]) . '</p>';
-    }
-    else {
+    if (\Drupal::moduleHandler()->moduleExists('views')) {
       $output .= '<p>';
       $output .= t('Lists of flagged content can be displayed using views. You can configure these in the Views administration section.');
       if (\Drupal::service('flag')->getFlagById('bookmarks')) {
