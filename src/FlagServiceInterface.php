@@ -23,7 +23,7 @@ interface FlagServiceInterface {
    *   (optional) The type of entity for which to load the flags.
    * @param string $bundle
    *   (optional) The bundle for which to load the flags.
-   * @param AccountInterface $account
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   (optional) The user account to filter available flags. If not set, all
    *   flags for the given entity and bundle will be returned.
    *
@@ -35,37 +35,36 @@ interface FlagServiceInterface {
   /**
    * Get a flagging that already exists.
    *
-   * @param FlagInterface $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   The flag.
-   * @param EntityInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The flaggable entity.
-   * @param AccountInterface $account
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   (optional) The account of the flagging user. If omitted, the flagging for
    *   the current user will be returned.
    *
-   * @return FlaggingInterface|null
+   * @return \Drupal\flag\FlagInterface|null
    *   The flagging or NULL if the flagging is not found.
-   *
    */
   public function getFlagging(FlagInterface $flag, EntityInterface $entity, AccountInterface $account = NULL);
 
   /**
    * Get all flaggings for the given entity, flag, and optionally, user.
    *
-   * @param FlagInterface $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   (optional) The flag entity. If NULL, flaggings for any flag will be
    *   returned.
-   * @param EntityInterface $entity
-   *   (optional) The flaggable entity. If NULL, flaggings for any entity will be
-   *   returned.
-   * @param AccountInterface $account
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   (optional) The flaggable entity. If NULL, flaggings for any entity will
+   *   be returned.
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   (optional) The account of the flagging user. If NULL, flaggings for any
    *   user will be returned.
    *
    * @return array
    *   An array of flaggings.
    */
-   public function getFlaggings(FlagInterface $flag = NULL, EntityInterface $entity = NULL, AccountInterface $account = NULL);
+  public function getFlaggings(FlagInterface $flag = NULL, EntityInterface $entity = NULL, AccountInterface $account = NULL);
 
   /**
    * Load the flag entity given the ID.
@@ -73,7 +72,7 @@ interface FlagServiceInterface {
    * @param int $flag_id
    *   The ID of the flag to load.
    *
-   * @return FlagInterface|null
+   * @return \Drupal\flag\FlagInterface|null
    *   The flag entity.
    */
   public function getFlagById($flag_id);
@@ -81,12 +80,12 @@ interface FlagServiceInterface {
   /**
    * Loads the flaggable entity given the flag entity and entity ID.
    *
-   * @param FlagInterface $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   The flag entity.
    * @param int $entity_id
    *   The ID of the flaggable entity.
    *
-   * @return EntityInterface|null
+   * @return \Drupal\Core\Entity\EntityInterface|null
    *   The flaggable entity object.
    */
   public function getFlaggableById(FlagInterface $flag, $entity_id);
@@ -94,9 +93,9 @@ interface FlagServiceInterface {
   /**
    * Get a list of users that have flagged an entity.
    *
-   * @param EntityInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity object.
-   * @param FlagInterface $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   (optional) The flag entity to which to restrict results.
    *
    * @return array
@@ -107,15 +106,15 @@ interface FlagServiceInterface {
   /**
    * Flags the given entity given the flag and entity objects.
    *
-   * @param FlagInterface $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   The flag entity.
-   * @param EntityInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   The entity to flag.
-   * @param AccountInterface $account
+   * @param \Drupal\Core\Session\AccountInterface $account
    *   (optional) The account of the user flagging the entity. If not given,
    *   the current user is used.
    *
-   * @return FlaggingInterface|null
+   * @return \Drupal\flag\FlagInterface|null
    *   The flagging.
    *
    * @throws \LogicException

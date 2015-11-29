@@ -20,9 +20,9 @@ interface FlaggingServiceInterface {
   /**
    * Remove all flagged entities from a flag.
    *
-   * @param FlagInterface $flag
+   * @param \Drupal\flag\FlagInterface $flag
    *   The flag to reset.
-   * @param EntityInterface $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   (optional) The entity for which to delete flaggings.
    *
    * @return int
