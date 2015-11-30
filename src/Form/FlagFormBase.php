@@ -33,9 +33,9 @@ abstract class FlagFormBase extends EntityForm {
 
     $form['label'] = [
       '#type' => 'textfield',
-      '#title' => t('Label'),
+      '#title' => $this->t('Label'),
       '#default_value' => $flag->label,
-      '#description' => t('A short, descriptive title for this flag. It will be used in administrative interfaces to refer to this flag, and in page titles and menu items of some views this module provides (these are customizable, though). Some examples could be <em>Bookmarks</em>, <em>Favorites</em>, or <em>Offensive</em>.'),
+      '#description' => $this->t('A short, descriptive title for this flag. It will be used in administrative interfaces to refer to this flag, and in page titles and menu items of some views this module provides (these are customizable, though). Some examples could be <em>Bookmarks</em>, <em>Favorites</em>, or <em>Offensive</em>.'),
       '#maxlength' => 255,
       '#required' => TRUE,
       '#weight' => -3,
@@ -43,9 +43,9 @@ abstract class FlagFormBase extends EntityForm {
 
     $form['id'] = [
       '#type' => 'machine_name',
-      '#title' => t('Machine name'),
+      '#title' => $this->t('Machine name'),
       '#default_value' => $flag->id,
-      '#description' => t('The machine-name for this flag. It may be up to 32 characters long and may only contain lowercase letters, underscores, and numbers. It will be used in URLs and in all API calls.'),
+      '#description' => $this->t('The machine-name for this flag. It may be up to 32 characters long and may only contain lowercase letters, underscores, and numbers. It will be used in URLs and in all API calls.'),
       '#weight' => -2,
       '#machine_name' => [
         'exists' => [$this, 'exists'],
@@ -56,68 +56,68 @@ abstract class FlagFormBase extends EntityForm {
 
     $form['global'] = [
       '#type' => 'checkbox',
-      '#title' => t('Global flag'),
+      '#title' => $this->t('Global flag'),
       '#default_value' => $flag->isGlobal(),
-      '#description' => t('If checked, flag is considered "global" and each entity is either flagged or not. If unchecked, each user has individual flags on entities.'),
+      '#description' => $this->t('If checked, flag is considered "global" and each entity is either flagged or not. If unchecked, each user has individual flags on entities.'),
       '#weight' => -1,
     ];
 
     $form['messages'] = [
       '#type' => 'details',
       '#open' => TRUE,
-      '#title' => t('Messages'),
+      '#title' => $this->t('Messages'),
     ];
 
     $flag_short = $flag->getFlagShortText();
     $form['messages']['flag_short'] = [
       '#type' => 'textfield',
-      '#title' => t('Flag link text'),
-      '#default_value' => !empty($flag_short) ? $flag_short : t('Flag this item'),
-      '#description' => t('The text for the "flag this" link for this flag.'),
+      '#title' => $this->t('Flag link text'),
+      '#default_value' => !empty($flag_short) ? $flag_short : $this->t('Flag this item'),
+      '#description' => $this->t('The text for the "flag this" link for this flag.'),
       '#required' => TRUE,
     ];
 
     $form['messages']['flag_long'] = [
       '#type' => 'textfield',
-      '#title' => t('Flag link description'),
+      '#title' => $this->t('Flag link description'),
       '#default_value' => $flag->getFlagLongText(),
-      '#description' => t('The description of the "flag this" link. Usually displayed on mouseover.'),
+      '#description' => $this->t('The description of the "flag this" link. Usually displayed on mouseover.'),
     ];
 
     $form['messages']['flag_message'] = [
       '#type' => 'textfield',
-      '#title' => t('Flagged message'),
+      '#title' => $this->t('Flagged message'),
       '#default_value' => $flag->getFlagMessage(),
-      '#description' => t('Message displayed after flagging content. If JavaScript is enabled, it will be displayed below the link. If not, it will be displayed in the message area.'),
+      '#description' => $this->t('Message displayed after flagging content. If JavaScript is enabled, it will be displayed below the link. If not, it will be displayed in the message area.'),
     ];
 
     $unflag_short = $flag->getUnflagShortText();
     $form['messages']['unflag_short'] = [
       '#type' => 'textfield',
-      '#title' => t('Unflag link text'),
-      '#default_value' => !empty($unflag_short) ? $unflag_short : t('Unflag this item'),
-      '#description' => t('The text for the "unflag this" link for this flag.'),
+      '#title' => $this->t('Unflag link text'),
+      '#default_value' => !empty($unflag_short) ? $unflag_short : $this->t('Unflag this item'),
+      '#description' => $this->t('The text for the "unflag this" link for this flag.'),
       '#required' => TRUE,
     ];
 
     $form['messages']['unflag_long'] = [
       '#type' => 'textfield',
-      '#title' => t('Unflag link description'),
+      '#title' => $this->t('Unflag link description'),
       '#default_value' => $flag->getUnflagLongText(),
-      '#description' => t('The description of the "unflag this" link. Usually displayed on mouseover.'),
+      '#description' => $this->t('The description of the "unflag this" link. Usually displayed on mouseover.'),
     ];
 
     $form['messages']['unflag_message'] = [
       '#type' => 'textfield',
-      '#title' => t('Unflagged message'),
+      '#title' => $this->t('Unflagged message'),
       '#default_value' => $flag->getUnflagMessage(),
-      '#description' => t('Message displayed after content has been unflagged. If JavaScript is enabled, it will be displayed below the link. If not, it will be displayed in the message area.'),
+      '#description' => $this->t('Message displayed after content has been unflagged. If JavaScript is enabled, it will be displayed below the link. If not, it will be displayed in the message area.'),
     ];
 
     $form['access'] = [
       '#type' => 'details',
       '#open' => TRUE,
-      '#title' => t('Flag access'),
+      '#title' => $this->t('Flag access'),
       '#tree' => FALSE,
       '#weight' => 10,
     ];
@@ -136,26 +136,26 @@ abstract class FlagFormBase extends EntityForm {
     // Flag classes will want to override this form element.
     $form['access']['bundles'] = [
       '#type' => 'checkboxes',
-      '#title' => t('Flaggable types'),
+      '#title' => $this->t('Flaggable types'),
       '#options' => $entity_bundles,
       '#default_value' => $flag->getBundles(),
-      '#description' => t('Check any bundles that this flag may be used on. Leave empty to apply to all bundles.'),
+      '#description' => $this->t('Check any bundles that this flag may be used on. Leave empty to apply to all bundles.'),
       '#weight' => 10,
     ];
 
     $form['access']['unflag_denied_text'] = [
       '#type' => 'textfield',
-      '#title' => t('Unflag not allowed text'),
+      '#title' => $this->t('Unflag not allowed text'),
       '#default_value' => $flag->getUnflagDeniedText(),
-      '#description' => t('If a user is allowed to flag but not unflag, this text will be displayed after flagging. Often this is the past-tense of the link text, such as "flagged".'),
+      '#description' => $this->t('If a user is allowed to flag but not unflag, this text will be displayed after flagging. Often this is the past-tense of the link text, such as "flagged".'),
       '#weight' => -1,
     ];
 
     $form['display'] = [
       '#type' => 'details',
       '#open' => TRUE,
-      '#title' => t('Display options'),
-      '#description' => t('Flags are usually controlled through links that allow users to toggle their behavior. You can choose how users interact with flags by changing options here. It is legitimate to have none of the following checkboxes ticked, if, for some reason, you wish <a href="@placement-url">to place the the links on the page yourself</a>.', array('@placement-url' => 'http://drupal.org/node/295383')),
+      '#title' => $this->t('Display options'),
+      '#description' => $this->t('Flags are usually controlled through links that allow users to toggle their behavior. You can choose how users interact with flags by changing options here. It is legitimate to have none of the following checkboxes ticked, if, for some reason, you wish <a href="@placement-url">to place the the links on the page yourself</a>.', array('@placement-url' => 'http://drupal.org/node/295383')),
       '#tree' => FALSE,
       '#weight' => 20,
       '#prefix' => '<div id="link-type-settings-wrapper">',
@@ -173,7 +173,7 @@ abstract class FlagFormBase extends EntityForm {
 
     $form['display']['link_type'] = [
       '#type' => 'radios',
-      '#title' => t('Link type'),
+      '#title' => $this->t('Link type'),
       '#options' => \Drupal::service('plugin.manager.flag.linktype')->getAllLinkTypes(),
       // '#after_build' => array('flag_check_link_types'),
       '#default_value' => $flag->getLinkTypePlugin()->getPluginId(),
@@ -271,11 +271,11 @@ abstract class FlagFormBase extends EntityForm {
     $url = $flag->urlInfo();
     if ($status == SAVED_UPDATED) {
       drupal_set_message(t('Flag %label has been updated.', ['%label' => $flag->label()]));
-      $this->logger('flag')->notice('Flag %label has been updated.', ['%label' => $flag->label(), 'link' => \Drupal::l(t('Edit'), $url)]);
+      $this->logger('flag')->notice('Flag %label has been updated.', ['%label' => $flag->label(), 'link' => $this->l($this->t('Edit'), $url)]);
     }
     else {
       drupal_set_message(t('Flag %label has been added.', ['%label' => $flag->label()]));
-      $this->logger('flag')->notice('Flag %label has been added.', ['%label' => $flag->label(), 'link' => \Drupal::l(t('Edit'), $url)]);
+      $this->logger('flag')->notice('Flag %label has been added.', ['%label' => $flag->label(), 'link' => $this->l($this->t('Edit'), $url)]);
     }
 
     // We clear caches more vigorously if the flag was new.
