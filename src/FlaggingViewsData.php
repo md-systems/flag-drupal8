@@ -26,7 +26,7 @@ class FlaggingViewsData extends EntityViewsData {
     // Flag link.
     $data['flagging']['link_flag'] = [
       'field' => [
-        'title' => t('Flag Links'),
+        'title' => t('Flag link'),
         'help' => t('Display flag/unflag link.'),
         'id' => 'flag_link',
       ],
