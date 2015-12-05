@@ -19,8 +19,6 @@ use Drupal\flag\FlagInterface;
 
 /**
  * Class FlagCountManager.
- *
- * @package Drupal\flag
  */
 class FlagCountManager implements FlagCountManagerInterface, EventSubscriberInterface {
 

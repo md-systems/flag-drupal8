@@ -13,8 +13,6 @@ use Drupal\flag\FlagInterface;
 
 /**
  * Interface FlagCountManagerInterface.
- *
- * @package Drupal\flag
  */
 interface FlagCountManagerInterface {
 

@@ -12,8 +12,6 @@ use Drupal\flag\FlagInterface;
 
 /**
  * Interface FlaggingServiceInterface.
- *
- * @package Drupal\flag
  */
 interface FlaggingServiceInterface {
 

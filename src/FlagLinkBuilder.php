@@ -12,8 +12,6 @@ use Drupal\flag\FlagServiceInterface;
 
 /**
  * Provides a lazy builder for flag links.
- *
- * @package Drupal\flag
  */
 class FlagLinkBuilder implements FlagLinkBuilderInterface {
 

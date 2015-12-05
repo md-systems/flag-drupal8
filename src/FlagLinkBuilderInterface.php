@@ -9,8 +9,6 @@ namespace Drupal\flag;
 
 /**
  * Provides a lazy builder for flag links.
- *
- * @package Drupal\flag
  */
 interface FlagLinkBuilderInterface {
 
