@@ -8,8 +8,8 @@ namespace Drupal\flag\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\flag\FlagInterface;
-use Drupal\Core\Url;
+use Drupal\flag\ActionLinkPluginManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the base flag add/edit form.
@@ -19,6 +19,32 @@ use Drupal\Core\Url;
  * input, and handles the submit.
  */
 abstract class FlagFormBase extends EntityForm {
+
+  /**
+   * The action link plugin manager.
+   *
+   * @var Drupal\flag\ActionLinkPluginManager
+   */
+  protected $actionLinkManager;
+
+  /**
+   * Constructs a new form.
+   *
+   * @param \Drupal\flag\ActionLinkPluginManager $action_link_manager
+   *   The link type plugin manager.
+   */
+  public function __construct(ActionLinkPluginManager $action_link_manager) {
+    $this->actionLinkManager = $action_link_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('plugin.manager.flag.linktype')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -174,7 +200,7 @@ abstract class FlagFormBase extends EntityForm {
     $form['display']['link_type'] = [
       '#type' => 'radios',
       '#title' => $this->t('Link type'),
-      '#options' => \Drupal::service('plugin.manager.flag.linktype')->getAllLinkTypes(),
+      '#options' => $this->actionLinkManager->getAllLinkTypes(),
       // '#after_build' => array('flag_check_link_types'),
       '#default_value' => $flag->getLinkTypePlugin()->getPluginId(),
       // Give this a high weight so additions by the flag classes for entity-
@@ -201,7 +227,7 @@ abstract class FlagFormBase extends EntityForm {
     ];
     // Add the descriptions to each ratio button element. These attach to the
     // elements when FormAPI expands them.
-    $action_link_plugin_defs = \Drupal::service('plugin.manager.flag.linktype')->getDefinitions();
+    $action_link_plugin_defs = $this->actionLinkManager->getDefinitions();
     foreach ($action_link_plugin_defs as $key => $info) {
       $form['display']['link_type'][$key] = [
         '#description' => $info['description'],
