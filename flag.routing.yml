@@ -45,6 +45,7 @@ flag_link_flag.html:
   requirements:
     _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
     _format: 'html'
+    _csrf_token: 'TRUE'
 
 flag.link_flag.json:
   path: '/flag/flag/{flag}/{entity_id}'
@@ -61,6 +62,7 @@ flag_link_unflag.html:
   requirements:
     _custom_access: '\Drupal\flag\FlagAccessController::checkUnflag'
     _format: 'html'
+    _csrf_token: 'TRUE'
 
 flag.link_unflag.json:
   path: '/flag/unflag/{flag}/{entity_id}'
@@ -103,7 +105,7 @@ flag.field_entry.edit:
     _custom_access: '\Drupal\flag\FlagAccessController::checkflag'
 
 entity.flag.enable:
-  path: '/flag/enable/{flag}'
+  path: '/admin/structure/flags/manage/{flag}/enable'
   defaults:
     _form: '\Drupal\flag\Form\FlagDisableConfirmForm'
     _title: 'Enable Flag?'
@@ -111,7 +113,7 @@ entity.flag.enable:
     _permission: 'administer flags'
 
 entity.flag.disable:
-  path: '/flag/disable/{flag}'
+  path: '/admin/structure/flags/manage/{flag}/disable'
   defaults:
     _form: '\Drupal\flag\Form\FlagDisableConfirmForm'
     _title: 'Disable Flag?'
@@ -119,7 +121,7 @@ entity.flag.disable:
     _permission: 'administer flags'
 
 entity.flag.reset:
-  path: '/flag/reset/{flag}'
+  path: '/admin/structure/flags/manage/{flag}/reset'
   defaults:
     _form: '\Drupal\flag\Form\FlagResetForm'
     _title: 'Reset Flag?'

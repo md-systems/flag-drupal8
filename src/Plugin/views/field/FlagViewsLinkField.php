@@ -96,12 +96,15 @@ class FlagViewsLinkField extends FieldPluginBase {
    * @param ResultRow $values
    *   The current result row.
    *
-   * @return array
+   * @return array|string
    *   The render array for the flag link.
    */
   protected function renderLink(EntityInterface $entity, ResultRow $values) {
+    // Output nothing as there is no flag.
+    // For an 'empty text' option use the default 'No results behavior'
+    // option provided by Views.
     if (empty($entity)) {
-      return t('N/A');
+      return '';
     }
 
     $flag = $this->getFlag();

@@ -26,8 +26,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * hand off multiple delettions.
  *
  * @see https://www.drupal.org/node/89181
- *
- * @package Drupal\flag
  */
 class FlaggingService implements FlaggingServiceInterface {
 

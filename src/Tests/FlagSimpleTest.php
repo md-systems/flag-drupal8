@@ -91,7 +91,6 @@ class FlagSimpleTest extends FlagTestBase {
     $this->doFlagLinksTest();
     $this->doGlobalFlagLinksTest();
     $this->doTestFlagCounts();
-    $this->doFlagLinkTeaserTest();
     $this->doUserDeletionTest();
   }
 
@@ -192,41 +191,6 @@ class FlagSimpleTest extends FlagTestBase {
     $this->drupalLogin($user_2);
     $this->drupalGet('node/' . $node_id);
     $this->assertLink('Flag this item');
-  }
-
-  /**
-   * Test the flag link doesn't appear when set to hidden for a view mode.
-   */
-  public function doFlagLinkTeaserTest() {
-    $this->drupalLogin($this->adminUser);
-
-    $node = $this->drupalCreateNode([
-      'type' => $this->nodeType,
-      'promote' => TRUE,
-    ]);
-    $node_id = $node->id();
-    $node_title = $node->getTitle();
-
-    $this->drupalGet('node');
-    $this->assertText($node_title);
-    $this->assertLink('Flag this item');
-
-    // Set flag format to hidden for teaser display and post form.
-    $edit = [
-      'fields[flag_' . $this->id . '][type]' => 'hidden',
-    ];
-
-    $this->drupalPostForm('admin/structure/types/manage/' . $this->nodeType . '/display/teaser', $edit, t('Save'));
-
-    // Check if form is saved successfully.
-    $this->assertText('Your settings have been saved.');
-
-    $this->drupalGet('node');
-    $this->assertText($node_title);
-    $this->assertNoLink('Flag this item');
-
-    $this->drupalGet('node/' . $node_id);
-
   }
 
   /**

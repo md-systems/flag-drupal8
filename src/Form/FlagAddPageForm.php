@@ -8,7 +8,8 @@ namespace Drupal\flag\Form;
 
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
+use Drupal\flag\FlagTypePluginManager;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Provides the flag add page.
@@ -20,6 +21,32 @@ use Drupal\Core\Url;
  * @see \Drupal\flag\FlagTypeBase
  */
 class FlagAddPageForm extends FormBase {
+
+  /**
+   * The flag type plugin manager.
+   *
+   * @var Drupal\flag\FlagTypePluginManager
+   */
+  protected $flagTypeManager;
+
+  /**
+   * Constructs a new form.
+   *
+   * @param \Drupal\flag\FlagTypePluginManager $flag_type_manager
+   *   The link type plugin manager.
+   */
+  public function __construct(FlagTypePluginManager $flag_type_manager) {
+    $this->flagTypeManager = $flag_type_manager;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('plugin.manager.flag.flagtype')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -39,7 +66,7 @@ class FlagAddPageForm extends FormBase {
       '#required' => TRUE,
       '#description' => t('The type of object this flag will affect. This cannot be changed once the flag is created.'),
       '#default_value' => 'entity:node',
-      '#options' => \Drupal::service('plugin.manager.flag.flagtype')->getAllFlagTypes(),
+      '#options' => $this->flagTypeManager->getAllFlagTypes(),
     ];
 
     $form['actions'] = [

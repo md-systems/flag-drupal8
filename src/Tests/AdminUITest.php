@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Contains \Drupal\flag\Tests\AdminUI.
+ * Contains \Drupal\flag\Tests\AdminUITest.
  */
 
 namespace Drupal\flag\Tests;
@@ -13,7 +13,7 @@ use Drupal\flag\Tests\FlagTestBase;
  *
  * @group flag
  */
-class AdminUI extends FlagTestBase {
+class AdminUITest extends FlagTestBase {
 
 
   /**
@@ -164,7 +164,7 @@ class AdminUI extends FlagTestBase {
     $this->drupalGet('admin/structure/flags');
     $this->assertText(t('enabled'));
 
-    $this->drupalPostForm('flag/disable/' . $this->flagId, [], $this->t('Disable'));
+    $this->drupalPostForm('admin/structure/flags/manage/' . $this->flagId . '/disable', [], $this->t('Disable'));
     $this->assertResponse(200);
 
     $this->drupalGet('admin/structure/flags');
@@ -181,7 +181,7 @@ class AdminUI extends FlagTestBase {
     $this->drupalGet('admin/structure/flags');
     $this->assertText(t('disabled'));
 
-    $this->drupalPostForm('flag/enable/' . $this->flagId, [], $this->t('Enable'));
+    $this->drupalPostForm('admin/structure/flags/manage/' . $this->flagId . '/enable', [], $this->t('Enable'));
     $this->assertResponse(200);
 
     $this->drupalGet('admin/structure/flags');
@@ -207,7 +207,7 @@ class AdminUI extends FlagTestBase {
     $this->assertEqual(count($ids_before), 1, "The flag has one flagging.");
 
     // Go to the reset form for the flag.
-    $this->drupalGet('flag/reset/' . $this->flag->id());
+    $this->drupalGet('admin/structure/flags/manage/' . $this->flag->id() . '/reset');
 
     $this->assertText($this->t('Are you sure you want to reset the Flag'));
 

@@ -58,9 +58,9 @@ use Drupal\flag\FlagInterface;
  *   links = {
  *     "edit-form" = "/admin/structure/flags/manage/{flag}",
  *     "delete-form" = "/admin/structure/flags/manage/{flag}/delete",
- *     "enable" = "/flag/enable/{flag}",
- *     "disable" = "/flag/disable/{flag}",
- *     "reset" = "/flag/reset/{flag}"
+ *     "enable" = "/admin/structure/flags/manage/{flag}/enable",
+ *     "disable" = "/admin/structure/flags/manage/{flag}/disable",
+ *     "reset" = "/admin/structure/flags/manage/{flag}/reset"
  *   }
  * )
  */
